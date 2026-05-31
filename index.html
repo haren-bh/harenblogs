@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bufferof & Haren Bhandari Blogs</title>
+  <title>Bufferof</title>
   <!-- Premium Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -120,6 +120,73 @@
       max-width: 600px;
       margin: 0 auto;
       font-weight: 400;
+    }
+
+    .author-badge {
+      display: inline-flex;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.8rem;
+      margin-top: 2rem;
+      padding: 0.6rem 1.2rem;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 50px;
+      font-size: 0.9rem;
+      backdrop-filter: blur(5px);
+      transition: all 0.3s ease;
+    }
+
+    .author-badge:hover {
+      border-color: rgba(20, 184, 166, 0.3);
+      background: rgba(255, 255, 255, 0.04);
+      box-shadow: 0 10px 20px -10px rgba(20, 184, 166, 0.1);
+    }
+
+    .author-name {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    .author-title {
+      color: var(--text-secondary);
+      border-left: 1px solid rgba(255, 255, 255, 0.15);
+      padding-left: 1rem;
+    }
+
+    .author-linkedin {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--accent-teal);
+      text-decoration: none;
+      font-weight: 600;
+      border-left: 1px solid rgba(255, 255, 255, 0.15);
+      padding-left: 1rem;
+      transition: color 0.2s ease;
+    }
+
+    .author-linkedin:hover {
+      color: #5eead4;
+    }
+
+    .author-linkedin svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    @media (max-width: 640px) {
+      .author-badge {
+        flex-direction: column;
+        border-radius: 16px;
+        padding: 1rem;
+        gap: 0.5rem;
+      }
+      .author-title, .author-linkedin {
+        border-left: none;
+        padding-left: 0;
+      }
     }
 
     /* Sections Divider */
@@ -334,8 +401,16 @@
     <!-- Header Section -->
     <header>
       <div class="logo-container">Insights & Guides</div>
-      <h1>Bufferof and Haren Bhandari Blogs</h1>
+      <h1>Bufferof</h1>
       <p class="subtitle">Exploring the frontier of autonomous agentic coding, AI memory systems, and modern software paradigms.</p>
+      <div class="author-badge">
+        <span class="author-name">By Haren Bhandari</span>
+        <span class="author-title">Developer Relations Engineer, Google Tokyo</span>
+        <a href="https://www.linkedin.com/in/haren-bhandari-abb09924/" target="_blank" rel="noopener noreferrer" class="author-linkedin">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.8v8.37h2.8v-4.67c0-.25.02-.5.1-.68a1.14 1.14 0 0 1 1-.77c.76 0 1 .52 1 1.29v4.83h2.8M6.5 8.37a1.37 1.37 0 1 0 0-2.75 1.37 1.37 0 0 0 0 2.75M8 18.5V10.13H5.2v8.37H8Z"/></svg>
+          LinkedIn
+        </a>
+      </div>
     </header>
 
     <!-- English Blogs Section -->
@@ -430,7 +505,7 @@
 
     <!-- Footer -->
     <footer>
-      <p>&copy; 2026 Bufferof & Haren Bhandari Blogs. Powered by Antigravity.</p>
+      <p>&copy; 2026 Bufferof. Powered by Antigravity.</p>
     </footer>
 
   </div>
