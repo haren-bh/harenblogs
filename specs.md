@@ -2,6 +2,15 @@
 
 ## Change Log
 
+### [2026-08-31 10:50:00 +09:00]
+- Translated markdown file [md/[JP] Securing your agent in Agent Platform with Agent Gateway and Model Armor.md](file:///Users/bharen/Documents/Blogs/md/[JP]%20Securing%20your%20agent%20in%20Agent%20Platform%20with%20Agent%20Gateway%20and%20Model%20Armor.md) into Japanese.
+- Preserved all standard technical terminology (e.g. Agent Platform, Agent Gateway, Model Armor, Agent Runtime, Prompt Injection, Data Leakage, mTLS, etc.), code snippets, and image URLs.
+
+### [2026-08-31 10:48:00 +09:00]
+- Updated markdown file [md/[JP] Securing your agent in Agent Platform with Agent Gateway and Model Armor.md](file:///Users/bharen/Documents/Blogs/md/[JP]%20Securing%20your%20agent%20in%20Agent%20Platform%20with%20Agent%20Gateway%20and%20Model%20Armor.md).
+- Replaced local/base64 referenced images with full image URLs hosted at `https://bufferof.com/en/Blog_Securing_your_agent_in_Agent_Platform_/images/`.
+- Removed the Base64 image payload definitions from the bottom of the markdown file.
+
 ### [2026-08-30 14:57:00 +09:00]
 - Added the new blog post "Securing your agent in Agent Platform with Agent Gateway and Model Armor" to the top of the English Publications section in [index.html](file:///Users/bharen/Documents/Blogs/index.html).
 - The new blog is referenced with the path `en/Blog_Securing_your_agent_in_Agent_Platform_/index.html`, featuring the category badge "Agent Security" and date "August 30, 2026".
