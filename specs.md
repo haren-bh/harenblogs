@@ -2,6 +2,11 @@
 
 ## Change Log
 
+### [2026-09-10 14:31:00 +09:00]
+- Added the new blog post "Optimize Tetris NP-Complete solution with AlphaEvolve" to the top of the English Publications section in [index.html](file:///Users/bharen/Documents/Blogs/index.html).
+- The new blog is referenced with the path `en/Blog_Optimize_Tetris_NP_Complete_solution_with_AlphaEvolve/index.html`, featuring the category badge "Algorithm Optimization" and date "September 10, 2026".
+- Reindexed subsequent blog post numbers (Blogs 2 to 13) in the HTML comments.
+
 ### [2026-08-31 10:50:00 +09:00]
 - Translated markdown file [md/[JP] Securing your agent in Agent Platform with Agent Gateway and Model Armor.md](file:///Users/bharen/Documents/Blogs/md/[JP]%20Securing%20your%20agent%20in%20Agent%20Platform%20with%20Agent%20Gateway%20and%20Model%20Armor.md) into Japanese.
 - Preserved all standard technical terminology (e.g. Agent Platform, Agent Gateway, Model Armor, Agent Runtime, Prompt Injection, Data Leakage, mTLS, etc.), code snippets, and image URLs.
