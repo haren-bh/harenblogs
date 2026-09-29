@@ -2,6 +2,11 @@
 
 ## Change Log
 
+### [2026-09-29 18:05:00 +09:00]
+- Added the new blog post "Create an Agent that Remembers with Agent Platform Memory Bank" to the top of the English Publications section in [index.html](file:///Users/bharen/Documents/Blogs/index.html).
+- The new blog is referenced with the path `en/Blog_Create_an_Agent_that_Remembers_with_Google_Agent%20Engine%20Memory%20Bank/index.html`, featuring the category badge "Agent Memory" and date "September 29, 2026".
+- Reindexed subsequent blog post numbers (Blogs 2 to 15) in the HTML comments.
+
 ### [2026-09-27 21:52:00 +09:00]
 - Added the new blog post "Layered Security for AI Agents in Google Cloud: A Reference Architecture" to the top of the English Publications section in [index.html](file:///Users/bharen/Documents/Blogs/index.html).
 - The new blog is referenced with the path `en/Blog_Layered_Security_for_AI_Agents_in_Google_Cloud%20_%20A%20Reference%20Architecture/index.html`, featuring the category badge "Agent Security" and date "September 27, 2026".
