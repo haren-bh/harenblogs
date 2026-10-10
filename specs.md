@@ -2,6 +2,15 @@
 
 ## Change Log
 
+### [2026-10-10 23:40:00 +09:00]
+- Added the new blog post "Securing your agents deployed in Cloud Run with Model Armor" to the top of the English Publications section in [index.html](file:///Users/bharen/Documents/Blogs/index.html).
+- The new blog is referenced with the path `en/Blog_Securing%20your%20agents%20deployed%20in%20Cloud%20Run%20with%20Model%20Armor/index.html`, featuring the category badge "Agent Security" and date "October 10, 2026".
+- Reindexed subsequent blog post numbers (Blogs 2 to 16) in the HTML comments.
+
+### [2026-10-04 15:30:00 +09:00]
+- Updated markdown file [md/[JP] Google_Cloud_updates_Oct_2.md](file:///Users/bharen/Documents/Blogs/md/%5BJP%5D%20Google_Cloud_updates_Oct_2.md).
+- Added hero image (`https://raw.githubusercontent.com/haren-bh/harenblogs/refs/heads/main/md/images/Google_Cloud_updates_Oct_2.jpeg`) directly after the first introductory paragraph.
+
 ### [2026-10-01 18:48:00 +09:00]
 - Translated markdown file [md/[JP Blog] Create an Agent that Remembers with Google Agent Engine Memory Bank.md](file:///Users/bharen/Documents/Blogs/md/%5BJP%20Blog%5D%20Create%20an%20Agent%20that%20Remembers%20with%20Google%20Agent%20Engine%20Memory%20Bank.md) into Japanese while preserving technical terminology (e.g., LLM, Context Window, Agent Platform Memory Bank, Agent Development Kit (ADK), Agents CLI, Agent Harness, Agent Runtime, Execution Environment, Perception, Reasoning & Planning, ReAct, Chain-of-Thought, Plan-and-Execute, Tool Use (Grounding), Execution & Reflection, Lifecycle Management, Tool Sandboxing, Guardrails & Safety, Prompt Injection, Observability & Auditability, OpenTelemetry, Cloud Logging, Cloud Trace, Memory Orchestration, Context Engineering, Context Rot, Lost in the Middle, Time to First Token (TTFT), Prompt Caching, L1 CPU Cache, Session Buffer, Short-Term Memory, Long-Term Memory, Autonomous Fact Extraction, Memory Reconciliation, Vector Indexing & Semantic Search, Scoped Isolation, GDPR/CCPA, RAG, VertexAiMemoryBankService, Extraction Scopes, Custom Topics, Cold Start, ETL, etc.) and code snippets.
 - Replaced referenced base64 image placeholders (`[image1]` through `[image9]`) with full image URLs hosted at `https://bufferof.com/en/Blog_Create_an_Agent_that_Remembers_with_Google_Agent%20Engine%20Memory%20Bank/images/` (`image3.png` for `[image1]`, `image4.png` for `[image2]`, `image5.png` for `[image3]`, `image6.png` for `[image4]`, `image9.png` for `[image5]`, `image8.png` for `[image6]`, `image7.png` for `[image7]`, `image2.png` for `[image8]`, and `image1.png` for `[image9]`) and removed the Base64 image definitions at the end of the file.

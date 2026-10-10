@@ -3,6 +3,8 @@
 
 Google Cloud および Google AI の月次アップデートまとめへようこそ。今月は、Gemini 4 シリーズ初のフロンティアモデルであり 100 万トークンの出力ウィンドウを備えた **Gemini 4 Argon** の登場から、AI エージェント向けに特化して構築された新しいサーバーレスおよび Kubernetes ランタイムまで、長期的なエージェントワークフローの構築、保護、スケーリングを支援するリリースが多数発表されました。
 
+![](https://raw.githubusercontent.com/haren-bh/harenblogs/refs/heads/main/md/images/Google_Cloud_updates_Oct_2.jpeg)
+
 ### 今月のハイライト
 
 * **フロンティアモデルと高効率モデル:** 100 万出力トークン上限と 50% オフの導入記念特別価格を提供する **Gemini 4 Argon** が登場したほか、**Gemini 3.8 Flash**（Long-Term GA へ移行）、**Gemini 3.8 Flash Cyber**、Live Avatar を備えた **Gemini 3.8 Live**（一般提供開始：GA）、および **Gemini 3.8 Flash TTS**（パブリックプレビュー）が発表されました。
