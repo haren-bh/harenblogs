@@ -2,6 +2,17 @@
 
 ## Change Log
 
+### [2026-10-16 14:12:30 +09:00]
+- Added the Japanese blog post "Agent CLI を利用した Google Cloud 上でのエージェント構築とデプロイ" to the top of the Japanese Publications section (`日本語の投稿`) in [index.html](file:///Users/bharen/Documents/Blogs/index.html).
+- Referenced the blog at `jp/%5BJP%5DBlog_AgentCLIADK/index.html` with badge "日本語" and date "October 16, 2026", and reindexed subsequent Japanese blog comments (Blogs 16 to 17).
+
+### [2026-10-16 14:03:00 +09:00]
+- Redesigned and reformatted [index.html](file:///Users/bharen/Documents/Blogs/jp/%5BJP%5DBlog_AgentCLIADK/index.html) based on the segments and commands in [blog.md](file:///Users/bharen/Documents/Blogs/jp/%5BJP%5DBlog_AgentCLIADK/blog.md).
+- Applied a clean gray and white theme (`#f3f4f6` light gray page background, `#ffffff` white segment cards, `#e5e7eb`/`#d1d5db` gray borders, and high-contrast `#111827`/`#374151` typography).
+- Added sticky sidebar table of contents (目次) with active scroll-spy highlighting, top quick-jump pills, mobile navigation toggle, reading progress bar, and previous/next section links so all segments (`環境のセットアップ`, `プロジェクトの設定`, `API を有効にする`, `API の概要`, `Agent CLIをインストール`, `Antigravity CLIの起動`, `最初のエージェントの構築`, `プレイグラウンド（Playground）`, `Agent Platform へのデプロイ`, `次のチャレンジ`) are easily navigable.
+- Placed all terminal commands (`gcloud`, `mkdir`/`uv`/`uvx`, `agy`) and Antigravity CLI prompts into styled command boxes (`.command-box`) with header labels and one-click copy buttons.
+- Fixed oversized inline image dimensions into responsive figures with click-to-zoom lightbox support and removed Google Docs redirect wrappers and PUA icon artifacts.
+
 ### [2026-10-10 23:40:00 +09:00]
 - Added the new blog post "Securing your agents deployed in Cloud Run with Model Armor" to the top of the English Publications section in [index.html](file:///Users/bharen/Documents/Blogs/index.html).
 - The new blog is referenced with the path `en/Blog_Securing%20your%20agents%20deployed%20in%20Cloud%20Run%20with%20Model%20Armor/index.html`, featuring the category badge "Agent Security" and date "October 10, 2026".

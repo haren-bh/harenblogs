@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agent CLI を利用した Google Cloud 上でのエージェント構築とデプロイ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+JP:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg-page: #f3f4f6;
+      --bg-surface: #ffffff;
+      --bg-subtle: #f9fafb;
+      --bg-accent-gray: #e5e7eb;
+      --bg-cmd: #1f2937;
+      --bg-cmd-header: #111827;
+      --border-light: #e5e7eb;
+      --border-medium: #d1d5db;
+      --text-primary: #111827;
+      --text-secondary: #374151;
+      --text-muted: #6b7280;
+      --link-color: #2563eb;
+      --link-hover: #1d4ed8;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
+      --radius-md: 8px;
+      --radius-lg: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 84px;
+    }
+
+    body {
+      font-family: 'Noto Sans JP', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-page);
+      color: var(--text-primary);
+      line-height: 1.8;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Reading Progress Bar */
+    .progress-bar-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: var(--border-light);
+      z-index: 200;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: #4b5563;
+      transition: width 0.1s ease-out;
+    }
+
+    /* Top Navigation Bar */
+    .top-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border-light);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .top-header-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0.875rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .brand-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      color: var(--text-secondary);
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      border: 1px solid var(--border-light);
+      background: var(--bg-subtle);
+      transition: all 0.15s ease;
+    }
+
+    .brand-link:hover {
+      background: var(--bg-accent-gray);
+      color: var(--text-primary);
+    }
+
+    .header-doc-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .mobile-toc-btn {
+      display: none;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.45rem 0.85rem;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-medium);
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      cursor: pointer;
+    }
+
+    /* Layout Container */
+    .page-layout {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr);
+      gap: 2.5rem;
+      align-items: start;
+    }
+
+    /* Sidebar Navigation */
+    .sidebar {
+      position: sticky;
+      top: 84px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      box-shadow: var(--shadow-sm);
+      max-height: calc(100vh - 108px);
+      overflow-y: auto;
+    }
+
+    .sidebar-header {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      padding-bottom: 0.75rem;
+      margin-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .toc-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .toc-item a {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.45rem 0.65rem;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.4;
+      transition: all 0.15s ease;
+      border-left: 3px solid transparent;
+    }
+
+    .toc-item a:hover {
+      background: var(--bg-subtle);
+      color: var(--text-primary);
+    }
+
+    .toc-item a.active {
+      background: var(--bg-page);
+      color: var(--text-primary);
+      font-weight: 600;
+      border-left-color: #374151;
+    }
+
+    .toc-item.toc-h1 {
+      margin-top: 0.4rem;
+    }
+
+    .toc-item.toc-h1:first-child {
+      margin-top: 0;
+    }
+
+    .toc-item.toc-h1 a {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .toc-item.toc-h2 a {
+      padding-left: 1.35rem;
+      font-size: 0.84rem;
+    }
+
+    .toc-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      background: var(--bg-accent-gray);
+      color: var(--text-secondary);
+      font-size: 0.72rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* Main Content Area */
+    .main-content {
+      display: flex;
+      flex-direction: column;
+      gap: 1.75rem;
+    }
+
+    /* Hero Banner Card */
+    .hero-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .hero-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      background: var(--bg-page);
+      border: 1px solid var(--border-medium);
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+    }
+
+    .hero-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.35;
+      margin-bottom: 1rem;
+      letter-spacing: -0.01em;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      line-height: 1.75;
+    }
+
+    /* Quick Jump Pills */
+    .quick-nav {
+      margin-top: 1.5rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border-light);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .quick-nav-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.35rem 0.75rem;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-light);
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+
+    .quick-nav-pill:hover {
+      background: var(--bg-accent-gray);
+      border-color: var(--border-medium);
+      color: var(--text-primary);
+    }
+
+    /* Content Segment Card */
+    .segment-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: 2.25rem 2.5rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .segment-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.85rem;
+      border-bottom: 2px solid var(--bg-page);
+    }
+
+    .segment-step {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.25rem 0.65rem;
+      border-radius: 6px;
+      background: #374151;
+      color: #ffffff;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+
+    h1.section-h1 {
+      font-size: 1.55rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.35;
+    }
+
+    h2.section-h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-top: 2.25rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    h2.section-h2:first-of-type {
+      margin-top: 0.5rem;
+    }
+
+    h2.section-h2::before {
+      content: '';
+      display: inline-block;
+      width: 4px;
+      height: 1.2rem;
+      background: #4b5563;
+      border-radius: 2px;
+    }
+
+    h2.section-h2 a,
+    h1.section-h1 a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    h2.section-h2 a:hover,
+    h1.section-h1 a:hover {
+      text-decoration: underline;
+    }
+
+    p {
+      margin-bottom: 1rem;
+      color: var(--text-secondary);
+    }
+
+    a {
+      color: var(--link-color);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    a:hover {
+      color: var(--link-hover);
+    }
+
+    ul,
+    ol {
+      margin: 0.75rem 0 1.25rem 1.5rem;
+      color: var(--text-secondary);
+    }
+
+    li {
+      margin-bottom: 0.65rem;
+      padding-left: 0.25rem;
+    }
+
+    li > p {
+      margin-bottom: 0.5rem;
+    }
+
+    /* Inline Code */
+    code.inline-code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.875em;
+      background: var(--bg-page);
+      color: #1f2937;
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      border: 1px solid var(--border-medium);
+    }
+
+    .kbd-shortcut {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85em;
+      font-weight: 600;
+      background: var(--bg-subtle);
+      color: var(--text-primary);
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      border: 1px solid var(--border-medium);
+      box-shadow: 0 1px 0 var(--border-medium);
+    }
+
+    /* Command Box */
+    .command-box {
+      margin: 1.25rem 0 1.5rem;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 1px solid #374151;
+      background: var(--bg-cmd);
+      box-shadow: var(--shadow-md);
+    }
+
+    .command-box-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.55rem 1rem;
+      background: var(--bg-cmd-header);
+      border-bottom: 1px solid #374151;
+    }
+
+    .command-box-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #9ca3af;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .command-box-dots {
+      display: inline-flex;
+      gap: 5px;
+      margin-right: 4px;
+    }
+
+    .command-box-dots span {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #4b5563;
+    }
+
+    .copy-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.65rem;
+      background: #374151;
+      border: 1px solid #4b5563;
+      border-radius: 4px;
+      color: #e5e7eb;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .copy-btn:hover {
+      background: #4b5563;
+      color: #ffffff;
+    }
+
+    .copy-btn.copied {
+      background: #e5e7eb;
+      color: #111827;
+      border-color: #ffffff;
+    }
+
+    .command-box pre {
+      margin: 0;
+      padding: 1.1rem 1.25rem;
+      overflow-x: auto;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      line-height: 1.65;
+      color: #f9fafb;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .command-box pre code {
+      font-family: inherit;
+      color: inherit;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+
+    /* Callout / Hint Box */
+    .hint-box {
+      margin: 1.25rem 0;
+      padding: 1rem 1.25rem;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-medium);
+      border-left: 4px solid #4b5563;
+      border-radius: var(--radius-md);
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+
+    .hint-box strong {
+      color: var(--text-primary);
+    }
+
+    /* Figures and Images */
+    figure.doc-figure {
+      margin: 1.5rem 0;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      text-align: center;
+    }
+
+    figure.doc-figure img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 6px;
+      border: 1px solid var(--border-medium);
+      cursor: zoom-in;
+      transition: transform 0.15s ease;
+      display: block;
+      margin: 0 auto;
+    }
+
+    figure.doc-figure figcaption {
+      margin-top: 0.75rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .image-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+      margin: 1.5rem 0;
+    }
+
+    /* Success Banner */
+    .completion-box {
+      margin-top: 1.5rem;
+      padding: 1.25rem 1.5rem;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    /* Segment Footer Navigation */
+    .segment-nav {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-top: 2rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border-light);
+    }
+
+    .segment-nav-link {
+      display: inline-flex;
+      flex-direction: column;
+      padding: 0.65rem 1rem;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      background: var(--bg-subtle);
+      text-decoration: none;
+      color: var(--text-primary);
+      font-size: 0.88rem;
+      font-weight: 600;
+      transition: all 0.15s ease;
+    }
+
+    .segment-nav-link:hover {
+      background: var(--bg-accent-gray);
+      border-color: var(--border-medium);
+    }
+
+    .segment-nav-link span {
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    /* Lightbox Modal */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(17, 24, 39, 0.85);
+      z-index: 500;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      cursor: zoom-out;
+    }
+
+    .lightbox.open {
+      display: flex;
+    }
+
+    .lightbox img {
+      max-width: 95vw;
+      max-height: 90vh;
+      border-radius: 8px;
+      background: #ffffff;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 960px) {
+      .page-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .mobile-toc-btn {
+        display: inline-flex;
+      }
+
+      .header-doc-title {
+        display: none;
+      }
+
+      .sidebar {
+        display: none;
+        position: fixed;
+        top: 60px;
+        left: 1rem;
+        right: 1rem;
+        z-index: 150;
+        max-height: 75vh;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
+      }
+
+      .sidebar.open {
+        display: block;
+      }
+
+      .hero-card,
+      .segment-card {
+        padding: 1.5rem;
+      }
+
+      .hero-title {
+        font-size: 1.55rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Reading Progress Bar -->
+  <div class="progress-bar-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <!-- Top Header -->
+  <header class="top-header">
+    <div class="top-header-inner">
+      <a href="../../index.html" class="brand-link">
+        ← ブログ一覧へ戻る
+      </a>
+      <div class="header-doc-title">Agent CLI を利用した Google Cloud 上でのエージェント構築とデプロイ</div>
+      <button class="mobile-toc-btn" id="mobileTocBtn" type="button" aria-label="目次を開く">
+        ☰ セクション一覧
+      </button>
+    </div>
+  </header>
+
+  <div class="page-layout">
+    <!-- Left Navigation Sidebar -->
+    <aside class="sidebar" id="sidebarNav" aria-label="目次">
+      <div class="sidebar-header">
+        <span>目次 (Segments)</span>
+      </div>
+      <ul class="toc-list">
+        <li class="toc-item toc-h1">
+          <a href="#env-setup"><span class="toc-badge">1</span> 環境のセットアップ</a>
+        </li>
+        <li class="toc-item toc-h2">
+          <a href="#project-setup">プロジェクトの設定</a>
+        </li>
+        <li class="toc-item toc-h2">
+          <a href="#enable-api">API を有効にする</a>
+        </li>
+        <li class="toc-item toc-h2">
+          <a href="#api-overview">API の概要</a>
+        </li>
+        <li class="toc-item toc-h2">
+          <a href="#install-agent-cli">Agent CLIをインストール</a>
+        </li>
+        <li class="toc-item toc-h2">
+          <a href="#start-agy-cli">Antigravity CLIの起動</a>
+        </li>
+        <li class="toc-item toc-h1">
+          <a href="#build-first-agent"><span class="toc-badge">2</span> 最初のエージェントの構築</a>
+        </li>
+        <li class="toc-item toc-h2">
+          <a href="#playground">プレイグラウンド（Playground）</a>
+        </li>
+        <li class="toc-item toc-h2">
+          <a href="#deploy-agent-platform">Agent Platform へのデプロイ</a>
+        </li>
+        <li class="toc-item toc-h2">
+          <a href="#next-challenge">次のチャレンジ</a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- Main Article Content -->
+    <main class="main-content">
+      <!-- Intro / Hero -->
+      <section class="hero-card">
+        <span class="hero-badge">Hands-on Lab / Google Cloud ADK &amp; Agent CLI</span>
+        <h1 class="hero-title">Agent CLI を利用した Google Cloud 上でのエージェント構築とデプロイ</h1>
+        <p class="hero-lead">
+          このハンズオン（ラボ）では、Google Cloud のツールを活用して、プロダクション環境に対応したエージェント型アプリケーションを構築する方法を学びます。
+        </p>
+        <div class="quick-nav" aria-label="クイックナビゲーション">
+          <a href="#project-setup" class="quick-nav-pill">1. プロジェクトの設定</a>
+          <a href="#enable-api" class="quick-nav-pill">2. API の有効化</a>
+          <a href="#install-agent-cli" class="quick-nav-pill">3. Agent CLI インストール</a>
+          <a href="#start-agy-cli" class="quick-nav-pill">4. Antigravity CLI 起動</a>
+          <a href="#build-first-agent" class="quick-nav-pill">5. エージェントの構築</a>
+          <a href="#playground" class="quick-nav-pill">6. Playground テスト</a>
+          <a href="#deploy-agent-platform" class="quick-nav-pill">7. Agent Platform デプロイ</a>
+          <a href="#next-challenge" class="quick-nav-pill">8. 次のチャレンジ</a>
+        </div>
+      </section>
+
+      <!-- Segment 1: 環境のセットアップ -->
+      <section class="segment-card" id="env-setup">
+        <div class="segment-header">
+          <span class="segment-step">Part 1</span>
+          <h1 class="section-h1">環境のセットアップ</h1>
+        </div>
+
+        <!-- プロジェクトの設定 -->
+        <h2 class="section-h2" id="project-setup">
+          <a href="https://codelabs.developers.google.com/codelabs/create-low-code-agent-with-ADK-visual-builder?hl=ja#1"
+            target="_blank" rel="noopener noreferrer">プロジェクトの設定</a>
+        </h2>
+
+        <ul>
+          <li>
+            次のリンク <a
+              href="https://console.cloud.google.com/?utm_campaign=CDR_0x0a7a9056_default&amp;utm_medium=external&amp;utm_source=blog&amp;hl=ja"
+              target="_blank" rel="noopener noreferrer">GCP コンソール</a>をクリックして、<a
+              href="https://console.cloud.google.com/?utm_campaign=CDR_0x0a7a9056_default&amp;utm_medium=external&amp;utm_source=blog&amp;hl=ja"
+              target="_blank" rel="noopener noreferrer">GCP コンソール</a>に移動します。
+          </li>
+          <li>
+            使用できる<a
+              href="https://cloud.google.com/resource-manager/docs/creating-managing-projects?utm_campaign=CDR_0xc2a07d4f_default_b422717660&amp;utm_medium=external&amp;utm_source=blog&amp;hl=ja"
+              target="_blank" rel="noopener noreferrer">プロジェクト</a>がまだない場合は、<a
+              href="https://console.cloud.google.com/?utm_campaign=CDR_0x0a7a9056_default&amp;utm_medium=external&amp;utm_source=blog&amp;hl=ja"
+              target="_blank" rel="noopener noreferrer">GCP コンソール</a>で新しいプロジェクトを作成する必要があります。プロジェクト セレクタ（Google Cloud
+            コンソールの左上）でプロジェクトを選択します。まだプロジェクトがない場合は、<a
+              href="https://developers.google.com/workspace/guides/create-project?hl=ja" target="_blank"
+              rel="noopener noreferrer">こちらの手順</a>に沿って新しいプロジェクトを作成してください。新しいプロジェクトを作成したら、プロジェクトを選択してください。
+          </li>
+        </ul>
+
+        <figure class="doc-figure">
+          <img src="images/image8.png" alt="Google Cloud プロジェクトセレクタ">
+          <figcaption>図 2: Google Cloud ロゴの右側にあるドロップダウンをクリックして、対象のプロジェクトを選択・確認します。</figcaption>
+        </figure>
+
+        <ul>
+          <li>
+            このラボでは、<a href="https://docs.cloud.google.com/shell/docs/launching-cloud-shell-editor?hl=ja"
+              target="_blank" rel="noopener noreferrer">Cloud Shell エディタ</a>を使用してタスクを実行します。Cloud Shell を開き、Cloud Shell
+            を使用してプロジェクトを設定します。
+          </li>
+          <li>
+            このリンクをクリックすると、<a href="https://ide.cloud.google.com/?hl=ja" target="_blank"
+              rel="noopener noreferrer">Cloud Shell エディタ</a>に直接移動します。
+          </li>
+          <li>
+            Cloud Shell エディタのサイドバーで、[フォルダを開く] ボタンをクリックします。
+            <figure class="doc-figure">
+              <img src="images/image12.png" alt="フォルダを開くボタン" style="max-width: 320px;">
+            </figure>
+          </li>
+          <li>
+            ホームフォルダはすでに選択されているはずです。[OK] を押すと、ホームフォルダがこのタスクのルートフォルダになります。
+            <figure class="doc-figure">
+              <img src="images/image11.png" alt="ホームフォルダの選択">
+            </figure>
+          </li>
+          <li>
+            メニューから [Terminal] &gt; [New Terminal] をクリックして、ターミナルを開きます（まだ開いていない場合）。このチュートリアルのコマンドはすべて、このターミナルで実行できます。
+          </li>
+          <li>
+            プロジェクトがすでに認証されているかどうかは、Cloud Shell ターミナルで次のコマンドを使用して確認できます。
+          </li>
+        </ul>
+
+        <div class="command-box">
+          <div class="command-box-header">
+            <span class="command-box-label">
+              <span class="command-box-dots"><span></span><span></span><span></span></span>
+              Cloud Shell Terminal
+            </span>
+            <button class="copy-btn" type="button">コピー</button>
+          </div>
+          <pre><code>gcloud auth list</code></pre>
+        </div>
+
+        <ul>
+          <li>プロジェクト ID がわからない場合は、次のコマンドを使用してすべてのプロジェクト ID を一覧表示できます。</li>
+        </ul>
+
+        <div class="command-box">
+          <div class="command-box-header">
+            <span class="command-box-label">
+              <span class="command-box-dots"><span></span><span></span><span></span></span>
+              Cloud Shell Terminal
+            </span>
+            <button class="copy-btn" type="button">コピー</button>
+          </div>
+          <pre><code>gcloud projects list</code></pre>
+        </div>
+
+        <ul>
+          <li>プロジェクト ID をコピーし、次のコマンドを使用して設定します。</li>
+        </ul>
+
+        <div class="command-box">
+          <div class="command-box-header">
+            <span class="command-box-label">
+              <span class="command-box-dots"><span></span><span></span><span></span></span>
+              Cloud Shell Terminal
+            </span>
+            <button class="copy-btn" type="button">コピー</button>
+          </div>
+          <pre><code>gcloud config set project &lt;YOUR_PROJECT_ID&gt;</code></pre>
+        </div>
+
+        <ul>
+          <li>Cloud Shell で次のコマンドを実行して、プロジェクトを確認します。</li>
+        </ul>
+
+        <div class="command-box">
+          <div class="command-box-header">
+            <span class="command-box-label">
+              <span class="command-box-dots"><span></span><span></span><span></span></span>
+              Cloud Shell Terminal
+            </span>
+            <button class="copy-btn" type="button">コピー</button>
+          </div>
+          <pre><code>gcloud config list project</code></pre>
+        </div>
+
+        <!-- API を有効にする -->
+        <h2 class="section-h2" id="enable-api">
+          <a href="https://codelabs.developers.google.com/codelabs/create-low-code-agent-with-ADK-visual-builder?hl=ja#2"
+            target="_blank" rel="noopener noreferrer">API を有効にする</a>
+        </h2>
+
+        <p>このラボを実行するには、いくつかの API サービスを有効にする必要があります。Cloud Shell で次のコマンドを実行します。</p>
+
+        <div class="command-box">
+          <div class="command-box-header">
+            <span class="command-box-label">
+              <span class="command-box-dots"><span></span><span></span><span></span></span>
+              Cloud Shell Terminal
+            </span>
+            <button class="copy-btn" type="button">コピー</button>
+          </div>
+          <pre><code>gcloud services enable aiplatform.googleapis.com
+gcloud services enable cloudresourcemanager.googleapis.com</code></pre>
+        </div>
+
+        <!-- API の概要 -->
+        <h2 class="section-h2" id="api-overview">API の概要</h2>
+
+        <ul>
+          <li>
+            <a href="https://cloud.google.com/vertex-ai?hl=ja" target="_blank" rel="noopener noreferrer">Vertex AI</a>
+            API（<code class="inline-code">aiplatform.googleapis.com</code>）を使用すると、<a
+              href="https://cloud.google.com/vertex-ai?hl=ja" target="_blank" rel="noopener noreferrer">Vertex AI</a>
+            プラットフォームにアクセスできます。これにより、アプリケーションはテキスト生成、チャット セッション、関数呼び出しのために Gemini モデルを操作できます。
+          </li>
+          <li>
+            Cloud Resource Manager API（<code
+              class="inline-code">cloudresourcemanager.googleapis.com</code>）を使用すると、プロジェクト ID や名前など、Google Cloud
+            プロジェクトのメタデータをプログラムで管理できます。これは、プロジェクトの ID と権限を確認するために他のツールや SDK で必要になることがよくあります。
+          </li>
+        </ul>
+
+        <!-- Agent CLIをインストール -->
+        <h2 class="section-h2" id="install-agent-cli">Agent CLIをインストール</h2>
+
+        <p>
+          Google Agent CLI（<code class="inline-code">agents-cli</code>）は、Agent Development
+          Kit（ADK）を用いたエージェント型アプリケーションのプロジェクト作成、ローカルテスト、および Google Cloud Agent Platform
+          へのデプロイを効率的に行うためのコマンドラインツールです。
+        </p>
+        <p>Cloud Shell Editor のターミナルで以下のコマンドを実行します。</p>
+
+        <div class="command-box">
+          <div class="command-box-header">
+            <span class="command-box-label">
+              <span class="command-box-dots"><span></span><span></span><span></span></span>
+              Cloud Shell Terminal
+            </span>
+            <button class="copy-btn" type="button">コピー</button>
+          </div>
+          <pre><code>mkdir nototoki
+cd nototoki &amp;&amp; uv venv
+source .venv/bin/activate
+uv pip install google-adk
+uvx google-agents-cli setup</code></pre>
+        </div>
+
+        <figure class="doc-figure">
+          <img src="images/image3.png" alt="Agent CLIのインストール">
+          <figcaption>図１：Agent CLIのインストール</figcaption>
+        </figure>
+
+        <p>図 1 のような画面が表示されれば、Agent CLI のインストールは完了です。</p>
+
+        <!-- Antigravity CLIの起動 -->
+        <h2 class="section-h2" id="start-agy-cli">Antigravity CLIの起動</h2>
+
+        <p>Cloud Shell ターミナルで Antigravity CLI（<code class="inline-code">agy</code>）を起動します。</p>
+
+        <div class="command-box">
+          <div class="command-box-header">
+            <span class="command-box-label">
+              <span class="command-box-dots"><span></span><span></span><span></span></span>
+              Cloud Shell Terminal
+            </span>
+            <button class="copy-btn" type="button">コピー</button>
+          </div>
+          <pre><code>agy</code></pre>
+        </div>
+
+        <p>起動すると、以下のような画面が表示されます。</p>
+
+        <figure class="doc-figure">
+          <img src="images/image2.png" alt="Antigravity CLI起動">
+          <figcaption>図２：Antigravity CLI起動</figcaption>
+        </figure>
+
+        <div class="hint-box">
+          <strong>ヒント:</strong> <span class="kbd-shortcut">Shift + Tab</span>
+          を押すと、ファイル変更の確認ステップをスキップし、コマンド実行の確認のみに短縮できます。
+        </div>
+
+        <div class="segment-nav">
+          <div></div>
+          <a href="#build-first-agent" class="segment-nav-link">
+            <span>次のセクション</span>
+            最初のエージェントの構築 →
+          </a>
+        </div>
+      </section>
+
+      <!-- Segment 2: 最初のエージェントの構築 -->
+      <section class="segment-card" id="build-first-agent">
+        <div class="segment-header">
+          <span class="segment-step">Part 2</span>
+          <h1 class="section-h1">最初のエージェントの構築</h1>
+        </div>
+
+        <p>このラボの後半では独自のカスタムエージェントを設計しますが、まずは基本となるエージェントを構築してテストしてみましょう。</p>
+        <p>今回は、能登半島のトキに関する情報を検索・提供するエージェントを作成します。</p>
+        <p>Antigravity CLI に以下のプロンプトを入力してください。</p>
+
+        <div class="command-box">
+          <div class="command-box-header">
+            <span class="command-box-label">
+              <span class="command-box-dots"><span></span><span></span><span></span></span>
+              Antigravity CLI Prompt
+            </span>
+            <button class="copy-btn" type="button">コピー</button>
+          </div>
+          <pre><code>agents-cli を使用して、Google 検索で能登半島のトキの情報を調べてくれるエージェントを作成してください。
+トキ以外の質問には回答しないようにしてください。
+挨拶された場合は、「能登のトキについてどのようなことを調べたいですか？」といった返答をしてください。</code></pre>
+        </div>
+
+        <p>処理が完了すると、AGY は以下のような出力を生成します。</p>
+
+        <figure class="doc-figure">
+          <img src="images/image9.png" alt="エージェントのテスト">
+          <figcaption>図３：エージェントのテスト</figcaption>
+        </figure>
+
+        <p>
+          バックグラウンドでは、<code class="inline-code">agents-cli</code> が Python
+          によるエージェント定義や各種設定、ローカル実行・プレイグラウンド用環境など、ADK
+          プロジェクトに必要なボイラープレートを自動生成します。手動でコードを書く手間が省けるため、エージェントの振る舞いの定義にすぐ集中できます。
+        </p>
+
+        <p>続いて、Antigravity CLI 上でプロンプトを入力し、エージェントの動作をテストしてみましょう。</p>
+
+        <div class="command-box">
+          <div class="command-box-header">
+            <span class="command-box-label">
+              <span class="command-box-dots"><span></span><span></span><span></span></span>
+              Antigravity CLI Prompt
+            </span>
+            <button class="copy-btn" type="button">コピー</button>
+          </div>
+          <pre><code>「能登半島でのトキの野生復帰や放鳥の取り組みについて教えてください」というメッセージで私のエージェントをテストする</code></pre>
+        </div>
+
+        <p>エージェントのロジックは <code class="inline-code">app/agent.py</code> ファイルで確認できます。</p>
+
+        <div class="hint-box">
+          <strong>ヒント：</strong>Antigravity CLI を途中で終了した場合は、ターミナルで <code class="inline-code">agy --resume</code>
+          を実行することで、いつでも過去のセッションを再開できます。
+        </div>
+
+        <!-- プレイグラウンド（Playground） -->
+        <h2 class="section-h2" id="playground">プレイグラウンド（Playground）</h2>
+
+        <p>
+          エージェントは <strong>Playground</strong>（ブラウザベースの Dev UI）でもテストできます。単に対話するだけでなく、セッション（<strong>sessions</strong>）の確認や各ターンのトレース（<strong>traces</strong>）のステップ実行など、内部動作を可視化できます。Antigravity CLI で次のように指示してください。
+        </p>
+
+        <div class="command-box">
+          <div class="command-box-header">
+            <span class="command-box-label">
+              <span class="command-box-dots"><span></span><span></span><span></span></span>
+              Antigravity CLI Prompt
+            </span>
+            <button class="copy-btn" type="button">コピー</button>
+          </div>
+          <pre><code>エージェントのプレイグラウンドを起動してください。その際、-allow_origins "regex:https://.*8080-.*\.cloudshell\.dev" オプションを付与してください。</code></pre>
+        </div>
+
+        <div class="command-box">
+          <div class="command-box-header">
+            <span class="command-box-label">
+              <span class="command-box-dots"><span></span><span></span><span></span></span>
+              Antigravity CLI Prompt (別表現)
+            </span>
+            <button class="copy-btn" type="button">コピー</button>
+          </div>
+          <pre><code>エージェントのプレイグラウンドを起動する, -allow_origins "regex:https://.*8080-.*\.cloudshell\.dev" オプションをつける</code></pre>
+        </div>
+
+        <p>
+          AGY がバックグラウンドで Playground を起動し、ローカル URL（通常は <code class="inline-code">http://localhost:8080</code>）を出力します。
+        </p>
+
+        <figure class="doc-figure">
+          <img src="images/image1.png" alt="Playground の起動出力">
+        </figure>
+
+        <p>
+          表示された <code class="inline-code">http://localhost:8080/dev-ui</code> を <span class="kbd-shortcut">Ctrl +
+            クリック</span> すると、UI 画面が開きます。
+        </p>
+
+        <figure class="doc-figure">
+          <img src="images/image4.png" alt="Playground Dev UI 画面">
+        </figure>
+
+        <!-- Agent Platform へのデプロイ -->
+        <h2 class="section-h2" id="deploy-agent-platform">Agent Platform へのデプロイ</h2>
+
+        <p>Google Cloud へのデプロイは、Antigravity CLI に対して Agent Platform へデプロイするよう指示するだけで完了します。</p>
+
+        <div class="command-box">
+          <div class="command-box-header">
+            <span class="command-box-label">
+              <span class="command-box-dots"><span></span><span></span><span></span></span>
+              Antigravity CLI Prompt
+            </span>
+            <button class="copy-btn" type="button">コピー</button>
+          </div>
+          <pre><code>エージェントを停止してください。</code></pre>
+        </div>
+
+        <div class="command-box">
+          <div class="command-box-header">
+            <span class="command-box-label">
+              <span class="command-box-dots"><span></span><span></span><span></span></span>
+              Antigravity CLI Prompt
+            </span>
+            <button class="copy-btn" type="button">コピー</button>
+          </div>
+          <pre><code>エージェントを Agent Runtime にデプロイしてください。</code></pre>
+        </div>
+
+        <p>デプロイには数分かかる場合があります。完了すると、Agent Platform 上でエージェントが確認できるようになります。</p>
+
+        <div class="image-grid">
+          <figure class="doc-figure">
+            <img src="images/image5.png" alt="Agent Platform デプロイ画面 1">
+          </figure>
+          <figure class="doc-figure">
+            <img src="images/image6.png" alt="Agent Platform デプロイ画面 2">
+          </figure>
+          <figure class="doc-figure">
+            <img src="images/image7.png" alt="Agent Platform デプロイ画面 3">
+          </figure>
+        </div>
+
+        <p>対象のエージェントをクリックすると、本番環境でのモニタリングや各種管理ツールを利用できます。</p>
+
+        <figure class="doc-figure">
+          <img src="images/image10.png" alt="Agent Platform モニタリング・管理ツール">
+        </figure>
+
+        <div class="completion-box">
+          <span>🎉</span>
+          <span>おめでとうございます！エージェント駆動型アプリケーションの設計、構築、検証、評価、そしてデプロイまでの一連の工程が完了しました。</span>
+        </div>
+
+        <!-- 次のチャレンジ -->
+        <h2 class="section-h2" id="next-challenge">次のチャレンジ</h2>
+
+        <p>作成したエージェントに、以下のような新機能を追加してみましょう。</p>
+
+        <ul>
+          <li>Web UI を作成し、画面経由でエージェントにアクセスする</li>
+          <li>画像生成機能を追加する</li>
+          <li>ユーザー認証機能を導入する</li>
+          <li>その他の独自の拡張機能</li>
+        </ul>
+
+        <div class="segment-nav">
+          <a href="#env-setup" class="segment-nav-link">
+            <span>前のセクション</span>
+            ← 環境のセットアップ
+          </a>
+          <a href="#" class="segment-nav-link">
+            <span>ページ上部</span>
+            トップへ戻る ↑
+          </a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Image Lightbox Modal -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-label="拡大画像表示">
+    <img src="" alt="拡大表示" id="lightboxImg">
+  </div>
+
+  <script>
+    // Copy command button handler
+    document.querySelectorAll('.copy-btn').forEach(button => {
+      button.addEventListener('click', async () => {
+        const pre = button.closest('.command-box').querySelector('pre');
+        const text = pre ? pre.innerText.trim() : '';
+        try {
+          await navigator.clipboard.writeText(text);
+          const original = button.textContent;
+          button.textContent = 'コピー完了 ✓';
+          button.classList.add('copied');
+          setTimeout(() => {
+            button.textContent = original;
+            button.classList.remove('copied');
+          }, 1800);
+        } catch (err) {
+          console.error('Copy failed', err);
+        }
+      });
+    });
+
+    // Active TOC Highlighting on Scroll
+    const headings = Array.from(document.querySelectorAll('[id]')).filter(el =>
+      el.matches('#env-setup, #project-setup, #enable-api, #api-overview, #install-agent-cli, #start-agy-cli, #build-first-agent, #playground, #deploy-agent-platform, #next-challenge')
+    );
+    const tocLinks = document.querySelectorAll('.toc-item a');
+
+    function updateActiveToc() {
+      const scrollY = window.scrollY;
+      let currentId = headings[0]?.id;
+
+      for (const heading of headings) {
+        const top = heading.getBoundingClientRect().top + window.scrollY - 120;
+        if (scrollY >= top) {
+          currentId = heading.id;
+        }
+      }
+
+      tocLinks.forEach(link => {
+        const isMatch = link.getAttribute('href') === `#${currentId}`;
+        link.classList.toggle('active', isMatch);
+      });
+
+      // Update reading progress bar
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = docHeight > 0 ? Math.min(100, Math.max(0, (scrollY / docHeight) * 100)) : 0;
+      const bar = document.getElementById('progressBar');
+      if (bar) bar.style.width = `${progress}%`;
+    }
+
+    window.addEventListener('scroll', updateActiveToc, { passive: true });
+    updateActiveToc();
+
+    // Mobile TOC Toggle
+    const mobileTocBtn = document.getElementById('mobileTocBtn');
+    const sidebarNav = document.getElementById('sidebarNav');
+    if (mobileTocBtn && sidebarNav) {
+      mobileTocBtn.addEventListener('click', () => {
+        sidebarNav.classList.toggle('open');
+      });
+      tocLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          sidebarNav.classList.remove('open');
+        });
+      });
+    }
+
+    // Lightbox for images
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+    document.querySelectorAll('.doc-figure img').forEach(img => {
+      img.addEventListener('click', () => {
+        lightboxImg.src = img.src;
+        lightboxImg.alt = img.alt;
+        lightbox.classList.add('open');
+      });
+    });
+    if (lightbox) {
+      lightbox.addEventListener('click', () => {
+        lightbox.classList.remove('open');
+      });
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') lightbox.classList.remove('open');
+      });
+    }
+  </script>
+</body>
+
+</html>
