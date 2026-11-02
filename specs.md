@@ -2,6 +2,31 @@
 
 ## Change Log
 
+### [2026-11-02 09:57:29 +09:00]
+- Replaced all three Mermaid blocks in [md/[JP]Google_Cloud_updates_Nov_1.md](file:///Users/bharen/Documents/Blogs/md/%5BJP%5DGoogle_Cloud_updates_Nov_1.md) with local (relative-path) image links to the Nano Banana 2.1 infographics; to be swapped for the published GitHub raw URLs after the next git commit:
+  - Benchmark `xychart-beta` → `![コーディング・知識・サイバー分野の検証済みベンチマーク（Gemini 4 Argon / Gemini 4 Carbon）](images/Google_Cloud_updates_Nov_1_benchmarks.png)` (the 出典 caption line directly below was kept).
+  - Gemini agent `flowchart LR` → `![Gemini エージェントのアーキテクチャ](images/Google_Cloud_updates_Nov_1_gemini_agent.png)`.
+  - AQuA `flowchart LR` → `![Ambient Quality Agent (AQuA) の診断パイプライン](images/Google_Cloud_updates_Nov_1_aqua_pipeline.png)`.
+- Carried over the user's unsaved editor change: removed the first Python code sample (`genai.Client(enterprise=True, ...)` / `generate_content_stream` with `gemini-4-argon`) under the Gemini 4 Argon section, collapsing the gap to a single blank line. File is now 200 lines; the remaining Python/Bash code blocks are unchanged. Pre-change copy saved in the conversation scratch folder (`JP_Nov_1_before_images.md`).
+
+### [2026-11-02 09:48:50 +09:00]
+- Generated infographic images for all three Mermaid diagrams in [md/[JP]Google_Cloud_updates_Nov_1.md](file:///Users/bharen/Documents/Blogs/md/%5BJP%5DGoogle_Cloud_updates_Nov_1.md) using Gemini Nano Banana 2.1 (`gemini-nano-banana-2.1`, Gemini Enterprise Agent Platform `global` endpoint, project `haren-main`, `google-genai` 2.32.0 with `enterprise=True`) and saved them to `md/images/`:
+  - [Google_Cloud_updates_Nov_1_benchmarks.png](file:///Users/bharen/Documents/Blogs/md/images/Google_Cloud_updates_Nov_1_benchmarks.png) — bar chart of the `xychart-beta` benchmark diagram (Vals Index 68.9, DeepSWE v1.1 77.9, ERQA 87.0, CWE-Bench v1 68.0 for Gemini 4 Argon in blue; CWE-bench 71.0, SEC-bench Pro 88.2 for Gemini 4 Carbon in charcoal).
+  - [Google_Cloud_updates_Nov_1_gemini_agent.png](file:///Users/bharen/Documents/Blogs/md/images/Google_Cloud_updates_Nov_1_gemini_agent.png) — Gemini エージェントのアーキテクチャ (利用環境 → Gemini Agent Runtime ↔ 4層の永続メモリ, サブエージェント, Agent Gateway → ツール/スキルレジストリ & マルチモデルルーティング).
+  - [Google_Cloud_updates_Nov_1_aqua_pipeline.png](file:///Users/bharen/Documents/Blogs/md/images/Google_Cloud_updates_Nov_1_aqua_pipeline.png) — AQuA の診断パイプライン (本番テレメトリ → 5 steps → オンデマンドの根本原因診断, fed by the deploy-time GCS source snapshot).
+- Style: 16:9, flat vector, white/light-gray theme with Google blue (#1A73E8) and charcoal (#4B5563) accents, Japanese labels identical to the Mermaid source. Output is PNG at 1376×768 (the `global` endpoint returned 1K even when 2K was requested; the model is not available in `us-central1`).
+- The agent diagram was regenerated once to remove card-letter labels (A–G) and fix an awkward 「ポリシー」 line break. All images were visually verified for text and data accuracy. The Mermaid blocks in the markdown were left unchanged (images not yet embedded).
+
+### [2026-11-02 09:22:33 +09:00]
+- Proofread [md/[JP]Google_Cloud_updates_Nov_1.md](file:///Users/bharen/Documents/Blogs/md/%5BJP%5DGoogle_Cloud_updates_Nov_1.md) for natural Japanese expression and rewrote unnatural/literal (translationese) phrasing across the intro, summary table, all section prose, tables, bullets, and "次のステップ".
+- Key fixes: removed unnatural subjects (「私たちは」), replaced verb misuse 「ガバナンスする」 → 「ガバナンスを確保する」, corrected 「2027年10月13日以降まで」/「2027年9月2日以降まで」 → 「少なくとも…まで」, 「暗号学的な」 → 「暗号技術に基づく」, 「フロンティアな」 → 「最先端のフロンティアモデル」, 「AI プロビナンス」 → 「AI コンテンツの来歴証明」, 「〜すべきではありません」 → 「〜は避けたいところです」, and removed redundancies (「頻繁に発生しがち」, 「更新案を自動提案」, 「国内…国内 GA」, 「Google 社内での…Google 社内では」).
+- Split long noun-chain sentences (Gemini 4 Carbon specs, Model Garden table, 業界特化型エージェント, Antigravity Plugin Marketplace, AQuA, Spend Caps, Model Armor, Google SecOps), used standard Japanese terms (意味記憶/手続き記憶/エピソード記憶, GKE 用 Workload Identity 連携, 検出ルール, 棚卸し), unified table headers (提供ステージ, 開発者にとってのポイント, ・ separators), and date notation (e.g., 「10月16日・27日」). Localized Mermaid node labels for natural phrasing.
+- Verified with a scratch integrity script that all 83 links (45 unique URLs), 4 Python/Bash code blocks, 3 Mermaid blocks, all inline code spans, 22 headings, and 5 tables (37 rows, no column mismatches) are preserved unchanged.
+
+### [2026-11-02 09:08:03 +09:00]
+- Translated markdown file [md/[JP]Google_Cloud_updates_Nov_1.md](file:///Users/bharen/Documents/Blogs/md/%5BJP%5DGoogle_Cloud_updates_Nov_1.md) (`What's New in Google Cloud & Google AI — October 2026`) into Japanese.
+- Preserved all standard technical terminology (e.g., Gemini 4 Argon, Gemini 4 Carbon, Fairwind, `continuation_token`, Gemini Nano Banana 2.1, Gemini 3.5 Transcribe, Gemini 3.8 TTS, Gemini Robotics ER 2, Model Garden, Anthropic Claude 5.5, xAI Grok 4.7, DeepSeek-V4.1-Flash, OpenAI GPT-6, SynthID, Agent Identity, Antigravity Plugin Marketplace, ADK `ModelConsultTool`, Deferred Scheduling, Ambient Quality Agent (AQuA), BigQuery Conversational Analytics, Knowledge Catalog, Cloud Budgets Spend Caps, VPC-SC, CMEK, Model Armor, Google SecOps, etc.), markdown tables, Mermaid diagrams (`xychart-beta` and `flowchart LR`), Python/Bash code snippets, and documentation URLs.
+
 ### [2026-10-16 14:12:30 +09:00]
 - Added the Japanese blog post "Agent CLI を利用した Google Cloud 上でのエージェント構築とデプロイ" to the top of the Japanese Publications section (`日本語の投稿`) in [index.html](file:///Users/bharen/Documents/Blogs/index.html).
 - Referenced the blog at `jp/%5BJP%5DBlog_AgentCLIADK/index.html` with badge "日本語" and date "October 16, 2026", and reindexed subsequent Japanese blog comments (Blogs 16 to 17).
