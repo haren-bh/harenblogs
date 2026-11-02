@@ -121,34 +121,6 @@
 
 ![Ambient Quality Agent (AQuA) の診断パイプライン](https://raw.githubusercontent.com/haren-bh/harenblogs/refs/heads/main/md/images/Google_Cloud_updates_Nov_1_aqua_pipeline.png)
 
-`google-adk` を使えば、Python で `ModelConsultTool` をエージェントに追加できます。また、プラグインのインストールや、AQuA が検出した本番環境のインサイトのトリアージも、ターミナルから直接実行できます。
-
-```python
-from google.adk import Agent
-from google.adk.tools import ModelConsultTool
-
-root_agent = Agent(
-    name="support_executor",
-    instruction="Resolve customer order issues using your tools.",
-    tools=[
-        ModelConsultTool(
-            max_uses=2,          # Max advisor escalations per turn
-            session_max_uses=5,  # Max advisor escalations per session
-            thinking_level="high",
-        ),
-    ],
-)
-```
-
-```bash
-# Install a plugin bundle in Antigravity CLI (v2.28.2+)
-agy plugin install google-cloud-developer
-
-# List un-diagnosed NEW production failure clusters and run AQuA root-cause analysis
-agents-cli aqua list-insights --status NEW --root-cause false
-agents-cli aqua run "Diagnose insight <INSIGHT_ID>. What is the root cause, and how would you fix it?"
-```
-
 ### エージェントランタイム、コネクタ、ガバナンスに関するトピック
 
 * **Computer Use Tool（GA、10月30日）:** **GA** に昇格しました。金融取引に関わる操作など機密性の高いアクションに対して、Human-in-the-Loop（HITL）による確認ポリシーを設定できるほか、`configurableComputerUseToolSafetyPolicies` で組織全体に制約を適用することもできます（[Agent Platform リリースノート](https://docs.cloud.google.com/gemini-enterprise-agent-platform/release-notes)）。
@@ -180,14 +152,6 @@ AI エンドポイントをプロトタイプの段階から全社規模のト�
 ### セキュリティ、IAM、ネットワーク境界に関するアップデート
 
 * **IAM Workforce セッションの取り消し（GA、10月6日）と条件付き基本ロール（GA、10月29日）:** 管理者は `gcloud` または REST API を使って、Workforce Identity 連携のプリンシパルが持つアクティブなセッションと短期認証情報を即座に失効させられるようになりました。また、IAM Conditions に対応した条件付きの基本ロール（`roles/admin`、`roles/writer`、`roles/reader`）の付与も可能になりました（[IAM リリースノート](https://docs.cloud.google.com/iam/docs/release-notes) | [Workforce セッション取り消しドキュメント](https://docs.cloud.google.com/iam/docs/workforce-revoke-sessions)）。
-
-```bash
-# Immediately revoke active sessions and short-lived credentials for a federated user
-gcloud iam workforce-pools subjects revoke-sessions SUBJECT_ID \
-    --workforce-pool=WORKFORCE_POOL_ID \
-    --location=global
-```
-
 * **VPC Service Controls の違反修正提案と GKE Workload Identity（パブリックプレビュー、10月8日・14日）:** Violation Analyzer が、最小権限のイングレス／エグレスルールやアクセスレベルの更新内容を自動で提案するようになりました（10月8日）。また、VPC-SC ポリシーから **GKE 用 Workload Identity 連携** のプリンシパルを、Kubernetes サービスアカウント、Namespace、クラスタの単位で直接参照することも可能になりました（10月14日）（[VPC Service Controls リリースノート](https://docs.cloud.google.com/vpc-service-controls/docs/release-notes)）。
 * **Model Armor：データレジデンシーのデフォルト適用と組織ポリシー（GA）:** 新規作成または更新されるすべてのテンプレートに、`constraints/modelarmor.managed.requireTemplateDataResidencyCompliance` がデフォルトで適用されるようになりました（10月26日）。このほか、安全性フィルタとインジェクション対策の設定を必須化するカスタム組織ポリシー（**GA**、10月21日）、コンソール上でのテンプレートのテスト（**GA**、10月27日）、`us`/`eu` における Workspace 向けプロンプトインジェクションフィルタ `v3`（10月9日）が追加され、**ブラジル (`southamerica-east1`)** リージョンでも利用可能になりました（**GA**、10月29日）（[Model Armor リリースノート](https://docs.cloud.google.com/model-armor/release-notes)）。
 * **サーバーレス環境での PHP の CVE パッチ自動適用（GA、10月21日〜23日）:** `CVE-2026-109618` および `CVE-2026-109619`（CVSS 9.2）に対応するため、App Engine スタンダード環境、Cloud Run、Cloud Run functions、Cloud Functions for Firebase に、パッチ適用済みの PHP `8.2.35`、`8.3.36`、`8.4.27`、`8.5.12` ベースイメージを自動的にロールアウトしました。あわせて、Cloud Armor のファイルアップロード／RFI 向けルールセットの更新と、23 件の Mandiant SecOps 検出ルール（`GLOBAL.26.015`）も提供されています（[Google Cloud セキュリティブログ](https://cloud.google.com/blog/products/identity-security/responding-to-core-php-vulnerabilities-cve-2026-109618-cve-2026-109619)）。

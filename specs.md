@@ -2,6 +2,12 @@
 
 ## Change Log
 
+### [2026-11-02 20:04:28 +09:00]
+- Removed all code examples from [md/[JP]Google_Cloud_updates_Nov_1.md](file:///Users/bharen/Documents/Blogs/md/%5BJP%5DGoogle_Cloud_updates_Nov_1.md) because they were too detailed for a high-level update post:
+  - ADK for Python topic: the `ModelConsultTool` Python sample, the `agy plugin install` / `agents-cli aqua` bash sample, and the lead-in sentence 「`google-adk` を使えば、Python で `ModelConsultTool` をエージェントに追加できます。…」. The AQuA pipeline image now leads straight into the next topic.
+  - Security topic: the `gcloud iam workforce-pools subjects revoke-sessions` bash sample. The IAM and VPC Service Controls bullets now form one continuous list.
+- Verified: no code fences remain, all 81 links and 3 images are intact, and the file is now 169 lines. Inline code identifiers in prose (e.g. `service_tier="deferred"`, `agy plugin install` in 次のステップ) were kept.
+
 ### [2026-11-02 19:57:33 +09:00]
 - Formatting pass on [md/[JP]Google_Cloud_updates_Nov_1.md](file:///Users/bharen/Documents/Blogs/md/%5BJP%5DGoogle_Cloud_updates_Nov_1.md) so topics stand out (user feedback: 「本番環境に対応したマルチモーダルメディア生成・音声処理・身体性推論」 did not read as a topic):
   - Heading hierarchy now matches the Oct_2 post: sections promoted from `###` to `##` (はじめに, 主なアップデートの概要, AI アップデート, エージェント関連アップデート, Google Cloud 全般のアップデート, 次のステップ) and topics promoted from `####` to `###`.
