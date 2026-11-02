@@ -2,6 +2,70 @@
 
 ## Change Log
 
+### [2026-11-02 22:15:49 +09:00]
+- Regenerated three images used by [md/[JP]Google_Cloud_updates_Nov_1.md](file:///Users/bharen/Documents/Blogs/md/%5BJP%5DGoogle_Cloud_updates_Nov_1.md) so they match the intro-level text. They were made with Gemini Nano Banana 2.1 and saved under the same filenames in `md/images/`, so the raw GitHub URLs in the post do not change.
+  - `Google_Cloud_updates_Nov_1_aqua_pipeline.png`:
+    - Review chips goal.md / eval_config.yaml / AutoRaters became 「エージェントの目標」「評価基準」「Gemini の自動評価」.
+    - 「path:start-end で該当行を提示」 became 「問題の原因となる箇所を特定」.
+    - 「デプロイ時の GCS ソーススナップショット」 became 「デプロイ時のソースコード」.
+    - Status pills NEW / RECURRING / RESOLVED became 「新規」「再発」「解決済み」, with the note 「14 日間再発なしで解決済み」.
+    - 「Logging」 became 「Cloud Logging」, and the verification card now reads 「会話記録を確認し誤検知を除外」. This also fixes the old line break that split 「トランスクリプト」.
+  - `Google_Cloud_updates_Nov_1_gemini_agent.png`: 「@agents.company.com の同僚エージェント」 became 「専用アカウントを持つ同僚エージェント」. The rest of the diagram is unchanged.
+  - `Google_Cloud_updates_Nov_1_overall.png` (hero image):
+    - Argon card: limited to GA status, matching the summary table (GA on 2026-10-13, lifecycle support until at least 2027-10-13, Singapore and UK data residency). Removed the `gemini-4-argon` subtitle, the continuation_token streaming line and the 50%-off launch price.
+    - Media card: 「Cloud Storage URI」 became 「Cloud Storage」.
+    - Agents card: 「agy plugin install 1 つで」 became 「コマンド 1 つで」.
+    - ADK card: 「HTTP 200 を返したまま表面化しない」 became 「エラーとして表面化しない」.
+- Process:
+  - Prompts were updated in `gen_infographics.py` in the conversation scratch folder. Every text line is given explicitly, and the script gained a `--src` option for edit passes.
+  - Two candidates were generated per image, and every text line was checked (zoomed crops for the hero image). Picked: AQuA candidate 1, Gemini agent candidate 2 (candidate 1 drew literal 「」 brackets around the title) and overview candidate 1 (exact date formatting).
+  - Previous images were backed up to `scratch/images_before_intro_cleanup/`. Installed files were verified by SHA-1 against the chosen candidates.
+
+### [2026-11-02 22:05:34 +09:00]
+- Removed code- and settings-level detail from [md/[JP]Google_Cloud_updates_Nov_1.md](file:///Users/bharen/Documents/Blogs/md/%5BJP%5DGoogle_Cloud_updates_Nov_1.md) so the post reads as a high-level intro. User feedback: the AQuA `<path>:<start>-<end>` notation made no sense, and terms such as `goal.md` and `eval_config.yaml` were too close to code or settings.
+  - Removed file names, config keys and parameters, CLI commands and flags, UI paths, header names, constraint and role IDs, model IDs, region codes, CVE IDs, and version and rule numbers. The affected sentences were rewritten in plain Japanese. Inline code spans went from 125 to 0.
+  - Tables:
+    - Dropped the 「エンドポイント・リージョン」 column from the media-model table and the 「モデル ID・デプロイ」 column from the Model Garden table. Both tables now have 4 columns.
+    - Useful facts from the dropped cells moved into the descriptions: Transcribe 「同期処理とリアルタイム処理（Live API）の両方に対応し、米国・EU リージョンで提供。」, TTS 「Flash と Flash-Lite の 2 モデルを提供。」, Claude 「Opus・Sonnet・Haiku の 3 モデル」, and the GPT-6 Astra / GPT-6.1 Sol / GPT-6 Luna names.
+  - Summary table:
+    - Removed `gemini-4-argon`, `agy plugin install` and `HTTP 200`.
+    - 「Cloud Storage URI」 became 「Cloud Storage」.
+    - The ADK row now says 「エラーとして表面化しない本番エージェントの障害を、デプロイ時のソースコードと照合して継続的に診断」.
+  - AI section:
+    - Argon paragraph: region codes became 米国・EU, シンガポール and 英国; the cyber-permissive model ID became 「サイバー防衛用途向けのバリアント」.
+    - Media table: removed Priority PayGo, `outputConfig.outputUriPrefix` and the literal Audio Tags, which are now described as 「ささやき声・ため息・笑い声・短い間など」.
+    - Model Garden table: removed the Claude thinking levels `Low`〜`Max`, the Responses API / Chat Completions names (now 「OpenAI 互換の API」) and DeepSeek's prefill parameter detail.
+    - Fine-tuning bullet: model IDs became product names, and region codes became 米国・EU.
+  - Agents section:
+    - Removed `@agents.company.com`, Antigravity `v2.28.2` and the `Main Screen → Customizations` path.
+    - The `plugin.json` bullet is now 「プラグインの 5 つの構成要素」, with no file names or hook event names.
+    - The `Accounts` tab became 「アプリ内で一元管理」.
+    - Gateway bullet: removed the API-key and PAYG billing sentence and `/boost` / `/teamwork-preview`.
+    - ADK heading and lead: code formatting removed. `HTTP 200 OK` became 「エラーとして表面化しないまま、正常なレスポンスを返し続けてしまいます」, and `agents-cli` became Agents CLI.
+    - ModelConsultTool: removed `adk-python` v2.11.0〜v2.13.0, `max_uses` / `session_max_uses` and `ForceEscalationPlugin`.
+    - Deferred Scheduling: removed `service_tier="deferred"` and HTTP `429`.
+    - AQuA: removed `goal.md`, `eval_config.yaml`, the rater metrics (`task_success`, `tool_use_quality`, `trajectory_quality`) and `<path>:<start>-<end>`. It now reads 「エージェントの目標や評価基準、Gemini による自動評価（AutoRaters）をもとに実行内容を採点し、デプロイ時のソースコードと照合して、問題の原因となっている箇所を特定します」.
+    - Computer Use: `configurableComputerUseToolSafetyPolicies` became 「組織全体の安全ポリシー」.
+    - Semantic governance: API names became provider names, and `sgpUserIntentMatching` became 「ユーザーの意図に沿っているかどうかをポリシーで評価」.
+    - Custom MCP: removed `us-central1` / `europe-west1` and `citation_mappings`.
+    - CodeMender: removed v0.12.0〜v0.17.0, `--deep`, `cm health`, `cm support-bundle`, SARIF 2.1.0, `.git/hooks` / `.codemender`, and `--plain` / `--jsonl`. The same features are described in plain words.
+  - Google Cloud general section:
+    - Removed the BigQuery region codes (Montreal, Toronto) and the Singapore, UK and Brazil codes.
+    - The observability header name became 「リクエストにラベルを付ければ、部門やプロジェクトごとにコストを集計」.
+    - The `Usage & Spending > Usage` path became 「管理画面から」.
+    - The `gemini-3.8-flash` ID became Gemini 3.8 Flash.
+  - Security section:
+    - IAM: `gcloud` / REST became 「CLI や API」, 「プリンシパル」 became 「ユーザー」, and `roles/admin` / `roles/writer` / `roles/reader` were removed.
+    - Model Armor: the constraint ID became 「データレジデンシーへの準拠がデフォルトで必須」, filter `v3` became 「新バージョン」, and region codes were removed.
+    - PHP: the CVE IDs became 「PHP の重大な脆弱性 2 件（CVSS 9.2）」; removed the PHP versions and `GLOBAL.26.015`.
+    - SecOps: removed SOAR `6.3.103` / `6.3.104` and `Source Grouping Identifier`.
+  - 次のステップ 2 and 3: now 「ADK を最新版にアップグレードし、ModelConsultTool を試してみましょう」 and 「Antigravity を最新版にアップデートし、Plugin Marketplace からプラグインを探してインストールしてみてください」.
+- Verified by script:
+  - All 80 links and 3 images are unchanged, and every table has consistent column counts.
+  - A scan of the prose (URLs excluded) finds no backticks, file names, flags, IDs, region codes, versions or paths. The only matches are brand names (xAI, iManage, vLLM) and the benchmark name 「Intelligence Index v5.0」.
+  - The file is now 157 lines. A pre-change copy is in the conversation scratch folder (`JP_Nov_1_before_intro_cleanup.md`).
+- The three images that still showed code-like labels were regenerated right afterwards (see the 22:15:49 entry above).
+
 ### [2026-11-02 20:12:10 +09:00]
 - Removed all references to retired, deprecated or phased-out products from [md/[JP]Google_Cloud_updates_Nov_1.md](file:///Users/bharen/Documents/Blogs/md/%5BJP%5DGoogle_Cloud_updates_Nov_1.md), so the post covers new releases only:
   - Deleted the 「モデルライフサイクルの主要な日程」 topic: the retired Gemini 2.5 family (and the automatic migration of Canada/Japan sessions), plus the deprecated `gemini-3.6-flash` (Nov 19, 2026) and `gemini-3.7-flash` (Jan 28, 2027).
