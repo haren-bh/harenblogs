@@ -2,6 +2,14 @@
 
 ## Change Log
 
+### [2026-11-02 20:12:10 +09:00]
+- Removed all references to retired, deprecated or phased-out products from [md/[JP]Google_Cloud_updates_Nov_1.md](file:///Users/bharen/Documents/Blogs/md/%5BJP%5DGoogle_Cloud_updates_Nov_1.md), so the post covers new releases only:
+  - Deleted the 「モデルライフサイクルの主要な日程」 topic: the retired Gemini 2.5 family (and the automatic migration of Canada/Japan sessions), plus the deprecated `gemini-3.6-flash` (Nov 19, 2026) and `gemini-3.7-flash` (Jan 28, 2027).
+  - Moved the one non-retired row, `gemini-3.8-flash` in-country GA in Singapore (`sg`) and the UK (`europe-west2`), into a new bullet 「Gemini 3.8 Flash の国内提供拡大（GA、10月8日・14日）」 in the 「Cloud FinOps、割り当てのガードレール、リージョン拡大」 topic, placed before the Brazil region bullet and keeping both original source links.
+  - Google SecOps bullet: removed the SOAR → Chronicle API migration-deadline extension and the curated ATI rules → `GTI_IOC` migration. Kept the SOAR `6.3.103`/`6.3.104` updates, closed-case reopening, bulk Investigation Management and Basic Mode.
+  - 次のステップ item 4: removed the `gemini-3.6-flash` retirement reminder and retitled the item 「AI の FinOps ガードレールを整備する」.
+- Verified: no retirement or phase-out keywords remain (提供終了, 非推奨, Retired, 移行期限, Gemini 2.5, 3.6/3.7-flash, ATI). The file is now 157 lines.
+
 ### [2026-11-02 20:04:28 +09:00]
 - Removed all code examples from [md/[JP]Google_Cloud_updates_Nov_1.md](file:///Users/bharen/Documents/Blogs/md/%5BJP%5DGoogle_Cloud_updates_Nov_1.md) because they were too detailed for a high-level update post:
   - ADK for Python topic: the `ModelConsultTool` Python sample, the `agy plugin install` / `agents-cli aqua` bash sample, and the lead-in sentence 「`google-adk` を使えば、Python で `ModelConsultTool` をエージェントに追加できます。…」. The AQuA pipeline image now leads straight into the next topic.
