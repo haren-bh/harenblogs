@@ -2,6 +2,14 @@
 
 ## Change Log
 
+### [2026-11-02 19:57:33 +09:00]
+- Formatting pass on [md/[JP]Google_Cloud_updates_Nov_1.md](file:///Users/bharen/Documents/Blogs/md/%5BJP%5DGoogle_Cloud_updates_Nov_1.md) so topics stand out (user feedback: 「本番環境に対応したマルチモーダルメディア生成・音声処理・身体性推論」 did not read as a topic):
+  - Heading hierarchy now matches the Oct_2 post: sections promoted from `###` to `##` (はじめに, 主なアップデートの概要, AI アップデート, エージェント関連アップデート, Google Cloud 全般のアップデート, 次のステップ) and topics promoted from `####` to `###`.
+  - Split combined topics so each gets its own heading: 「Gemini 4 Carbon（プレリリース）」 and 「Gemini 4 Argon の一般提供開始」 (formerly one frontier-model topic); 「ファインチューニングと AI コンテンツの来歴証明」 and 「モデルライフサイクルの主要な日程」 (formerly 「ファインチューニング、モデルライフサイクル、AI コンテンツの来歴証明に関するトピック」).
+  - Moved the trailing link groups out of topic lead paragraphs into a closing `**詳細はこちら:**` line, following the Oct_2 convention, for six topics: Carbon, Argon, media models, model lifecycle, Gemini agent and Antigravity. Links on individual bullets stay inline.
+  - Removed the code formatting from stage labels inside bold bullet labels (`` `GA` `` → GA, `` `パブリックプレビュー` `` → パブリックプレビュー) so they match the summary table; code formatting on identifiers such as `adk-python` was kept.
+- Verified by script: the set of 81 links, all code blocks, images and table structures are unchanged. The file is now 205 lines. Pre-change copy saved in the conversation scratch folder (`JP_Nov_1_before_format_pass.md`).
+
 ### [2026-11-02 19:46:43 +09:00]
 - Restructured the frontier-model section of [md/[JP]Google_Cloud_updates_Nov_1.md](file:///Users/bharen/Documents/Blogs/md/%5BJP%5DGoogle_Cloud_updates_Nov_1.md) per user request: Gemini 4 Argon was already covered in detail in the September post, so Argon is now limited to its GA status and Gemini 4 Carbon is described on its own instead of being compared with Argon.
   - Heading renamed to 「フロンティア推論モデル：Gemini 4 Carbon（プレリリース）と Gemini 4 Argon（GA）」.

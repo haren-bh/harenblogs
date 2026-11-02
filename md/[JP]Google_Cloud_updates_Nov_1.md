@@ -1,6 +1,6 @@
 # Google Cloud & Google AI 最新アップデート：2026年10月
 
-### はじめに
+## はじめに
 
 今日、本番環境向けの AI システムを構築するうえで向き合うべきエンジニアリング課題は、突き詰めると次の 3 つに集約されます。「長時間にわたる多段階のタスク（Long-Horizon Tasks）を通じて一貫した推論を維持すること」、「本番環境で稼働するマルチモデルエージェントのガバナンスを確保すること」、そして「クラウドコストとセキュリティ境界を予測・制御できる状態に保つこと」です。2026年10月には、こうしたボトルネックをそれぞれ解消するための機能を数多くリリースしました。その内容は、**Gemini 4 Carbon** の発表と **Gemini 4 Argon** の一般提供開始をはじめ、本番エージェントの処理に影響を与えずに行うアウトオブバンド（帯域外）診断、請求額に厳格な上限を設ける Spend Caps（支出上限）まで多岐にわたります。マルチエージェントのバックエンドを設計している方、プラットフォームのセキュリティを担当している方、推論コストの FinOps 最適化に取り組んでいる方など、どなたでも今すぐ活用できるアップデートをまとめてご紹介します。
 
@@ -8,7 +8,7 @@
 
 ---
 
-### 主なアップデートの概要
+## 主なアップデートの概要
 
 | リリース / 機能 | 提供ステージ | 開発者にとってのポイント | ドキュメント / クイックスタート |
 | :--- | :--- | :--- | :--- |
@@ -22,11 +22,11 @@
 
 ---
 
-### AI アップデート
+## AI アップデート
 
-#### フロンティア推論モデル：Gemini 4 Carbon（プレリリース）と Gemini 4 Argon（GA）
+### Gemini 4 Carbon（プレリリース）
 
-2026年10月28日、**Gemini 4 Carbon**（**プレリリース**）を発表しました（[Gemini 4 Carbon の紹介](https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-carbon/)）。数日がかりのソフトウェアエンジニアリングタスクとエンドツーエンドの防御的サイバーセキュリティ向けに設計されたフロンティアモデルで、主な特長は次のとおりです。
+2026年10月28日、**Gemini 4 Carbon**（**プレリリース**）を発表しました。数日がかりのソフトウェアエンジニアリングタスクとエンドツーエンドの防御的サイバーセキュリティ向けに設計されたフロンティアモデルで、主な特長は次のとおりです。
 
 * **提供状況:** API、エンタープライズ、コンシューマー向けに広く提供されるのに先立ち、まずは米国政府によるプレリリーステストと、Fairwind プログラムで審査を通過したサイバー防衛担当者向けに先行して展開されています。
 * **長期タスクと計画立案:** 数日単位の長期タスクに対応するアーキテクチャを採用しています。マルチステップの計画立案では、指示の範囲を超えた行動（Overreach）を 26%、対応漏れ（Under-service）を 29% 削減し、根拠のない主張をおよそ半分に抑えています（いずれも Gemini 4 Argon 比）。
@@ -35,11 +35,17 @@
 * **プロンプトインジェクション耐性:** Gray Swan Indirect Prompt Injection（IPI）での攻撃成功率は **0.0%** です。
 * **料金:** 2026年11月30日までの導入記念価格は、入力 100 万トークンあたり **$2.00**、出力 100 万トークンあたり **$10.00**（キャッシュ済み入力は **95% オフ**）です。2026年12月1日からは標準価格（入力 **$4.00**、出力 **$20.00**／100 万トークンあたり）が適用されます。
 
-**Gemini 4 Argon**（`gemini-4-argon`）は、2026年10月13日に一般提供（**GA**）を開始しました。ライフサイクルサポートは少なくとも2027年10月13日まで提供され、`us`・`eu` マルチリージョンに加えて、シンガポール（`asia-southeast1`）と英国（`europe-west2`）のデータレジデンシーにも対応しています。また、`gemini-4-argon-cyber-permissive` も Fairwind 許可リスト経由で **GA** となりました。機能や料金の詳細は [Gemini 4 Argon の紹介](https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-argon/) をご覧ください（[Google Cloud ブログ](https://cloud.google.com/blog/products/ai-machine-learning/gemini-4-argon-available-on-google-cloud) | [Gemini 4 Argon ドキュメント](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/4-argon)）。
+**詳細はこちら:** [Gemini 4 Carbon の紹介](https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-carbon/)
 
-#### 本番環境に対応したマルチモーダルメディア生成・音声処理・身体性推論
+### Gemini 4 Argon の一般提供開始
 
-メディアや音声のパイプラインを構築する際は、ストレージへのアップロードジョブ、音声フォーマッタ、透かし（ウォーターマーク）ツールなどを個別につなぎ合わせる必要がよくあります。10月にリリースされた 4 つのモデルにより、クラウドストレージへのネイティブな保存、ストリーミング音声処理、空間推論を Gemini Enterprise Agent Platform 上で直接利用できるようになりました（[Agent Platform の料金](https://cloud.google.com/gemini-enterprise-agent-platform/generative-ai/pricing) | [Google Cloud 全体のリリースノート](https://docs.cloud.google.com/release-notes)）。
+**Gemini 4 Argon**（`gemini-4-argon`）は、2026年10月13日に一般提供（**GA**）を開始しました。ライフサイクルサポートは少なくとも2027年10月13日まで提供され、`us`・`eu` マルチリージョンに加えて、シンガポール（`asia-southeast1`）と英国（`europe-west2`）のデータレジデンシーにも対応しています。また、`gemini-4-argon-cyber-permissive` も Fairwind 許可リスト経由で **GA** となりました。
+
+**詳細はこちら:** [Gemini 4 Argon の紹介（機能・料金の詳細）](https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-argon/) | [Google Cloud ブログ](https://cloud.google.com/blog/products/ai-machine-learning/gemini-4-argon-available-on-google-cloud) | [Gemini 4 Argon ドキュメント](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/4-argon)
+
+### 本番環境に対応したマルチモーダルメディア生成・音声処理・身体性推論
+
+メディアや音声のパイプラインを構築する際は、ストレージへのアップロードジョブ、音声フォーマッタ、透かし（ウォーターマーク）ツールなどを個別につなぎ合わせる必要がよくあります。10月にリリースされた 4 つのモデルにより、クラウドストレージへのネイティブな保存、ストリーミング音声処理、空間推論を Gemini Enterprise Agent Platform 上で直接利用できるようになりました。
 
 | モデル | 提供ステージ | エンドポイント・リージョン | 開発者向けのポイント・料金 | ドキュメント・ブログ |
 | :--- | :--- | :--- | :--- | :--- |
@@ -48,7 +54,9 @@
 | **Gemini 3.8 Text-to-Speech** | **GA**（10月26日。Voice Design & Replication は **パブリックプレビュー**） | `gemini-3.8-flash-tts`、`gemini-3.8-flash-lite-tts`（`global`、`us`、`eu`） | 70 以上の言語と 30 種類のスタジオ品質の音声を備え、複数話者の対話を 1 回の処理（シングルパス）で生成可能。構造化された「Director's Notes（演出ノート）」、インライン Audio Tags（`[whisper]`、`[sigh]`、`[laughing]`、`[short pause]`）、ストリーミング出力、SynthID による透かしにも対応。 | [Gemini 3.8 TTS ブログ](https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-8-text-to-speech/) · [TTS ドキュメント](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/text-to-speech/overview) |
 | **Gemini Robotics ER 2** | **パブリックプレビュー**（10月27日） | `gemini-robotics-er-2-preview` | Gemini 3.5 Flash をベースに構築された、身体性推論（Embodied Reasoning）向けの VLM。3D 空間推論、エージェント型のコード実行、動画理解、ロボティクスタスクのオーケストレーションに対応。 | [Robotics ER 2 ブログ](https://cloud.google.com/blog/products/ai-machine-learning/gemini-robotics-embodied-reasoning-2-is-now-available-on-google-cloud) |
 
-#### Model Garden で広がるマルチモデルの選択肢
+**詳細はこちら:** [Agent Platform の料金](https://cloud.google.com/gemini-enterprise-agent-platform/generative-ai/pricing) | [Google Cloud 全体のリリースノート](https://docs.cloud.google.com/release-notes)
+
+### Model Garden で広がるマルチモデルの選択肢
 
 現代のエージェントアーキテクチャでは、単一のモデルファミリーだけに頼ることはほとんどありません。IAM や VPC 境界、クラウド費用のコミットメント契約を分断することなく、プランナーには最先端のフロンティアモデルを、サブエージェントには低コストなモデルを使い分けたいというニーズがあります。10月には Model Garden を拡充し、Gemini、Anthropic Claude、OpenAI GPT、xAI Grok、DeepSeek を統一されたガバナンスのもとで利用できるようにしました。
 
@@ -59,12 +67,14 @@
 | **DeepSeek-V4.1-Flash** | **パブリックプレビュー**（10月14日） | `deepseek-v4.1-flash-maas`（`global`、Standard PayGo） | 552B パラメータのマルチモーダル MoE をマネージドで提供（プレフィル時にトークンあたり 8B のバックボーンパラメータがアクティブ）。テキスト／画像入力、思考（Thinking）、ツール呼び出し、構造化出力に対応し、コンテキスト長・出力上限はいずれも **1,048,576 トークン**。 | [DeepSeek-V4.1-Flash ドキュメント](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/maas/deepseek/deepseek-v41-flash) |
 | **OpenAI GPT-6 ファミリー** | **プライベートプレビュー**（10月21日発表） | **GPT-6 Astra**、**GPT-6.1 Sol**、**GPT-6 Luna** | Google Cloud の IAM、データ境界、Marketplace による請求の一本化、Flexible Savings Plan（FSP）の消化に対応した形で、Model Garden からネイティブに利用可能。法人向け Gemini および Antigravity との統合も近日提供予定。 | [OpenAI on Google Cloud ブログ](https://cloud.google.com/blog/products/ai-machine-learning/google-cloud-brings-openai-models-to-customers) |
 
-#### ファインチューニング、モデルライフサイクル、AI コンテンツの来歴証明に関するトピック
+### ファインチューニングと AI コンテンツの来歴証明
 
-* **Gemini 3 向け教師ありファインチューニング（SFT）（`GA`、10月19日）:** `us` および `eu` マルチリージョンのエンドポイントで **GA** となり、チューニングジョブとチューニング済みエンドポイントの両方で顧客管理の暗号鍵（**CMEK**）を利用できるようになりました。対象モデルには、`gemini-3.5-flash` と `gemini-3.1-flash-lite` に加えて `gemini-3.5-flash-lite` が新たに追加されています（[Agent Platform リリースノート](https://docs.cloud.google.com/gemini-enterprise-agent-platform/release-notes)）。
-* **SynthID Detector のグローバル展開（`GA`、10月7日・29日）:** 英語版が全世界で利用可能になり、Google のモデルだけでなく、**OpenAI、NVIDIA、Kakao、Apple** などパートナー各社のモデルで生成された画像・動画・音声についても、AI 生成かどうかを誰でも検証できるようになりました。これまでに透かしが埋め込まれた画像・動画は 1,800 億点以上、音声は 24 万年分に上り、Google 検索、Chrome、Gemini アプリ全体で 1 日あたり 100 万回以上の検証が行われています（[Google DeepMind SynthID ブログ](https://blog.google/innovation-and-ai/models-and-research/google-deepmind/synth-id-ai-content/)）。
+* **Gemini 3 向け教師ありファインチューニング（SFT）（GA、10月19日）:** `us` および `eu` マルチリージョンのエンドポイントで **GA** となり、チューニングジョブとチューニング済みエンドポイントの両方で顧客管理の暗号鍵（**CMEK**）を利用できるようになりました。対象モデルには、`gemini-3.5-flash` と `gemini-3.1-flash-lite` に加えて `gemini-3.5-flash-lite` が新たに追加されています（[Agent Platform リリースノート](https://docs.cloud.google.com/gemini-enterprise-agent-platform/release-notes)）。
+* **SynthID Detector のグローバル展開（GA、10月7日・29日）:** 英語版が全世界で利用可能になり、Google のモデルだけでなく、**OpenAI、NVIDIA、Kakao、Apple** などパートナー各社のモデルで生成された画像・動画・音声についても、AI 生成かどうかを誰でも検証できるようになりました。これまでに透かしが埋め込まれた画像・動画は 1,800 億点以上、音声は 24 万年分に上り、Google 検索、Chrome、Gemini アプリ全体で 1 日あたり 100 万回以上の検証が行われています（[Google DeepMind SynthID ブログ](https://blog.google/innovation-and-ai/models-and-research/google-deepmind/synth-id-ai-content/)）。
 
-本番環境のエンドポイントを常に最新の状態に保てるよう、以下のモデルライフサイクルの主要な日程をご確認ください（[Gemini モデルライフサイクルドキュメント](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/model-versions) | [Gemini Enterprise リリースノート](https://docs.cloud.google.com/gemini/enterprise/docs/release-notes)）。
+### モデルライフサイクルの主要な日程
+
+本番環境のエンドポイントを常に最新の状態に保てるよう、以下のモデルライフサイクルの主要な日程をご確認ください。
 
 | モデル / ファミリー | ライフサイクルステージ・主要日程 | 開発者が取るべき対応 / 移行パス |
 | :--- | :--- | :--- |
@@ -73,34 +83,40 @@
 | **`gemini-3.6-flash`** | **非推奨・提供終了予定**（2026年11月19日） | 2026年11月19日までに、エンドポイントを `gemini-3.8-flash` へアップグレードしてください。 |
 | **`gemini-3.7-flash`** | **非推奨・提供終了予定**（2027年1月28日） | 2027年1月28日までに、エンドポイントを `gemini-3.8-flash` へアップグレードしてください。 |
 
+**詳細はこちら:** [Gemini モデルライフサイクルドキュメント](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/model-versions) | [Gemini Enterprise リリースノート](https://docs.cloud.google.com/gemini/enterprise/docs/release-notes)
+
 ---
 
-### エージェント関連アップデート
+## エージェント関連アップデート
 
-#### ユニバーサル Gemini エージェントと業界特化型エージェント
+### ユニバーサル Gemini エージェントと業界特化型エージェント
 
-2026年10月8日の Gemini at Work で発表された **Gemini エージェント** は、エンタープライズ向けの Q&A、ディープリサーチ、マルチモーダルなコンテンツ制作、自律的なコード実行を、単一のエージェントアーキテクチャと API に統合したものです（[Gemini at Work（Google ブログ）](https://blog.google/innovation-and-ai/infrastructure-and-cloud/google-cloud/gemini-at-work/) | [Gemini at Work 2026 基調講演ブログ](https://cloud.google.com/blog/products/ai-machine-learning/welcome-to-gemini-at-work-2026)）。独自のメモリストアやプロキシゲートウェイをチームがゼロから構築しなくても、Workspace、Microsoft 365、Slack、モバイル／デスクトップ、CLI、ヘッドレス環境のすべてで、状態管理、ID、ポリシー適用の機能を標準で利用できます。
+2026年10月8日の Gemini at Work で発表された **Gemini エージェント** は、エンタープライズ向けの Q&A、ディープリサーチ、マルチモーダルなコンテンツ制作、自律的なコード実行を、単一のエージェントアーキテクチャと API に統合したものです。独自のメモリストアやプロキシゲートウェイをチームがゼロから構築しなくても、Workspace、Microsoft 365、Slack、モバイル／デスクトップ、CLI、ヘッドレス環境のすべてで、状態管理、ID、ポリシー適用の機能を標準で利用できます。
 
 ![Gemini エージェントのアーキテクチャ](https://raw.githubusercontent.com/haren-bh/harenblogs/refs/heads/main/md/images/Google_Cloud_updates_Nov_1_gemini_agent.png)
 
 * **4 層のクラウドメモリ:** **セッション**（Session）、**意味記憶**（Semantic：社内ナレッジ）、**手続き記憶**（Procedural：学習したスキルや自ら作成したスキル）、**エピソード記憶**（Episodic）の 4 層のメモリを、複数のデバイスや数日間にわたる実行をまたいで保持します。
 * **サブエージェントと同僚エージェント（Coworker Agents）:** タスクに応じてサブエージェントを並列または順次起動できます。さらに、専用の Workspace アカウント（`@agents.company.com`）、ドライブやカレンダーへのアクセス権、最小権限の IAM が割り当てられた常設の **同僚エージェント** もサポートしています。
-* **業界特化型エージェント（`パブリックプレビュー`）:** **金融サービス** 向けと **法務** 向けの特化型エージェントを提供します。金融サービス向けエージェントは、FactSet、LSEG、SEC 提出書類に加え、10月30日に **パブリックプレビュー** となった S&P Global Adaptive Retrieval データストア（完全な監査リネージ付き）にグラウンディングされた 50 以上のスキルを備えています。法務向けエージェントは、NetDocuments や iManage で設定された案件（マター）単位の権限と情報隔壁（Ethical Walls）をそのまま継承します。
+* **業界特化型エージェント（パブリックプレビュー）:** **金融サービス** 向けと **法務** 向けの特化型エージェントを提供します。金融サービス向けエージェントは、FactSet、LSEG、SEC 提出書類に加え、10月30日に **パブリックプレビュー** となった S&P Global Adaptive Retrieval データストア（完全な監査リネージ付き）にグラウンディングされた 50 以上のスキルを備えています。法務向けエージェントは、NetDocuments や iManage で設定された案件（マター）単位の権限と情報隔壁（Ethical Walls）をそのまま継承します。
 
-#### Antigravity Plugin Marketplace、Enterprise Gateway、機能の利用制御
+**詳細はこちら:** [Gemini at Work（Google ブログ）](https://blog.google/innovation-and-ai/infrastructure-and-cloud/google-cloud/gemini-at-work/) | [Gemini at Work 2026 基調講演ブログ](https://cloud.google.com/blog/products/ai-machine-learning/welcome-to-gemini-at-work-2026)
 
-これまで、エンジニアリング組織全体でコーディングエージェントの環境を整えるには、開発者一人ひとりの PC で MCP の設定、プロンプトルール、認証情報を手作業で同期する必要がありました。**Antigravity v2.28.2**（2026年10月29日に **GA**）では、新しい **Plugin Marketplace**（`Main Screen → Customizations`）と CLI により、エージェントのカスタマイズ一式をパッケージ化し、コマンド 1 つでインストールできるようになりました（[Antigravity Plugin Marketplace ブログ](https://antigravity.google/blog/plugin-marketplace-in-antigravity) | [Antigravity 変更履歴](https://antigravity.google/docs/changelog)）。
+### Antigravity Plugin Marketplace、Enterprise Gateway、機能の利用制御
+
+これまで、エンジニアリング組織全体でコーディングエージェントの環境を整えるには、開発者一人ひとりの PC で MCP の設定、プロンプトルール、認証情報を手作業で同期する必要がありました。**Antigravity v2.28.2**（2026年10月29日に **GA**）では、新しい **Plugin Marketplace**（`Main Screen → Customizations`）と CLI により、エージェントのカスタマイズ一式をパッケージ化し、コマンド 1 つでインストールできるようになりました。
 
 * **`plugin.json` の 5 つの構成要素:** **Skills**（必要に応じて段階的に読み込まれる `SKILL.md`）、**MCP Servers**（OAuth 2.0 に対応した Streamable HTTP またはローカルの `stdio` で接続する `mcp.json`）、**Rules**（`rules/*.md`）、**Lifecycle Hooks**（`SessionStart`、`PreToolUse`、`PostToolUse`、`PreInvocation`、`PostInvocation`、`Stop` の各イベントに対応する `hooks.json`）、**Custom Agents**（`agents/*.md`）を 1 つのプラグインにまとめられます。
 * **リリース時点の厳選カタログ:** **16 個の Google 製プラグイン** に加え、Atlassian、Canva、CrowdStrike、Databricks、Datadog、Dropbox、Figma、Linear、monday.com、Notion、Ping Identity、SentinelOne、Stripe、Supabase、Unity、Vercel の審査済みパートナープラグインを提供します。各サービスの認証は `Accounts` タブで一元管理できます。
-* **Enterprise Gateway（`GA`、10月20日）と管理者向けの切り替え設定（`GA`、10月6日）:** プラットフォームチームは、Antigravity アプリ、CLI、IDE からの推論リクエストを一元管理の API キーゲートウェイ経由でルーティングし、トラフィックの検査やエグレス（外向き通信）の制御を行えます。推論の利用料はサービスアカウントの従量課金（PAYG）で請求されます。また、**Boost**（`/boost`、**GA**）と **Teamwork**（`/teamwork-preview`、**パブリックプレビュー**）の利用可否を組織単位で切り替えることもできます（[Gemini Enterprise リリースノート](https://docs.cloud.google.com/gemini/enterprise/docs/release-notes)）。
+* **Enterprise Gateway（GA、10月20日）と管理者向けの切り替え設定（GA、10月6日）:** プラットフォームチームは、Antigravity アプリ、CLI、IDE からの推論リクエストを一元管理の API キーゲートウェイ経由でルーティングし、トラフィックの検査やエグレス（外向き通信）の制御を行えます。推論の利用料はサービスアカウントの従量課金（PAYG）で請求されます。また、**Boost**（`/boost`、**GA**）と **Teamwork**（`/teamwork-preview`、**パブリックプレビュー**）の利用可否を組織単位で切り替えることもできます（[Gemini Enterprise リリースノート](https://docs.cloud.google.com/gemini/enterprise/docs/release-notes)）。
 
-#### ADK for Python：`ModelConsultTool`、Deferred Scheduling、AQuA
+**詳細はこちら:** [Antigravity Plugin Marketplace ブログ](https://antigravity.google/blog/plugin-marketplace-in-antigravity) | [Antigravity 変更履歴](https://antigravity.google/docs/changelog)
+
+### ADK for Python：`ModelConsultTool`、Deferred Scheduling、AQuA
 
 エージェントのターンの大半は定型的なツール呼び出しで、重要なアーキテクチャ判断やポリシー判断が求められるのは、そのうちの 1〜2 回程度にすぎません。さらに、デプロイ後に気づきにくいロジックのリグレッションが発生しても、レスポンスは `HTTP 200 OK` を返し続けてしまいます。10月に Agent Development Kit（ADK）と `agents-cli` に加えられた 3 つのアップデートは、コスト効率の改善と、本番環境における品質の継続的な維持という 2 つの課題に対応します。
 
-* **`ModelConsultTool`（`adk-python` v2.11.0〜v2.13.0、`GA` / オープンソース）:** 高速なメインの実行エージェントが、難しい推論ステップだけをターンの途中でツールを持たないアドバイザーモデルにエスカレーション（相談）できるようにします。相談回数は `max_uses` と `session_max_uses` で厳密に制限でき、`ForceEscalationPlugin` やトークン数・コストのテレメトリとも連携します（[ADK Python リリース](https://github.com/google/adk-python/releases) | [`ModelConsultTool` ガイド](https://github.com/google/adk-python/blob/main/docs/guides/tools/model_consult/model_consult_tool/index.md)）。
-* **Deferred Scheduling（`パブリックプレビュー`）:** `service_tier="deferred"` を設定すると、レイテンシ要件が厳しくないバックグラウンドのエージェント処理をキューに入れ、オフピーク時間帯の空きキャパシティで実行できます。これにより **トークン料金が 50% 割引** になるほか、HTTP `429`（レート制限）エラーも減らせます（[Agent Platform リリースノート](https://docs.cloud.google.com/gemini-enterprise-agent-platform/release-notes)）。
+* **`ModelConsultTool`（`adk-python` v2.11.0〜v2.13.0、GA / オープンソース）:** 高速なメインの実行エージェントが、難しい推論ステップだけをターンの途中でツールを持たないアドバイザーモデルにエスカレーション（相談）できるようにします。相談回数は `max_uses` と `session_max_uses` で厳密に制限でき、`ForceEscalationPlugin` やトークン数・コストのテレメトリとも連携します（[ADK Python リリース](https://github.com/google/adk-python/releases) | [`ModelConsultTool` ガイド](https://github.com/google/adk-python/blob/main/docs/guides/tools/model_consult/model_consult_tool/index.md)）。
+* **Deferred Scheduling（パブリックプレビュー）:** `service_tier="deferred"` を設定すると、レイテンシ要件が厳しくないバックグラウンドのエージェント処理をキューに入れ、オフピーク時間帯の空きキャパシティで実行できます。これにより **トークン料金が 50% 割引** になるほか、HTTP `429`（レート制限）エラーも減らせます（[Agent Platform リリースノート](https://docs.cloud.google.com/gemini-enterprise-agent-platform/release-notes)）。
 * **Ambient Quality Agent — AQuA（オープンソース、10月8日）:** 本番エージェントとは別に（アウトオブバンドで）並行稼働し、Cloud Trace、Cloud Logging、BigQuery から 1 回の実行で最大 1,000 セッションを収集・分析します。`goal.md`、`eval_config.yaml`、Gemini AutoRaters（`task_success`、`tool_use_quality`、`trajectory_quality`）に基づいてトラジェクトリ（実行軌跡）を採点し、デプロイ時に Cloud Storage へ保存したソースコードのスナップショットから、問題箇所を正確な行番号（`<path>:<start>-<end>`）付きで示します（[AQuA ブログ記事](https://developers.googleblog.com/the-outer-loop-insights-first-an-ambient-quality-agent-that-diagnoses-your-production-agent/) | [AQuA GitHub リポジトリ](https://github.com/google/adk-recipes/tree/main/core/python/ambient-quality-agent) | [エージェント評価ドキュメント](https://docs.cloud.google.com/gemini-enterprise-agent-platform/optimize/evaluation/agent-evaluation)）。
 
 ![Ambient Quality Agent (AQuA) の診断パイプライン](https://raw.githubusercontent.com/haren-bh/harenblogs/refs/heads/main/md/images/Google_Cloud_updates_Nov_1_aqua_pipeline.png)
@@ -133,37 +149,37 @@ agents-cli aqua list-insights --status NEW --root-cause false
 agents-cli aqua run "Diagnose insight <INSIGHT_ID>. What is the root cause, and how would you fix it?"
 ```
 
-#### エージェントランタイム、コネクタ、ガバナンスに関するトピック
+### エージェントランタイム、コネクタ、ガバナンスに関するトピック
 
-* **Computer Use Tool（`GA`、10月30日）:** **GA** に昇格しました。金融取引に関わる操作など機密性の高いアクションに対して、Human-in-the-Loop（HITL）による確認ポリシーを設定できるほか、`configurableComputerUseToolSafetyPolicies` で組織全体に制約を適用することもできます（[Agent Platform リリースノート](https://docs.cloud.google.com/gemini-enterprise-agent-platform/release-notes)）。
-* **マルチプロバイダー対応のセマンティックガバナンスポリシー（`GA`、10月26日）:** Anthropic Messages/Claude API、OpenAI Chat Completions、Mistral AI、Llama/OpenAI 互換エンドポイント、セルフホスト型の vLLM など、Gemini 以外のモデルで動作するエージェントのツール呼び出しも、`sgpUserIntentMatching` による制御のもとで評価できるようになりました（[Agent Platform リリースノート](https://docs.cloud.google.com/gemini-enterprise-agent-platform/release-notes)）。
-* **カスタム MCP の VPC 接続と引用表示（`GA`、10月16日・27日）:** プライベート MCP サーバーに接続するための Agent Gateway（`us-central1`、`europe-west1`）経由の Private Service Connect（PSC）アタッチメント、Cloud NAT による静的エグレス IP、REST API の `citation_mappings` による引用元チップの表示が追加されました（[Gemini Enterprise リリースノート](https://docs.cloud.google.com/gemini/enterprise/docs/release-notes)）。
-* **Workflow Builder コネクタ（`GA`、10月13日・16日）:** **Microsoft Teams、Notion、Salesforce、Confluence Data Center、Jira Data Center** とのネイティブなワークフロー統合が追加されました（[Gemini Enterprise リリースノート](https://docs.cloud.google.com/gemini/enterprise/docs/release-notes)）。
-* **CodeMender v0.12.0〜v0.17.0（`パブリックプレビュー`、10月5日〜28日）:** 6 回の CLI リリースを通じて、`--deep` 脆弱性スキャンのデフォルト並列実行、`cm health` による事前チェック、`cm support-bundle`、GitHub Code Scanning 向け SARIF 2.1.0 出力の更新、`.git/hooks` と `.codemender` を読み取り専用にするサンドボックス保護、C++ ファイルや shebang 付きスクリプトの自動検出、CI/CD 向けの `--plain` / `--jsonl` 出力が追加されました（[Agent Platform リリースノート](https://docs.cloud.google.com/gemini-enterprise-agent-platform/release-notes)）。
+* **Computer Use Tool（GA、10月30日）:** **GA** に昇格しました。金融取引に関わる操作など機密性の高いアクションに対して、Human-in-the-Loop（HITL）による確認ポリシーを設定できるほか、`configurableComputerUseToolSafetyPolicies` で組織全体に制約を適用することもできます（[Agent Platform リリースノート](https://docs.cloud.google.com/gemini-enterprise-agent-platform/release-notes)）。
+* **マルチプロバイダー対応のセマンティックガバナンスポリシー（GA、10月26日）:** Anthropic Messages/Claude API、OpenAI Chat Completions、Mistral AI、Llama/OpenAI 互換エンドポイント、セルフホスト型の vLLM など、Gemini 以外のモデルで動作するエージェントのツール呼び出しも、`sgpUserIntentMatching` による制御のもとで評価できるようになりました（[Agent Platform リリースノート](https://docs.cloud.google.com/gemini-enterprise-agent-platform/release-notes)）。
+* **カスタム MCP の VPC 接続と引用表示（GA、10月16日・27日）:** プライベート MCP サーバーに接続するための Agent Gateway（`us-central1`、`europe-west1`）経由の Private Service Connect（PSC）アタッチメント、Cloud NAT による静的エグレス IP、REST API の `citation_mappings` による引用元チップの表示が追加されました（[Gemini Enterprise リリースノート](https://docs.cloud.google.com/gemini/enterprise/docs/release-notes)）。
+* **Workflow Builder コネクタ（GA、10月13日・16日）:** **Microsoft Teams、Notion、Salesforce、Confluence Data Center、Jira Data Center** とのネイティブなワークフロー統合が追加されました（[Gemini Enterprise リリースノート](https://docs.cloud.google.com/gemini/enterprise/docs/release-notes)）。
+* **CodeMender v0.12.0〜v0.17.0（パブリックプレビュー、10月5日〜28日）:** 6 回の CLI リリースを通じて、`--deep` 脆弱性スキャンのデフォルト並列実行、`cm health` による事前チェック、`cm support-bundle`、GitHub Code Scanning 向け SARIF 2.1.0 出力の更新、`.git/hooks` と `.codemender` を読み取り専用にするサンドボックス保護、C++ ファイルや shebang 付きスクリプトの自動検出、CI/CD 向けの `--plain` / `--jsonl` 出力が追加されました（[Agent Platform リリースノート](https://docs.cloud.google.com/gemini-enterprise-agent-platform/release-notes)）。
 
 ---
 
-### Google Cloud 全般のアップデート
+## Google Cloud 全般のアップデート
 
-#### Agentic Data Cloud と BigQuery Conversational Analytics
+### Agentic Data Cloud と BigQuery Conversational Analytics
 
 エージェントから業務データベースや分析データベースを利用する際に、ETL でデータを複製したり、根拠のない SQL を生成するハルシネーションのリスクを抱えたりするのは避けたいところです。10月には、ゼロコピーの MCP データベースフェデレーションと、ガバナンスを効かせた **BigQuery Conversational Analytics** を組み合わせて提供を開始しました。
 
-* **フェデレーション型 Data Cloud コネクタと Knowledge Catalog（`パブリックプレビュー`、10月2日）:** Gemini から **BigQuery、AlloyDB for PostgreSQL、Spanner、Cloud SQL** に対して、ユーザーごとの認証情報を使い、データを複製することなく（ゼロコピーで）その場で MCP クエリを実行できます。クエリは **Knowledge Catalog** のビジネス指標やスキーマに自動的にグラウンディングされます（[Gemini at Work 2026 基調講演ブログ](https://cloud.google.com/blog/products/ai-machine-learning/welcome-to-gemini-at-work-2026) | [Gemini Enterprise リリースノート](https://docs.cloud.google.com/gemini/enterprise/docs/release-notes)）。
-* **BigQuery Conversational Analytics（`GA`、10月14日〜27日）:** Knowledge Catalog にグラウンディングされた、複数のプロジェクトやデータセットにまたがる自然言語での分析が **GA** となりました。あわせて、Gemini Enterprise へのワンクリックでのエージェント公開（10月14日）、回答の **PDF/CSV** エクスポート（10月15日）、**モントリオール (`northamerica-northeast1`)** と **トロント (`northamerica-northeast2`)** リージョンへの対応（10月16日）、BigQuery での **会話の監査ログ記録**（10月26日）、**コネクテッドシート（Connected Sheets）** での対話型分析（10月27日）も追加されています（[BigQuery リリースノート](https://docs.cloud.google.com/bigquery/docs/release-notes)）。
+* **フェデレーション型 Data Cloud コネクタと Knowledge Catalog（パブリックプレビュー、10月2日）:** Gemini から **BigQuery、AlloyDB for PostgreSQL、Spanner、Cloud SQL** に対して、ユーザーごとの認証情報を使い、データを複製することなく（ゼロコピーで）その場で MCP クエリを実行できます。クエリは **Knowledge Catalog** のビジネス指標やスキーマに自動的にグラウンディングされます（[Gemini at Work 2026 基調講演ブログ](https://cloud.google.com/blog/products/ai-machine-learning/welcome-to-gemini-at-work-2026) | [Gemini Enterprise リリースノート](https://docs.cloud.google.com/gemini/enterprise/docs/release-notes)）。
+* **BigQuery Conversational Analytics（GA、10月14日〜27日）:** Knowledge Catalog にグラウンディングされた、複数のプロジェクトやデータセットにまたがる自然言語での分析が **GA** となりました。あわせて、Gemini Enterprise へのワンクリックでのエージェント公開（10月14日）、回答の **PDF/CSV** エクスポート（10月15日）、**モントリオール (`northamerica-northeast1`)** と **トロント (`northamerica-northeast2`)** リージョンへの対応（10月16日）、BigQuery での **会話の監査ログ記録**（10月26日）、**コネクテッドシート（Connected Sheets）** での対話型分析（10月27日）も追加されています（[BigQuery リリースノート](https://docs.cloud.google.com/bigquery/docs/release-notes)）。
 
-#### Cloud FinOps、割り当てのガードレール、リージョン拡大
+### Cloud FinOps、割り当てのガードレール、リージョン拡大
 
 AI エンドポイントをプロトタイプの段階から全社規模のトラフィックに耐えられるまでスケールさせるには、厳格なコスト上限、リクエスト単位でのチャージバック（費用配賦）を可能にするテレメトリ、そして一部のユーザーが共有枠を使い切ってしまう「ノイジーネイバー」問題への対策が欠かせません。
 
-* **Google Cloud Budgets Spend Caps（`GA`、10月30日）:** Cloud Billing Budgets API を使ってプログラムからコスト上限を適用でき、AI の推定コストに基づいてほぼリアルタイムに発動します。上限に達すると、基盤となるリソースを削除することなく従量課金（PayGo）／CUD のリクエストを停止しますが、Provisioned Throughput（プロビジョニング済みスループット）は稼働したままです。上限は毎月自動的にリセットされます（[Google Cloud Spend Caps ブログ](https://cloud.google.com/blog/topics/cost-management/google-cloud-spend-caps-now-generally-available)）。
-* **推論リクエストのメタデータロギング（`GA`、10月30日）:** プロンプトの内容を含まない、リクエスト単位の Cloud Logging レコード（モデル、リージョン、トークン数、レイテンシ、ティア、エラーコード）を出力します。ダッシュボードでは 1 秒単位の粒度で確認でき、`x-goog-agent-platform-observability-label-` ヘッダーを付与すれば、SQL でコストの帰属先を集計してチャージバックに活用することもできます（[Agent Platform リリースノート](https://docs.cloud.google.com/gemini-enterprise-agent-platform/release-notes)）。
-* **ユーザー単位の割り当て上限と割り当て超過時の PayGo（`GA`、10月6日〜7日・22日）:** 管理者は `Usage & Spending > Usage`（Standard、Plus、Standard Emerging Market）で、ユーザーごとの割り当て上限と倍率を設定できます。これにより、一部のパワーユーザーが共有プールを使い果たすのを防げます。あわせて、割り当て超過時の従量課金（PayGo）をティアごとに制御する機能が、Frontline、EDU、Emerging Market の各エディションにも拡大されました（[Gemini Enterprise リリースノート](https://docs.cloud.google.com/gemini/enterprise/docs/release-notes)）。
-* **ブラジル (`br`) リージョン（許可リスト制で `GA`、10月28日）と Notebook の刷新（`GA`、10月30日）:** **ブラジル (`br`)** で国内データレジデンシー（DRZ）と国内での ML 処理の提供を開始しました。また、**Gemini Notebook Enterprise** の UI が刷新され、Audio Overview（音声概要）の言語の個別選択、インフォグラフィックのスタイルプレビュー、カスタム要約、Fast Research に対応しました（[Gemini Enterprise リリースノート](https://docs.cloud.google.com/gemini/enterprise/docs/release-notes)）。
+* **Google Cloud Budgets Spend Caps（GA、10月30日）:** Cloud Billing Budgets API を使ってプログラムからコスト上限を適用でき、AI の推定コストに基づいてほぼリアルタイムに発動します。上限に達すると、基盤となるリソースを削除することなく従量課金（PayGo）／CUD のリクエストを停止しますが、Provisioned Throughput（プロビジョニング済みスループット）は稼働したままです。上限は毎月自動的にリセットされます（[Google Cloud Spend Caps ブログ](https://cloud.google.com/blog/topics/cost-management/google-cloud-spend-caps-now-generally-available)）。
+* **推論リクエストのメタデータロギング（GA、10月30日）:** プロンプトの内容を含まない、リクエスト単位の Cloud Logging レコード（モデル、リージョン、トークン数、レイテンシ、ティア、エラーコード）を出力します。ダッシュボードでは 1 秒単位の粒度で確認でき、`x-goog-agent-platform-observability-label-` ヘッダーを付与すれば、SQL でコストの帰属先を集計してチャージバックに活用することもできます（[Agent Platform リリースノート](https://docs.cloud.google.com/gemini-enterprise-agent-platform/release-notes)）。
+* **ユーザー単位の割り当て上限と割り当て超過時の PayGo（GA、10月6日〜7日・22日）:** 管理者は `Usage & Spending > Usage`（Standard、Plus、Standard Emerging Market）で、ユーザーごとの割り当て上限と倍率を設定できます。これにより、一部のパワーユーザーが共有プールを使い果たすのを防げます。あわせて、割り当て超過時の従量課金（PayGo）をティアごとに制御する機能が、Frontline、EDU、Emerging Market の各エディションにも拡大されました（[Gemini Enterprise リリースノート](https://docs.cloud.google.com/gemini/enterprise/docs/release-notes)）。
+* **ブラジル (`br`) リージョン（許可リスト制で GA、10月28日）と Notebook の刷新（GA、10月30日）:** **ブラジル (`br`)** で国内データレジデンシー（DRZ）と国内での ML 処理の提供を開始しました。また、**Gemini Notebook Enterprise** の UI が刷新され、Audio Overview（音声概要）の言語の個別選択、インフォグラフィックのスタイルプレビュー、カスタム要約、Fast Research に対応しました（[Gemini Enterprise リリースノート](https://docs.cloud.google.com/gemini/enterprise/docs/release-notes)）。
 
-#### セキュリティ、IAM、ネットワーク境界に関するアップデート
+### セキュリティ、IAM、ネットワーク境界に関するアップデート
 
-* **IAM Workforce セッションの取り消し（`GA`、10月6日）と条件付き基本ロール（`GA`、10月29日）:** 管理者は `gcloud` または REST API を使って、Workforce Identity 連携のプリンシパルが持つアクティブなセッションと短期認証情報を即座に失効させられるようになりました。また、IAM Conditions に対応した条件付きの基本ロール（`roles/admin`、`roles/writer`、`roles/reader`）の付与も可能になりました（[IAM リリースノート](https://docs.cloud.google.com/iam/docs/release-notes) | [Workforce セッション取り消しドキュメント](https://docs.cloud.google.com/iam/docs/workforce-revoke-sessions)）。
+* **IAM Workforce セッションの取り消し（GA、10月6日）と条件付き基本ロール（GA、10月29日）:** 管理者は `gcloud` または REST API を使って、Workforce Identity 連携のプリンシパルが持つアクティブなセッションと短期認証情報を即座に失効させられるようになりました。また、IAM Conditions に対応した条件付きの基本ロール（`roles/admin`、`roles/writer`、`roles/reader`）の付与も可能になりました（[IAM リリースノート](https://docs.cloud.google.com/iam/docs/release-notes) | [Workforce セッション取り消しドキュメント](https://docs.cloud.google.com/iam/docs/workforce-revoke-sessions)）。
 
 ```bash
 # Immediately revoke active sessions and short-lived credentials for a federated user
@@ -172,14 +188,14 @@ gcloud iam workforce-pools subjects revoke-sessions SUBJECT_ID \
     --location=global
 ```
 
-* **VPC Service Controls の違反修正提案と GKE Workload Identity（`パブリックプレビュー`、10月8日・14日）:** Violation Analyzer が、最小権限のイングレス／エグレスルールやアクセスレベルの更新内容を自動で提案するようになりました（10月8日）。また、VPC-SC ポリシーから **GKE 用 Workload Identity 連携** のプリンシパルを、Kubernetes サービスアカウント、Namespace、クラスタの単位で直接参照することも可能になりました（10月14日）（[VPC Service Controls リリースノート](https://docs.cloud.google.com/vpc-service-controls/docs/release-notes)）。
-* **Model Armor：データレジデンシーのデフォルト適用と組織ポリシー（`GA`）:** 新規作成または更新されるすべてのテンプレートに、`constraints/modelarmor.managed.requireTemplateDataResidencyCompliance` がデフォルトで適用されるようになりました（10月26日）。このほか、安全性フィルタとインジェクション対策の設定を必須化するカスタム組織ポリシー（**GA**、10月21日）、コンソール上でのテンプレートのテスト（**GA**、10月27日）、`us`/`eu` における Workspace 向けプロンプトインジェクションフィルタ `v3`（10月9日）が追加され、**ブラジル (`southamerica-east1`)** リージョンでも利用可能になりました（**GA**、10月29日）（[Model Armor リリースノート](https://docs.cloud.google.com/model-armor/release-notes)）。
-* **サーバーレス環境での PHP の CVE パッチ自動適用（`GA`、10月21日〜23日）:** `CVE-2026-109618` および `CVE-2026-109619`（CVSS 9.2）に対応するため、App Engine スタンダード環境、Cloud Run、Cloud Run functions、Cloud Functions for Firebase に、パッチ適用済みの PHP `8.2.35`、`8.3.36`、`8.4.27`、`8.5.12` ベースイメージを自動的にロールアウトしました。あわせて、Cloud Armor のファイルアップロード／RFI 向けルールセットの更新と、23 件の Mandiant SecOps 検出ルール（`GLOBAL.26.015`）も提供されています（[Google Cloud セキュリティブログ](https://cloud.google.com/blog/products/identity-security/responding-to-core-php-vulnerabilities-cve-2026-109618-cve-2026-109619)）。
+* **VPC Service Controls の違反修正提案と GKE Workload Identity（パブリックプレビュー、10月8日・14日）:** Violation Analyzer が、最小権限のイングレス／エグレスルールやアクセスレベルの更新内容を自動で提案するようになりました（10月8日）。また、VPC-SC ポリシーから **GKE 用 Workload Identity 連携** のプリンシパルを、Kubernetes サービスアカウント、Namespace、クラスタの単位で直接参照することも可能になりました（10月14日）（[VPC Service Controls リリースノート](https://docs.cloud.google.com/vpc-service-controls/docs/release-notes)）。
+* **Model Armor：データレジデンシーのデフォルト適用と組織ポリシー（GA）:** 新規作成または更新されるすべてのテンプレートに、`constraints/modelarmor.managed.requireTemplateDataResidencyCompliance` がデフォルトで適用されるようになりました（10月26日）。このほか、安全性フィルタとインジェクション対策の設定を必須化するカスタム組織ポリシー（**GA**、10月21日）、コンソール上でのテンプレートのテスト（**GA**、10月27日）、`us`/`eu` における Workspace 向けプロンプトインジェクションフィルタ `v3`（10月9日）が追加され、**ブラジル (`southamerica-east1`)** リージョンでも利用可能になりました（**GA**、10月29日）（[Model Armor リリースノート](https://docs.cloud.google.com/model-armor/release-notes)）。
+* **サーバーレス環境での PHP の CVE パッチ自動適用（GA、10月21日〜23日）:** `CVE-2026-109618` および `CVE-2026-109619`（CVSS 9.2）に対応するため、App Engine スタンダード環境、Cloud Run、Cloud Run functions、Cloud Functions for Firebase に、パッチ適用済みの PHP `8.2.35`、`8.3.36`、`8.4.27`、`8.5.12` ベースイメージを自動的にロールアウトしました。あわせて、Cloud Armor のファイルアップロード／RFI 向けルールセットの更新と、23 件の Mandiant SecOps 検出ルール（`GLOBAL.26.015`）も提供されています（[Google Cloud セキュリティブログ](https://cloud.google.com/blog/products/identity-security/responding-to-core-php-vulnerabilities-cve-2026-109618-cve-2026-109619)）。
 * **Google SecOps に関するトピック:** リージョンごとに SOAR `6.3.103`/`6.3.104` のアップデートを提供し、SOAR から Chronicle API への移行期限を2027年3月31日まで延長しました。また、キュレート済みの ATI ルールが `GTI_IOC` に移行されたほか（10月12日）、`Source Grouping Identifier` によるクローズ済みケースの再オープン（10月18日）、最大 50 件のケースを対象とした Investigation Management の一括操作（10月22日）、SIEM 検索を高速化する **Basic Mode**（**パブリックプレビュー**、10月31日）が追加されました（[SecOps リリースノート](https://docs.cloud.google.com/chronicle/docs/secops/release-notes) | [SOAR リリースノート](https://docs.cloud.google.com/chronicle/docs/soar/release-notes)）。
 
 ---
 
-### 次のステップ
+## 次のステップ
 
 10月のリリースを、さっそくご自身の技術スタックに取り入れてみませんか？以下のリンクから、すぐに試すことができます。
 
