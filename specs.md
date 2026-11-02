@@ -2,6 +2,11 @@
 
 ## Change Log
 
+### [2026-11-02 19:10:04 +09:00]
+- Found that [md/[JP]Google_Cloud_updates_Nov_1.md](file:///Users/bharen/Documents/Blogs/md/%5BJP%5DGoogle_Cloud_updates_Nov_1.md) was overwritten at 19:06:26 (right after commit `d847a57`) by a stale editor buffer, which undid the Mermaid → local image replacement (3 Mermaid blocks back, 0 image links, 225 lines).
+- Restored the file from commit `d847a57` (`git restore`). That commit holds the complete version: 200 lines with the Japanese translation, the naturalness proofreading, 3 local image links, and the removal of the first Python sample. The overwritten copy was saved to the conversation scratch folder (`JP_Nov_1_stale_overwrite_1906.md`).
+- Verified 27/27 checks: translation, proofreading phrases (and absence of the old phrasing), no Mermaid blocks, 3 image links to the committed PNGs, all 83 links (45 unique) and the remaining code blocks preserved, and all session entries in specs.md. Confirmed the images are already published on GitHub raw (HTTP 200).
+
 ### [2026-11-02 09:57:29 +09:00]
 - Replaced all three Mermaid blocks in [md/[JP]Google_Cloud_updates_Nov_1.md](file:///Users/bharen/Documents/Blogs/md/%5BJP%5DGoogle_Cloud_updates_Nov_1.md) with local (relative-path) image links to the Nano Banana 2.1 infographics; to be swapped for the published GitHub raw URLs after the next git commit:
   - Benchmark `xychart-beta` → `![コーディング・知識・サイバー分野の検証済みベンチマーク（Gemini 4 Argon / Gemini 4 Carbon）](images/Google_Cloud_updates_Nov_1_benchmarks.png)` (the 出典 caption line directly below was kept).
