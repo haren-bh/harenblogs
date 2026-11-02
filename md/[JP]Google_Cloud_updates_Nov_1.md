@@ -2,9 +2,9 @@
 
 ### はじめに
 
-今日、本番環境向けの AI システムを構築するうえで向き合うべきエンジニアリング課題は、突き詰めると次の 3 つに集約されます。「長時間にわたる多段階のタスク（Long-Horizon Tasks）を通じて一貫した推論を維持すること」、「本番環境で稼働するマルチモデルエージェントのガバナンスを確保すること」、そして「クラウドコストとセキュリティ境界を予測・制御できる状態に保つこと」です。2026年10月には、こうしたボトルネックをそれぞれ解消するための機能を数多くリリースしました。その内容は、**Gemini 4 Argon** の 100 万トークン出力ウィンドウをはじめ、本番エージェントの処理に影響を与えずに行うアウトオブバンド（帯域外）診断、請求額に厳格な上限を設ける Spend Caps（支出上限）まで多岐にわたります。マルチエージェントのバックエンドを設計している方、プラットフォームのセキュリティを担当している方、推論コストの FinOps 最適化に取り組んでいる方など、どなたでも今すぐ活用できるアップデートをまとめてご紹介します。
+今日、本番環境向けの AI システムを構築するうえで向き合うべきエンジニアリング課題は、突き詰めると次の 3 つに集約されます。「長時間にわたる多段階のタスク（Long-Horizon Tasks）を通じて一貫した推論を維持すること」、「本番環境で稼働するマルチモデルエージェントのガバナンスを確保すること」、そして「クラウドコストとセキュリティ境界を予測・制御できる状態に保つこと」です。2026年10月には、こうしたボトルネックをそれぞれ解消するための機能を数多くリリースしました。その内容は、**Gemini 4 Carbon** の発表と **Gemini 4 Argon** の一般提供開始をはじめ、本番エージェントの処理に影響を与えずに行うアウトオブバンド（帯域外）診断、請求額に厳格な上限を設ける Spend Caps（支出上限）まで多岐にわたります。マルチエージェントのバックエンドを設計している方、プラットフォームのセキュリティを担当している方、推論コストの FinOps 最適化に取り組んでいる方など、どなたでも今すぐ活用できるアップデートをまとめてご紹介します。
 
-![2026年10月の主なアップデートの概要](images/Google_Cloud_updates_Nov_1_overall.png)
+![2026年10月の主なアップデートの概要](https://raw.githubusercontent.com/haren-bh/harenblogs/refs/heads/main/md/images/Google_Cloud_updates_Nov_1_overall.png)
 
 ---
 
@@ -12,7 +12,7 @@
 
 | リリース / 機能 | 提供ステージ | 開発者にとってのポイント | ドキュメント / クイックスタート |
 | :--- | :--- | :--- | :--- |
-| **Gemini 4 Argon (`gemini-4-argon`)** | **GA** | `continuation_token` による自動ストリーミングで、入力・出力ともに 100 万トークンに対応する統合ウィンドウを実現。2026年11月30日までは導入記念価格として 50% オフで提供。 | [Gemini 4 Argon ドキュメント](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/4-argon) · [開発者ガイド](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/guides/gemini-4-argon) |
+| **Gemini 4 Argon (`gemini-4-argon`)** | **GA** | 2026年10月13日に一般提供を開始。少なくとも2027年10月13日までライフサイクルサポートが提供され、シンガポールと英国のデータレジデンシーにも対応。 | [Gemini 4 Argon ドキュメント](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/4-argon) · [開発者ガイド](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/guides/gemini-4-argon) |
 | **Gemini 4 Carbon** | **プレリリース (Fairwind)** | 数日がかりのソフトウェアエンジニアリングタスクや、エンドツーエンドのサイバー防衛に特化して設計。Gray Swan Indirect Prompt Injection ベンチマークで攻撃成功率 0.0% を達成。 | [Gemini 4 Carbon 発表記事](https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-carbon/) |
 | **Gemini Nano Banana 2.1、3.5 Transcribe、3.8 TTS** | **GA** | Cloud Storage URI へ直接出力できる 4K 画像生成、85 以上の言語に対応したライブ／バッチ音声文字起こし、30 種類の表現豊かな音声を備えた TTS が本番環境で利用可能に。 | [Nano Banana 2.1 ドキュメント](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/nano-banana-2-1) · [Transcribe ドキュメント](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/3-5-transcribe) · [TTS ドキュメント](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/text-to-speech/overview) |
 | **Model Garden の拡充（Claude 5.5、Grok 4.7、DeepSeek-V4.1-Flash、OpenAI GPT-6）** | **GA / パブリック・プライベートプレビュー** | Gemini、Anthropic Claude 5.5、xAI Grok 4.7、DeepSeek-V4.1-Flash、OpenAI GPT-6 の各モデルを、Google Cloud IAM と VPC-SC による統制のもと、請求も一本化して利用可能に。 | [Claude 5.5 ドキュメント](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/partner-models/claude/opus-5-5) · [Grok 4.7 ドキュメント](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/partner-models/grok/grok-4-7) · [OpenAI ブログ](https://cloud.google.com/blog/products/ai-machine-learning/google-cloud-brings-openai-models-to-customers) |
@@ -24,30 +24,18 @@
 
 ### AI アップデート
 
-#### フロンティア推論モデル：Gemini 4 Argon（GA）と Gemini 4 Carbon（プレリリース）
+#### フロンティア推論モデル：Gemini 4 Carbon（プレリリース）と Gemini 4 Argon（GA）
 
-複数モジュールにまたがるリポジトリのリファクタリング、数百ページに及ぶ訴訟の証拠開示（ディスカバリ）資料の統合分析、形式検証（Formal Verification）の証明生成といったタスクを LLM に任せる場合、従来の 32K〜64K という出力トークン上限では、破綻しやすいチャンキング（分割生成）のループ処理に頼らざるを得ませんでした。**Gemini 4 Argon**（`gemini-4-argon`）は2026年10月13日に **GA** となり、少なくとも2027年10月13日までライフサイクルサポートが提供されます。**1,048,576 トークンの入力ウィンドウ** と **1,048,576 トークンの出力ウィンドウ** を組み合わせることで、この制約を取り払います（[Gemini 4 Argon の紹介](https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-argon/) | [Google Cloud ブログ](https://cloud.google.com/blog/products/ai-machine-learning/gemini-4-argon-available-on-google-cloud) | [Gemini 4 Argon ドキュメント](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/4-argon)）。
+2026年10月28日、**Gemini 4 Carbon**（**プレリリース**）を発表しました（[Gemini 4 Carbon の紹介](https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-carbon/)）。数日がかりのソフトウェアエンジニアリングタスクとエンドツーエンドの防御的サイバーセキュリティ向けに設計されたフロンティアモデルで、主な特長は次のとおりです。
 
-また、2026年10月28日には、数日がかりのソフトウェアエンジニアリングタスクとエンドツーエンドの防御的サイバーセキュリティ向けに設計された **Gemini 4 Carbon**（**プレリリース**）を発表しました（[Gemini 4 Carbon の紹介](https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-carbon/)）。Carbon は、API、エンタープライズ、コンシューマー向けに広く提供されるのに先立ち、まずは米国政府によるプレリリーステストと、Fairwind プログラムで審査を通過したサイバー防衛担当者向けに先行して展開されています。
+* **提供状況:** API、エンタープライズ、コンシューマー向けに広く提供されるのに先立ち、まずは米国政府によるプレリリーステストと、Fairwind プログラムで審査を通過したサイバー防衛担当者向けに先行して展開されています。
+* **長期タスクと計画立案:** 数日単位の長期タスクに対応するアーキテクチャを採用しています。マルチステップの計画立案では、指示の範囲を超えた行動（Overreach）を 26%、対応漏れ（Under-service）を 29% 削減し、根拠のない主張をおよそ半分に抑えています（いずれも Gemini 4 Argon 比）。
+* **知能・コーディング性能:** Artificial Analysis Intelligence Index v5.0 で **第1位**（**59**、2026年10月28日時点）、WebDev Arena で **第4位**（Elo **1768**）を獲得しました。Terminal-Bench 4.0 での不正行為（チート）の成功率は **0.0%** です。
+* **サイバー防衛性能:** SEC-bench Pro で **88.2%**、ExploitGym で **54.8%**、CWE-bench で **71.0%** を記録しました。セキュアなコードを生成する能力も Gemini 4 Argon の **2 倍以上** に向上しています。
+* **プロンプトインジェクション耐性:** Gray Swan Indirect Prompt Injection（IPI）での攻撃成功率は **0.0%** です。
+* **料金:** 2026年11月30日までの導入記念価格は、入力 100 万トークンあたり **$2.00**、出力 100 万トークンあたり **$10.00**（キャッシュ済み入力は **95% オフ**）です。2026年12月1日からは標準価格（入力 **$4.00**、出力 **$20.00**／100 万トークンあたり）が適用されます。
 
-| 仕様 / 機能 | Gemini 4 Argon (`gemini-4-argon`) | Gemini 4 Carbon |
-| :--- | :--- | :--- |
-| **提供ステージ** | **GA**（少なくとも2027年10月13日までライフサイクルサポートを提供）。`gemini-4-argon-cyber-permissive` も Fairwind 許可リスト経由で **GA** | **プレリリース**（米国政府によるテストと Fairwind プログラムを通じて順次展開） |
-| **コンテキスト長・出力上限** | 統合コンテキスト **1,048,576** トークン（`v1beta1` の `continuation_token` を使用すると、最大 **1,048,576** トークンまで出力可能） | 数日単位の長期タスクに対応するフロンティアアーキテクチャ |
-| **思考（Thinking）・マルチモーダル** | 思考レベルを `LOW`、`MEDIUM`（デフォルト）、`HIGH` から選択可能。**エージェント型の動画理解**（**GA**）に対応 | マルチステップの計画立案に対応。Argon と比べて、指示の範囲を超えた行動（Overreach）が 26%、対応漏れ（Under-service）が 29% 減少し、根拠のない主張はおよそ半分に |
-| **エンタープライズ・コーディングのベンチマーク** | Vals Index で **第1位**（**68.9%**）、Harvey Legal Agent で **第1位**（**19.6%**）、DeepSWE v1.1 で **77.9%**、ERQA で **87%** | Artificial Analysis Intelligence Index v5.0 で **第1位**（**59**、2026年10月28日時点）、WebDev Arena では Elo スコアが **+89** 上昇して **第4位（1768）** に浮上、Terminal-Bench 4.0 での不正行為（チート）の成功率は **0.0%** |
-| **サイバー防衛・プロンプトインジェクション耐性** | CWE-Bench v1 で **68%**（同率首位）、Gray Swan IPI（適応型攻撃を 15 回試行）で攻撃成功率 **0.7%** | SEC-bench Pro で **88.2%**、ExploitGym で **54.8%**、CWE-bench で **71.0%**。セキュアなコードを生成する能力は Argon 比で **2 倍以上** に向上し、Gray Swan IPI の攻撃成功率は **0.0%** |
-| **導入記念価格（2026年11月30日まで）** | 入力 100 万トークンあたり **$2.00** · 出力 100 万トークンあたり **$10.00**（キャッシュ済み入力は **95% オフ**） | 入力 100 万トークンあたり **$2.00** · 出力 100 万トークンあたり **$10.00**（キャッシュ済み入力は **95% オフ**） |
-| **標準価格（2026年12月1日から）** | 入力 100 万トークンあたり **$4.00** · 出力 100 万トークンあたり **$20.00** | 入力 100 万トークンあたり **$4.00** · 出力 100 万トークンあたり **$20.00** |
-| **データレジデンシー (DRZ)** | `us` および `eu` マルチリージョン、**シンガポール (`asia-southeast1`)**、**英国 (`europe-west2`)** | Fairwind / プレリリース環境 |
-
-![コーディング・知識・サイバー分野の検証済みベンチマーク（Gemini 4 Argon / Gemini 4 Carbon）](images/Google_Cloud_updates_Nov_1_benchmarks.png)
-*出典: [Gemini 4 Argon モデルカード](https://storage.googleapis.com/deepmind-media/Model-Cards/Gemini-4-Argon-Model-Card.pdf)、[Gemini 4 Argon の紹介](https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-argon/)、[Gemini 4 Carbon の紹介](https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-carbon/)。*
-
-* **Argon を利用できる製品・サービス:** `gemini-4-argon` は現在、Google AI Studio、Google Antigravity、BigQuery GenAI 関数（**GA**）、Gemini Enterprise の Web／モバイル版と Workflow Builder（10月27日からデフォルトモデル）、AlphaEvolve（10月26日からデフォルトモデル）、CodeMender（`--model gemini-4-argon`、**パブリックプレビュー**）で利用できます（[Agent Platform リリースノート](https://docs.cloud.google.com/gemini-enterprise-agent-platform/release-notes)）。
-* **Google 社内での活用成果:** Google 社内では Argon を活用して、`google/adk-python` の長時間セッションにおけるインメモリ準備処理のオーバーヘッドを 40% 削減し、コールドインポートのレイテンシを 21% 短縮しました。また、ServiceNow の **NowAI-Bench** では、Gemini 3.8 Flash と比べてタスク成功率が約 20% 向上しています。
-
-`v1beta1` の `GenerateContent` API で 65,536 トークンを超える出力（最大 1,048,576 トークン）をストリーミングするには、`google-genai >= 2.30.1` を使用して `max_output_tokens` を設定するだけです。SDK が暗号化された `continuation_token` カーソルを自動的にたどり、複数のリクエストにまたがって出力を継続します（[Gemini 4 Argon 開発者ガイド](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/guides/gemini-4-argon)）。
+**Gemini 4 Argon**（`gemini-4-argon`）は、2026年10月13日に一般提供（**GA**）を開始しました。ライフサイクルサポートは少なくとも2027年10月13日まで提供され、`us`・`eu` マルチリージョンに加えて、シンガポール（`asia-southeast1`）と英国（`europe-west2`）のデータレジデンシーにも対応しています。また、`gemini-4-argon-cyber-permissive` も Fairwind 許可リスト経由で **GA** となりました。機能や料金の詳細は [Gemini 4 Argon の紹介](https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-argon/) をご覧ください（[Google Cloud ブログ](https://cloud.google.com/blog/products/ai-machine-learning/gemini-4-argon-available-on-google-cloud) | [Gemini 4 Argon ドキュメント](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/4-argon)）。
 
 #### 本番環境に対応したマルチモーダルメディア生成・音声処理・身体性推論
 
@@ -93,7 +81,7 @@
 
 2026年10月8日の Gemini at Work で発表された **Gemini エージェント** は、エンタープライズ向けの Q&A、ディープリサーチ、マルチモーダルなコンテンツ制作、自律的なコード実行を、単一のエージェントアーキテクチャと API に統合したものです（[Gemini at Work（Google ブログ）](https://blog.google/innovation-and-ai/infrastructure-and-cloud/google-cloud/gemini-at-work/) | [Gemini at Work 2026 基調講演ブログ](https://cloud.google.com/blog/products/ai-machine-learning/welcome-to-gemini-at-work-2026)）。独自のメモリストアやプロキシゲートウェイをチームがゼロから構築しなくても、Workspace、Microsoft 365、Slack、モバイル／デスクトップ、CLI、ヘッドレス環境のすべてで、状態管理、ID、ポリシー適用の機能を標準で利用できます。
 
-![Gemini エージェントのアーキテクチャ](images/Google_Cloud_updates_Nov_1_gemini_agent.png)
+![Gemini エージェントのアーキテクチャ](https://raw.githubusercontent.com/haren-bh/harenblogs/refs/heads/main/md/images/Google_Cloud_updates_Nov_1_gemini_agent.png)
 
 * **4 層のクラウドメモリ:** **セッション**（Session）、**意味記憶**（Semantic：社内ナレッジ）、**手続き記憶**（Procedural：学習したスキルや自ら作成したスキル）、**エピソード記憶**（Episodic）の 4 層のメモリを、複数のデバイスや数日間にわたる実行をまたいで保持します。
 * **サブエージェントと同僚エージェント（Coworker Agents）:** タスクに応じてサブエージェントを並列または順次起動できます。さらに、専用の Workspace アカウント（`@agents.company.com`）、ドライブやカレンダーへのアクセス権、最小権限の IAM が割り当てられた常設の **同僚エージェント** もサポートしています。
@@ -115,7 +103,7 @@
 * **Deferred Scheduling（`パブリックプレビュー`）:** `service_tier="deferred"` を設定すると、レイテンシ要件が厳しくないバックグラウンドのエージェント処理をキューに入れ、オフピーク時間帯の空きキャパシティで実行できます。これにより **トークン料金が 50% 割引** になるほか、HTTP `429`（レート制限）エラーも減らせます（[Agent Platform リリースノート](https://docs.cloud.google.com/gemini-enterprise-agent-platform/release-notes)）。
 * **Ambient Quality Agent — AQuA（オープンソース、10月8日）:** 本番エージェントとは別に（アウトオブバンドで）並行稼働し、Cloud Trace、Cloud Logging、BigQuery から 1 回の実行で最大 1,000 セッションを収集・分析します。`goal.md`、`eval_config.yaml`、Gemini AutoRaters（`task_success`、`tool_use_quality`、`trajectory_quality`）に基づいてトラジェクトリ（実行軌跡）を採点し、デプロイ時に Cloud Storage へ保存したソースコードのスナップショットから、問題箇所を正確な行番号（`<path>:<start>-<end>`）付きで示します（[AQuA ブログ記事](https://developers.googleblog.com/the-outer-loop-insights-first-an-ambient-quality-agent-that-diagnoses-your-production-agent/) | [AQuA GitHub リポジトリ](https://github.com/google/adk-recipes/tree/main/core/python/ambient-quality-agent) | [エージェント評価ドキュメント](https://docs.cloud.google.com/gemini-enterprise-agent-platform/optimize/evaluation/agent-evaluation)）。
 
-![Ambient Quality Agent (AQuA) の診断パイプライン](images/Google_Cloud_updates_Nov_1_aqua_pipeline.png)
+![Ambient Quality Agent (AQuA) の診断パイプライン](https://raw.githubusercontent.com/haren-bh/harenblogs/refs/heads/main/md/images/Google_Cloud_updates_Nov_1_aqua_pipeline.png)
 
 `google-adk` を使えば、Python で `ModelConsultTool` をエージェントに追加できます。また、プラグインのインストールや、AQuA が検出した本番環境のインサイトのトリアージも、ターミナルから直接実行できます。
 
@@ -195,7 +183,7 @@ gcloud iam workforce-pools subjects revoke-sessions SUBJECT_ID \
 
 10月のリリースを、さっそくご自身の技術スタックに取り入れてみませんか？以下のリンクから、すぐに試すことができます。
 
-1. **Gemini 4 Argon で 100 万トークン規模の長文生成を試す:** [Google Cloud コンソールの Agent Studio](https://console.cloud.google.com/agent-platform/studio/chat?model=gemini-4-argon) または [Google AI Studio](https://aistudio.google.com/) を開き、[Gemini 4 Argon 開発者ガイド](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/guides/gemini-4-argon) を参考に実際に動かしてみましょう。2026年11月30日までは、導入記念価格（50% オフ）でご利用いただけます。
+1. **GA となった Gemini 4 Argon を本番環境で使う:** [Google Cloud コンソールの Agent Studio](https://console.cloud.google.com/agent-platform/studio/chat?model=gemini-4-argon) または [Google AI Studio](https://aistudio.google.com/) を開き、[Gemini 4 Argon 開発者ガイド](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/guides/gemini-4-argon) を参考に、既存のワークロードを Argon に切り替えて検証してみましょう。
 2. **ADK エージェントを最適化・診断する:** [ADK Python リリース](https://github.com/google/adk-python/releases) を確認して `google-adk` をアップグレードし、`ModelConsultTool` を追加しましょう。あわせて、オープンソースの [Ambient Quality Agent (AQuA) レシピ](https://github.com/google/adk-recipes/tree/main/core/python/ambient-quality-agent) を本番エージェントと並行してデプロイしてみてください。
 3. **Antigravity プラグインでコーディング環境を拡張する:** Antigravity を `v2.28.2` 以降にアップデートし、`Main Screen → Customizations` からプラグインを探すか、`agy plugin install` を実行してみてください。詳しくは [Antigravity の変更履歴とドキュメント](https://antigravity.google/docs/changelog) をご覧ください。
 4. **AI の FinOps とセキュリティのガードレールを整備する:** [Google Cloud Spend Caps ガイド](https://cloud.google.com/blog/topics/cost-management/google-cloud-spend-caps-now-generally-available) を参考に、プログラムからコスト上限を設定しましょう。また、2026年11月19日の `gemini-3.6-flash` 提供終了に備えて、[Gemini モデルライフサイクルドキュメント](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/model-versions) を確認し、利用中のモデルエンドポイントを棚卸ししておきましょう。
