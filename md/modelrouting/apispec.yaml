@@ -1,0 +1,98 @@
+openapi: 3.0.3
+
+info:
+  title: OpenAPI 3.x spec using Model Routing
+  description: Using Model Routing in an OAS 3.x spec
+  version: 1.0.0
+
+x-google-api-management:
+  backends:
+    gemini-38-flash:
+      address: "https://aiplatform.googleapis.com/v1/projects/haren-main/locations/global/publishers/google/models/gemini-3.8-flash:generateContent"
+      deadline: 60.0
+      pathTranslation: CONSTANT_ADDRESS
+
+    anthropic-claude-opus-47:
+      address: "https://aiplatform.googleapis.com/v1/projects/haren-main/locations/global/publishers/anthropic/models/claude-opus-4-7:rawPredict"
+      deadline: 60.0
+      pathTranslation: CONSTANT_ADDRESS
+
+    anthropic-claude-sonnet-5:
+      address: "https://aiplatform.googleapis.com/v1/projects/haren-main/locations/global/publishers/anthropic/models/claude-sonnet-5:rawPredict"
+      deadline: 60.0
+      pathTranslation: CONSTANT_ADDRESS
+
+    anthropic-claude-haiku-45:
+      address: "https://aiplatform.googleapis.com/v1/projects/haren-main/locations/global/publishers/anthropic/models/claude-haiku-4-5:rawPredict"
+      deadline: 60.0
+      pathTranslation: CONSTANT_ADDRESS
+
+    vertex-maas-openapi:
+      address: "https://aiplatform.googleapis.com/v1/projects/haren-main/locations/global/endpoints/openapi/chat/completions"
+      deadline: 60.0
+      pathTranslation: CONSTANT_ADDRESS
+
+  ai:
+    models:
+      routing:
+        routers:
+          gemini-claude-router:
+            defaultModel:
+              backend: gemini-38-flash
+              targetModel: google/gemini-3.8-flash
+            rules:
+              - model: "claude-opus-4-7"
+                backend: anthropic-claude-opus-47
+                targetModel: anthropic/claude-opus-4-7
+              - model: "claude-sonnet-5"
+                backend: anthropic-claude-sonnet-5
+                targetModel: anthropic/claude-sonnet-5
+              - model: "claude-haiku-4-5"
+                backend: anthropic-claude-haiku-45
+                targetModel: anthropic/claude-haiku-4-5
+
+          maas-models-router:
+            defaultModel:
+              backend: vertex-maas-openapi
+              targetModel: openai/gpt-oss-120b-maas
+            rules:
+              - model: "gpt-oss-120b-maas"
+                backend: vertex-maas-openapi
+                targetModel: openai/gpt-oss-120b-maas
+              - model: "deepseek-v4.1"
+                backend: vertex-maas-openapi
+                targetModel: openai/deepseek-v4.1-flash-maas
+              - model: "grok-4.7"
+                backend: vertex-maas-openapi
+                targetModel: openai/grok-4.7
+              - model: "glm-5.2"
+                backend: vertex-maas-openapi
+                targetModel: openai/glm-5.2-maas
+              - model: "codestral-2"
+                backend: vertex-maas-openapi
+                targetModel: openai/codestral-2
+              - model: "llama-4-maverick"
+                backend: vertex-maas-openapi
+                targetModel: openai/llama-4-maverick-17b-128e-instruct-maas
+
+servers:
+  - url: "https://modelrouting-14tqei0csqh0g.apigateway.haren-main.cloud.goog"
+
+paths:
+  /v1/chat/gemini-claude:
+    post:
+      summary: "Router for Gemini and Anthropic Claude models"
+      operationId: "chatGeminiClaude"
+      x-google-model-router: gemini-claude-router
+      responses:
+        "200":
+          description: "OK"
+
+  /v1/chat/maas-models:
+    post:
+      summary: "Router for Vertex AI MaaS OpenAI-compatible models"
+      operationId: "chatMaasModels"
+      x-google-model-router: maas-models-router
+      responses:
+        "200":
+          description: "OK"

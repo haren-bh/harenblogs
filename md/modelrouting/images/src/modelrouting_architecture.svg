@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="920" viewBox="0 0 1600 920">
+<defs><marker id="ah-gray" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M1,1.5 L11,6 L1,10.5 z" fill="#5F6368"/></marker><marker id="ah-light" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M1,1.5 L11,6 L1,10.5 z" fill="#9AA0A6"/></marker><marker id="ah-blue" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M1,1.5 L11,6 L1,10.5 z" fill="#1A73E8"/></marker><marker id="ah-green" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M1,1.5 L11,6 L1,10.5 z" fill="#188038"/></marker><filter id="shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#3C4043" flood-opacity="0.10"/></filter></defs>
+<rect width="1600" height="920" fill="#FFFFFF"/>
+<text x="48" y="62" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="32" font-weight="500" fill="#202124" text-anchor="start" xml:space="preserve">Model routing in Google Cloud</text>
+<text x="48" y="96" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="18" font-weight="400" fill="#5F6368" text-anchor="start" xml:space="preserve">Clients call one OpenAI-compatible endpoint. API Gateway picks the model, translates the request, and calls Model Garden.</text>
+<rect x="40" y="150" width="320" height="610" rx="16" fill="#FFFFFF" stroke="#DADCE0" stroke-width="1.5" filter="url(#shadow)"/>
+<text x="64" y="190" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="20" font-weight="500" fill="#202124" text-anchor="start" xml:space="preserve">Clients</text>
+<rect x="64" y="210" width="272" height="52" rx="10" fill="#F8F9FA" stroke="#DADCE0" stroke-width="1.5"/>
+<text x="84" y="242" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="16" font-weight="500" fill="#202124" text-anchor="start" xml:space="preserve">Apps &amp; services</text>
+<rect x="64" y="274" width="272" height="52" rx="10" fill="#F8F9FA" stroke="#DADCE0" stroke-width="1.5"/>
+<text x="84" y="306" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="16" font-weight="500" fill="#202124" text-anchor="start" xml:space="preserve">AI agents</text>
+<rect x="64" y="338" width="272" height="52" rx="10" fill="#F8F9FA" stroke="#DADCE0" stroke-width="1.5"/>
+<text x="84" y="370" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="16" font-weight="500" fill="#202124" text-anchor="start" xml:space="preserve">OpenAI SDK · curl</text>
+<text x="64" y="432" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="14" font-weight="500" fill="#5F6368" text-anchor="start" xml:space="preserve">Example request</text>
+<rect x="64" y="446" width="272" height="206" rx="10" fill="#202124"/>
+<text x="80" y="478" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="12.5" text-anchor="start" xml:space="preserve"><tspan fill="#8AB4F8" font-weight="700" font-family="'Roboto Mono', Menlo, Consolas, monospace">POST </tspan><tspan fill="#E8EAED" font-weight="400" font-family="'Roboto Mono', Menlo, Consolas, monospace">/v1/chat/gemini-claude</tspan></text>
+<text x="80" y="500" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="12.5" text-anchor="start" xml:space="preserve"><tspan fill="#9AA0A6" font-weight="400" font-family="'Roboto Mono', Menlo, Consolas, monospace">x-api-key: </tspan><tspan fill="#9AA0A6" font-weight="400" font-family="'Roboto Mono', Menlo, Consolas, monospace">&lt;API_KEY&gt;</tspan></text>
+<text x="80" y="532" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="12.5" font-weight="400" fill="#E8EAED" text-anchor="start" xml:space="preserve">{</text>
+<text x="80" y="554" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="12.5" text-anchor="start" xml:space="preserve"><tspan fill="#E8EAED" font-weight="400" font-family="'Roboto Mono', Menlo, Consolas, monospace">  "model": </tspan><tspan fill="#FDD663" font-weight="700" font-family="'Roboto Mono', Menlo, Consolas, monospace">"claude-opus-4-7"</tspan><tspan fill="#E8EAED" font-weight="400" font-family="'Roboto Mono', Menlo, Consolas, monospace">,</tspan></text>
+<text x="80" y="576" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="12.5" font-weight="400" fill="#E8EAED" text-anchor="start" xml:space="preserve">  "messages": [ … ],</text>
+<text x="80" y="598" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="12.5" font-weight="400" fill="#E8EAED" text-anchor="start" xml:space="preserve">  "stream": true</text>
+<text x="80" y="620" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="12.5" font-weight="400" fill="#E8EAED" text-anchor="start" xml:space="preserve">}</text>
+<text x="64" y="696" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="14" font-weight="400" fill="#5F6368" text-anchor="start" xml:space="preserve">Any client that speaks the</text>
+<text x="64" y="716" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="14" font-weight="400" fill="#5F6368" text-anchor="start" xml:space="preserve">OpenAI chat completions format</text>
+<rect x="480" y="140" width="1080" height="740" rx="20" fill="#F8F9FA" stroke="#DADCE0" stroke-width="1.5"/>
+<text x="508" y="176" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="17" font-weight="500" fill="#5F6368" text-anchor="start" xml:space="preserve">Google Cloud</text>
+<rect x="510" y="200" width="510" height="580" rx="16" fill="#FFFFFF" stroke="#1A73E8" stroke-width="2" filter="url(#shadow)"/>
+<text x="538" y="240" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="22" font-weight="500" fill="#202124" text-anchor="start" xml:space="preserve">API Gateway</text>
+<rect x="692" y="220" width="216" height="28" rx="14.0" fill="#E8F0FE"/>
+<text x="800.0" y="238.68" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="13" font-weight="500" fill="#174EA6" text-anchor="middle" xml:space="preserve">Model routing · Public Preview</text>
+<text x="538" y="270" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="15" font-weight="400" fill="#5F6368" text-anchor="start" xml:space="preserve">Regional, fully managed gateway · *.gateway.dev URL</text>
+<rect x="538.0" y="292" width="143.33333333333334" height="40" rx="10" fill="#F8F9FA" stroke="#DADCE0" stroke-width="1.5"/>
+<text x="609.6666666666666" y="317.04" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="14" font-weight="500" fill="#202124" text-anchor="middle" xml:space="preserve">API key / JWT auth</text>
+<rect x="693.3333333333334" y="292" width="143.33333333333334" height="40" rx="10" fill="#F8F9FA" stroke="#DADCE0" stroke-width="1.5"/>
+<text x="765.0" y="317.04" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="14" font-weight="500" fill="#202124" text-anchor="middle" xml:space="preserve">Quotas</text>
+<rect x="848.6666666666667" y="292" width="143.33333333333334" height="40" rx="10" fill="#F8F9FA" stroke="#DADCE0" stroke-width="1.5"/>
+<text x="920.3333333333334" y="317.04" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="14" font-weight="500" fill="#202124" text-anchor="middle" xml:space="preserve">SSE streaming</text>
+<rect x="538" y="350" width="454" height="272" rx="14" fill="#E8F0FE" stroke="#1A73E8" stroke-width="1.5"/>
+<text x="562" y="384" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="19" font-weight="500" fill="#174EA6" text-anchor="start" xml:space="preserve">Model router</text>
+<rect x="562" y="400" width="406" height="62" rx="10" fill="#FFFFFF" stroke="#DADCE0" stroke-width="1.5"/>
+<circle cx="592" cy="431" r="14" fill="#1A73E8"/>
+<text x="592" y="436.04" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="14" font-weight="700" fill="#FFFFFF" text-anchor="middle" xml:space="preserve">1</text>
+<text x="618" y="427" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="16" font-weight="500" fill="#202124" text-anchor="start" xml:space="preserve">Read the model field</text>
+<text x="618" y="448" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="13.5" font-weight="400" fill="#5F6368" text-anchor="start" xml:space="preserve">e.g. "claude-opus-4-7"</text>
+<rect x="562" y="472" width="406" height="62" rx="10" fill="#FFFFFF" stroke="#DADCE0" stroke-width="1.5"/>
+<circle cx="592" cy="503" r="14" fill="#1A73E8"/>
+<text x="592" y="508.04" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="14" font-weight="700" fill="#FFFFFF" text-anchor="middle" xml:space="preserve">2</text>
+<text x="618" y="499" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="16" font-weight="500" fill="#202124" text-anchor="start" xml:space="preserve">Match a rule, else use defaultModel</text>
+<text x="618" y="520" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="13.5" font-weight="400" fill="#5F6368" text-anchor="start" xml:space="preserve">rule → backend + targetModel</text>
+<rect x="562" y="544" width="406" height="62" rx="10" fill="#FFFFFF" stroke="#DADCE0" stroke-width="1.5"/>
+<circle cx="592" cy="575" r="14" fill="#1A73E8"/>
+<text x="592" y="580.04" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="14" font-weight="700" fill="#FFFFFF" text-anchor="middle" xml:space="preserve">3</text>
+<text x="618" y="571" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="16" font-weight="500" fill="#202124" text-anchor="start" xml:space="preserve">Transcode to the provider's API</text>
+<text x="618" y="592" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="13.5" font-weight="400" fill="#5F6368" text-anchor="start" xml:space="preserve">OpenAI format → Gemini, Anthropic, or OpenAI API</text>
+<text x="538" y="650" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="14" font-weight="400" fill="#5F6368" text-anchor="start" xml:space="preserve">Routers and rules come from your OpenAPI 3.x spec.</text>
+<rect x="538" y="672" width="454" height="66" rx="10" fill="#F1F3F4" stroke="#DADCE0" stroke-width="1.5"/>
+<text x="558" y="700" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="15" font-weight="500" fill="#202124" text-anchor="start" xml:space="preserve">Gateway service account</text>
+<text x="558" y="723" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="13" font-weight="400" fill="#5F6368" text-anchor="start" xml:space="preserve">roles/aiplatform.user · OAuth access token to Agent Platform</text>
+<rect x="1080" y="200" width="450" height="580" rx="16" fill="#FFFFFF" stroke="#DADCE0" stroke-width="1.5" filter="url(#shadow)"/>
+<text x="1104" y="240" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="20" font-weight="500" fill="#202124" text-anchor="start" xml:space="preserve">Gemini Enterprise Agent Platform</text>
+<text x="1104" y="266" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="15" font-weight="400" fill="#5F6368" text-anchor="start" xml:space="preserve">Model Garden · aiplatform.googleapis.com</text>
+<rect x="1104" y="292" width="402" height="144" rx="12" fill="#FFFFFF" stroke="#DADCE0" stroke-width="1.5"/>
+<line x1="1120" y1="312" x2="1120" y2="416" stroke="#1A73E8" stroke-width="4" stroke-linecap="round"/>
+<text x="1138" y="330" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="12" font-weight="700" fill="#1A73E8" text-anchor="start" letter-spacing="1.2" xml:space="preserve">GOOGLE</text>
+<text x="1138" y="360" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="19" font-weight="500" fill="#202124" text-anchor="start" xml:space="preserve">Gemini 3.8 Flash</text>
+<text x="1138" y="388" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="13" font-weight="400" fill="#5F6368" text-anchor="start" xml:space="preserve">publishers/google/…:generateContent</text>
+<text x="1138" y="414" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="13.5" font-weight="400" fill="#5F6368" text-anchor="start" xml:space="preserve">defaultModel of gemini-claude-router</text>
+<rect x="1104" y="452" width="402" height="144" rx="12" fill="#FFFFFF" stroke="#DADCE0" stroke-width="1.5"/>
+<line x1="1120" y1="472" x2="1120" y2="576" stroke="#C15F3C" stroke-width="4" stroke-linecap="round"/>
+<text x="1138" y="490" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="12" font-weight="700" fill="#C15F3C" text-anchor="start" letter-spacing="1.2" xml:space="preserve">ANTHROPIC</text>
+<text x="1138" y="520" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="17.5" font-weight="500" fill="#202124" text-anchor="start" xml:space="preserve">Claude Opus 4.7 · Sonnet 5 · Haiku 4.5</text>
+<text x="1138" y="548" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="13" font-weight="400" fill="#5F6368" text-anchor="start" xml:space="preserve">publishers/anthropic/…:rawPredict</text>
+<text x="1138" y="574" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="13.5" font-weight="400" fill="#5F6368" text-anchor="start" xml:space="preserve">Rules in gemini-claude-router</text>
+<rect x="1104" y="612" width="402" height="144" rx="12" fill="#FFFFFF" stroke="#DADCE0" stroke-width="1.5"/>
+<line x1="1120" y1="632" x2="1120" y2="736" stroke="#10A37F" stroke-width="4" stroke-linecap="round"/>
+<text x="1138" y="650" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="12" font-weight="700" fill="#10A37F" text-anchor="start" letter-spacing="1.2" xml:space="preserve">OPENAI · MAAS</text>
+<text x="1138" y="680" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="19" font-weight="500" fill="#202124" text-anchor="start" xml:space="preserve">gpt-oss 120B</text>
+<text x="1138" y="708" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="13" font-weight="400" fill="#5F6368" text-anchor="start" xml:space="preserve">endpoints/openapi/chat/completions</text>
+<text x="1138" y="734" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="13.5" font-weight="400" fill="#5F6368" text-anchor="start" xml:space="preserve">defaultModel of maas-models-router</text>
+<line x1="360" y1="430" x2="506" y2="430" stroke="#1A73E8" stroke-width="2.5" stroke-linecap="round" marker-end="url(#ah-blue)"/>
+<text x="420" y="404" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="13" font-weight="500" fill="#1A73E8" text-anchor="middle" xml:space="preserve">OpenAI-compatible</text>
+<text x="420" y="420" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="13" font-weight="500" fill="#1A73E8" text-anchor="middle" xml:space="preserve">request</text>
+<line x1="510" y1="500" x2="364" y2="500" stroke="#5F6368" stroke-width="2" stroke-linecap="round" stroke-dasharray="6 5" marker-end="url(#ah-gray)"/>
+<text x="420" y="524" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="13" font-weight="400" fill="#5F6368" text-anchor="middle" xml:space="preserve">OpenAI-compatible</text>
+<text x="420" y="540" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="13" font-weight="400" fill="#5F6368" text-anchor="middle" xml:space="preserve">response · SSE</text>
+<circle cx="1020" cy="486.0" r="5" fill="#1A73E8"/>
+<path d="M1020,486.0 C1060.0,486.0 1060.0,364.0 1100,364.0" stroke="#1A73E8" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ah-blue)"/>
+<path d="M1020,486.0 C1060.0,486.0 1060.0,524.0 1100,524.0" stroke="#1A73E8" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ah-blue)"/>
+<path d="M1020,486.0 C1060.0,486.0 1060.0,684.0 1100,684.0" stroke="#1A73E8" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ah-blue)"/>
+<text x="510" y="832" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="15" font-weight="500" fill="#5F6368" text-anchor="start" xml:space="preserve">Observability</text>
+<rect x="626" y="808" width="290" height="40" rx="10" fill="#FFFFFF" stroke="#DADCE0" stroke-width="1.5"/>
+<text x="771.0" y="833.04" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="14" font-weight="500" fill="#202124" text-anchor="middle" xml:space="preserve">Cloud Logging · request logs</text>
+<rect x="932" y="808" width="360" height="40" rx="10" fill="#FFFFFF" stroke="#DADCE0" stroke-width="1.5"/>
+<text x="1112.0" y="833.04" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="14" font-weight="500" fill="#202124" text-anchor="middle" xml:space="preserve">Cloud Monitoring · request_count metric</text>
+</svg>

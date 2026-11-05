@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="680" viewBox="0 0 1600 680">
+<defs><marker id="ah-gray" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M1,1.5 L11,6 L1,10.5 z" fill="#5F6368"/></marker><marker id="ah-light" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M1,1.5 L11,6 L1,10.5 z" fill="#9AA0A6"/></marker><marker id="ah-blue" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M1,1.5 L11,6 L1,10.5 z" fill="#1A73E8"/></marker><marker id="ah-green" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M1,1.5 L11,6 L1,10.5 z" fill="#188038"/></marker><filter id="shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#3C4043" flood-opacity="0.10"/></filter></defs>
+<rect width="1600" height="680" fill="#FFFFFF"/>
+<text x="48" y="62" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="32" font-weight="500" fill="#202124" text-anchor="start">How to configure model routing</text>
+<text x="48" y="96" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="18" font-weight="400" fill="#5F6368" text-anchor="start">Prepare once, deploy with the tool you prefer, then verify.</text>
+<rect x="40" y="140" width="440" height="470" rx="18" fill="#F8F9FA" stroke="#DADCE0" stroke-width="1.5"/>
+<text x="68" y="182" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="21" font-weight="500" fill="#202124" text-anchor="start">Prepare</text>
+<text x="160" y="182" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="15" font-weight="400" fill="#5F6368" text-anchor="start">once per project</text>
+<rect x="64" y="206" width="392" height="84" rx="12" fill="#FFFFFF" stroke="#DADCE0" stroke-width="1.5"/>
+<circle cx="102" cy="248" r="18" fill="#1A73E8"/>
+<text x="102" y="253.76" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="16" font-weight="700" fill="#FFFFFF" text-anchor="middle">1</text>
+<text x="134" y="243" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="17" font-weight="500" fill="#202124" text-anchor="start">Enable models in Model Garden</text>
+<text x="134" y="267" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="14" font-weight="400" fill="#5F6368" text-anchor="start">Claude and gpt-oss model cards</text>
+<rect x="64" y="302" width="392" height="84" rx="12" fill="#FFFFFF" stroke="#DADCE0" stroke-width="1.5"/>
+<circle cx="102" cy="344" r="18" fill="#1A73E8"/>
+<text x="102" y="349.76" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="16" font-weight="700" fill="#FFFFFF" text-anchor="middle">2</text>
+<text x="134" y="339" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="17" font-weight="500" fill="#202124" text-anchor="start">Enable the required APIs</text>
+<text x="134" y="363" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="14" font-weight="400" fill="#5F6368" text-anchor="start">API Gateway, Agent Platform, and 2 more</text>
+<rect x="64" y="398" width="392" height="84" rx="12" fill="#FFFFFF" stroke="#DADCE0" stroke-width="1.5"/>
+<circle cx="102" cy="440" r="18" fill="#1A73E8"/>
+<text x="102" y="445.76" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="16" font-weight="700" fill="#FFFFFF" text-anchor="middle">3</text>
+<text x="134" y="435" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="17" font-weight="500" fill="#202124" text-anchor="start">Create the gateway service account</text>
+<text x="134" y="459" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="14" font-weight="400" fill="#5F6368" text-anchor="start">roles/aiplatform.user only</text>
+<rect x="64" y="494" width="392" height="84" rx="12" fill="#FFFFFF" stroke="#DADCE0" stroke-width="1.5"/>
+<circle cx="102" cy="536" r="18" fill="#1A73E8"/>
+<text x="102" y="541.76" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="16" font-weight="700" fill="#FFFFFF" text-anchor="middle">4</text>
+<text x="134" y="531" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="17" font-weight="500" fill="#202124" text-anchor="start">Write apispec.yaml</text>
+<text x="134" y="555" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="14" font-weight="400" fill="#5F6368" text-anchor="start">OpenAPI 3.x with model routers</text>
+<rect x="560" y="140" width="520" height="470" rx="18" fill="#F8F9FA" stroke="#DADCE0" stroke-width="1.5"/>
+<text x="588" y="182" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="21" font-weight="500" fill="#202124" text-anchor="start">Deploy</text>
+<text x="670" y="182" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="15" font-weight="400" fill="#5F6368" text-anchor="start">pick one</text>
+<rect x="584" y="206" width="472" height="118" rx="12" fill="#FFFFFF" stroke="#1A73E8" stroke-width="1.5" filter="url(#shadow)"/>
+<rect x="608" y="228" width="88" height="28" rx="14.0" fill="#E8F0FE"/>
+<text x="652.0" y="246.86" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="13.5" font-weight="500" fill="#174EA6" text-anchor="middle">Option 1</text>
+<text x="712" y="248" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="19" font-weight="500" fill="#202124" text-anchor="start">Google Cloud console</text>
+<text x="608" y="294" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="15" font-weight="400" fill="#5F6368" text-anchor="start">Create Gateway wizard, no CLI needed</text>
+<rect x="584" y="338" width="472" height="118" rx="12" fill="#FFFFFF" stroke="#1A73E8" stroke-width="1.5" filter="url(#shadow)"/>
+<rect x="608" y="360" width="88" height="28" rx="14.0" fill="#E8F0FE"/>
+<text x="652.0" y="378.86" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="13.5" font-weight="500" fill="#174EA6" text-anchor="middle">Option 2</text>
+<text x="712" y="380" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="19" font-weight="500" fill="#202124" text-anchor="start">gcloud CLI</text>
+<text x="608" y="426" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="15" font-weight="400" fill="#5F6368" text-anchor="start">Repeatable commands for scripts and CI/CD</text>
+<rect x="584" y="470" width="472" height="118" rx="12" fill="#FFFFFF" stroke="#1A73E8" stroke-width="1.5" filter="url(#shadow)"/>
+<rect x="608" y="492" width="88" height="28" rx="14.0" fill="#E8F0FE"/>
+<text x="652.0" y="510.86" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="13.5" font-weight="500" fill="#174EA6" text-anchor="middle">Option 3</text>
+<text x="712" y="512" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="19" font-weight="500" fill="#202124" text-anchor="start">Antigravity CLI (agy)</text>
+<text x="608" y="558" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="15" font-weight="400" fill="#5F6368" text-anchor="start">Natural-language prompts; you approve each step</text>
+<rect x="1160" y="140" width="400" height="470" rx="18" fill="#F8F9FA" stroke="#DADCE0" stroke-width="1.5"/>
+<text x="1188" y="182" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="21" font-weight="500" fill="#202124" text-anchor="start">Verify</text>
+<rect x="1184" y="206" width="352" height="94" rx="12" fill="#FFFFFF" stroke="#DADCE0" stroke-width="1.5"/>
+<circle cx="1214" cy="246" r="12" fill="#E6F4EA"/>
+<path d="M1209,246 L1212.5,250 L1219.5,241.5" stroke="#188038" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="1240" y="252" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="17" font-weight="500" fill="#202124" text-anchor="start">Send test requests</text>
+<text x="1240" y="276" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="14" font-weight="400" fill="#5F6368" text-anchor="start">curl with an OpenAI-compatible body</text>
+<rect x="1184" y="314" width="352" height="94" rx="12" fill="#FFFFFF" stroke="#DADCE0" stroke-width="1.5"/>
+<circle cx="1214" cy="354" r="12" fill="#E6F4EA"/>
+<path d="M1209,354 L1212.5,358 L1219.5,349.5" stroke="#188038" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="1240" y="360" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="17" font-weight="500" fill="#202124" text-anchor="start">Check logs and metrics</text>
+<text x="1240" y="384" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="14" font-weight="400" fill="#5F6368" text-anchor="start">Cloud Logging · Cloud Monitoring</text>
+<rect x="1184" y="430" width="352" height="154" rx="12" fill="#E8F0FE" stroke="#1A73E8" stroke-width="1.5"/>
+<text x="1208" y="466" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="17" font-weight="500" fill="#174EA6" text-anchor="start">Same result, whichever path</text>
+<text x="1208" y="500" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="14.5" font-weight="500" fill="#202124" text-anchor="start">API → API config → Gateway</text>
+<text x="1208" y="532" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="14" font-weight="400" fill="#5F6368" text-anchor="start">One OpenAI-compatible URL:</text>
+<text x="1208" y="558" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="14" font-weight="400" fill="#202124" text-anchor="start">https://…gateway.dev/v1/chat/…</text>
+<line x1="484" y1="375" x2="556" y2="375" stroke="#1A73E8" stroke-width="2.5" stroke-linecap="round" marker-end="url(#ah-blue)"/>
+<line x1="1084" y1="375" x2="1156" y2="375" stroke="#1A73E8" stroke-width="2.5" stroke-linecap="round" marker-end="url(#ah-blue)"/>
+<text x="48" y="648" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="15" font-weight="400" fill="#5F6368" text-anchor="start">Model routing is in Public Preview. You can't add it to an existing gateway: create a new API config and a new gateway.</text>
+</svg>

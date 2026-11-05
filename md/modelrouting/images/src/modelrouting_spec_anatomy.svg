@@ -1,0 +1,115 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000">
+<defs><marker id="ah-gray" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M1,1.5 L11,6 L1,10.5 z" fill="#5F6368"/></marker><marker id="ah-light" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M1,1.5 L11,6 L1,10.5 z" fill="#9AA0A6"/></marker><marker id="ah-blue" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M1,1.5 L11,6 L1,10.5 z" fill="#1A73E8"/></marker><marker id="ah-green" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M1,1.5 L11,6 L1,10.5 z" fill="#188038"/></marker><filter id="shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#3C4043" flood-opacity="0.10"/></filter></defs>
+<rect width="1600" height="1000" fill="#FFFFFF"/>
+<text x="48" y="62" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="32" font-weight="500" fill="#202124" text-anchor="start" xml:space="preserve">Anatomy of the model routing spec</text>
+<text x="48" y="96" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="18" font-weight="400" fill="#5F6368" text-anchor="start" xml:space="preserve">How paths, routers, and backends in apispec.yaml connect to each other.</text>
+<circle cx="64" cy="150" r="16" fill="#1A73E8"/>
+<text x="64" y="155.4" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="15" font-weight="700" fill="#FFFFFF" text-anchor="middle" xml:space="preserve">1</text>
+<text x="90" y="156" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="20" font-weight="500" fill="#202124" text-anchor="start" xml:space="preserve">paths — what clients call</text>
+<text x="48" y="186" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="13" font-weight="400" fill="#5F6368" text-anchor="start" xml:space="preserve">paths.&lt;path&gt;.post</text>
+<circle cx="556" cy="150" r="16" fill="#1A73E8"/>
+<text x="556" y="155.4" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="15" font-weight="700" fill="#FFFFFF" text-anchor="middle" xml:space="preserve">2</text>
+<text x="582" y="156" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="20" font-weight="500" fill="#202124" text-anchor="start" xml:space="preserve">routers — how the model is chosen</text>
+<text x="540" y="186" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="13" font-weight="400" fill="#5F6368" text-anchor="start" xml:space="preserve">x-google-api-management.ai.models.routing</text>
+<circle cx="1146" cy="150" r="16" fill="#1A73E8"/>
+<text x="1146" y="155.4" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="15" font-weight="700" fill="#FFFFFF" text-anchor="middle" xml:space="preserve">3</text>
+<text x="1172" y="156" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="20" font-weight="500" fill="#202124" text-anchor="start" xml:space="preserve">backends — where requests go</text>
+<text x="1130" y="186" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="13" font-weight="400" fill="#5F6368" text-anchor="start" xml:space="preserve">x-google-api-management.backends</text>
+<rect x="48" y="220" width="400" height="150" rx="14" fill="#FFFFFF" stroke="#DADCE0" stroke-width="1.5" filter="url(#shadow)"/>
+<rect x="72" y="244" width="62" height="28" rx="6" fill="#1A73E8"/>
+<text x="103.0" y="262.68" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="13" font-weight="700" fill="#FFFFFF" text-anchor="middle" xml:space="preserve">POST</text>
+<text x="148" y="264" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="16" font-weight="500" fill="#202124" text-anchor="start" xml:space="preserve">/v1/chat/gemini-claude</text>
+<text x="72" y="312" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="14" font-weight="400" fill="#5F6368" text-anchor="start" xml:space="preserve">x-google-model-router:</text>
+<text x="72" y="338" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="15" font-weight="500" fill="#174EA6" text-anchor="start" xml:space="preserve">gemini-claude-router</text>
+<rect x="48" y="600" width="400" height="150" rx="14" fill="#FFFFFF" stroke="#DADCE0" stroke-width="1.5" filter="url(#shadow)"/>
+<rect x="72" y="624" width="62" height="28" rx="6" fill="#1A73E8"/>
+<text x="103.0" y="642.68" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="13" font-weight="700" fill="#FFFFFF" text-anchor="middle" xml:space="preserve">POST</text>
+<text x="148" y="644" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="16" font-weight="500" fill="#202124" text-anchor="start" xml:space="preserve">/v1/chat/maas-models</text>
+<text x="72" y="692" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="14" font-weight="400" fill="#5F6368" text-anchor="start" xml:space="preserve">x-google-model-router:</text>
+<text x="72" y="718" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="15" font-weight="500" fill="#174EA6" text-anchor="start" xml:space="preserve">maas-models-router</text>
+<rect x="540" y="220" width="500" height="324" rx="14" fill="#FFFFFF" stroke="#1A73E8" stroke-width="1.8" filter="url(#shadow)"/>
+<text x="564" y="256" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="17" font-weight="500" fill="#174EA6" text-anchor="start" xml:space="preserve">gemini-claude-router</text>
+<text x="564" y="288" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="11.5" font-weight="700" fill="#80868B" text-anchor="start" letter-spacing="1" xml:space="preserve">MODEL (MATCH)</text>
+<text x="790" y="288" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="11.5" font-weight="700" fill="#80868B" text-anchor="start" letter-spacing="1" xml:space="preserve">BACKEND · TARGETMODEL</text>
+<rect x="564" y="300" width="452" height="50" rx="8" fill="#E6F4EA"/>
+<text x="580" y="331" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="14" font-weight="700" fill="#188038" text-anchor="start" xml:space="preserve">defaultModel</text>
+<text x="790" y="322" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="13.5" font-weight="500" fill="#202124" text-anchor="start" xml:space="preserve">gemini-38-flash</text>
+<text x="790" y="341" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="12" font-weight="400" fill="#5F6368" text-anchor="start" xml:space="preserve">google/gemini-3.8-flash</text>
+<rect x="564" y="356" width="452" height="50" rx="8" fill="#F8F9FA"/>
+<text x="580" y="387" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="13.5" font-weight="500" fill="#202124" text-anchor="start" xml:space="preserve">claude-opus-4-7</text>
+<text x="790" y="378" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="13.5" font-weight="500" fill="#202124" text-anchor="start" xml:space="preserve">anthropic-claude-opus-47</text>
+<text x="790" y="397" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="12" font-weight="400" fill="#5F6368" text-anchor="start" xml:space="preserve">anthropic/claude-opus-4-7</text>
+<rect x="564" y="412" width="452" height="50" rx="8" fill="#F8F9FA"/>
+<text x="580" y="443" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="13.5" font-weight="500" fill="#202124" text-anchor="start" xml:space="preserve">claude-sonnet-5</text>
+<text x="790" y="434" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="13.5" font-weight="500" fill="#202124" text-anchor="start" xml:space="preserve">anthropic-claude-sonnet-5</text>
+<text x="790" y="453" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="12" font-weight="400" fill="#5F6368" text-anchor="start" xml:space="preserve">anthropic/claude-sonnet-5</text>
+<rect x="564" y="468" width="452" height="50" rx="8" fill="#F8F9FA"/>
+<text x="580" y="499" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="13.5" font-weight="500" fill="#202124" text-anchor="start" xml:space="preserve">claude-haiku-4-5</text>
+<text x="790" y="490" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="13.5" font-weight="500" fill="#202124" text-anchor="start" xml:space="preserve">anthropic-claude-haiku-45</text>
+<text x="790" y="509" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="12" font-weight="400" fill="#5F6368" text-anchor="start" xml:space="preserve">anthropic/claude-haiku-4-5</text>
+<rect x="540" y="600" width="500" height="212" rx="14" fill="#FFFFFF" stroke="#1A73E8" stroke-width="1.8" filter="url(#shadow)"/>
+<text x="564" y="636" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="17" font-weight="500" fill="#174EA6" text-anchor="start" xml:space="preserve">maas-models-router</text>
+<text x="564" y="668" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="11.5" font-weight="700" fill="#80868B" text-anchor="start" letter-spacing="1" xml:space="preserve">MODEL (MATCH)</text>
+<text x="790" y="668" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="11.5" font-weight="700" fill="#80868B" text-anchor="start" letter-spacing="1" xml:space="preserve">BACKEND · TARGETMODEL</text>
+<rect x="564" y="680" width="452" height="50" rx="8" fill="#E6F4EA"/>
+<text x="580" y="711" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="14" font-weight="700" fill="#188038" text-anchor="start" xml:space="preserve">defaultModel</text>
+<text x="790" y="702" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="13.5" font-weight="500" fill="#202124" text-anchor="start" xml:space="preserve">vertex-maas-openapi</text>
+<text x="790" y="721" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="12" font-weight="400" fill="#5F6368" text-anchor="start" xml:space="preserve">openai/gpt-oss-120b-maas</text>
+<rect x="564" y="736" width="452" height="50" rx="8" fill="#F8F9FA"/>
+<text x="580" y="767" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="13.5" font-weight="500" fill="#202124" text-anchor="start" xml:space="preserve">openai/gpt-oss-120b-maas</text>
+<text x="790" y="758" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="13.5" font-weight="500" fill="#202124" text-anchor="start" xml:space="preserve">vertex-maas-openapi</text>
+<text x="790" y="777" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="12" font-weight="400" fill="#5F6368" text-anchor="start" xml:space="preserve">openai/gpt-oss-120b-maas</text>
+<path d="M450,295 C493.0,295 493.0,250 536,250" stroke="#1A73E8" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ah-blue)"/>
+<path d="M450,675 C493.0,675 493.0,630 536,630" stroke="#1A73E8" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ah-blue)"/>
+<text x="1130" y="212" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="12.5" font-weight="400" fill="#5F6368" text-anchor="start" xml:space="preserve">All addresses start with</text>
+<text x="1130" y="232" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="12" font-weight="400" fill="#5F6368" text-anchor="start" xml:space="preserve">https://aiplatform.googleapis.com/v1/</text>
+<text x="1130" y="250" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="12" font-weight="400" fill="#5F6368" text-anchor="start" xml:space="preserve">projects/PROJECT_ID/locations/global</text>
+<rect x="1130" y="268" width="422" height="96" rx="12" fill="#FFFFFF" stroke="#DADCE0" stroke-width="1.5" filter="url(#shadow)"/>
+<line x1="1146" y1="286" x2="1146" y2="346" stroke="#1A73E8" stroke-width="4" stroke-linecap="round"/>
+<text x="1162" y="300" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="15" font-weight="500" fill="#202124" text-anchor="start" xml:space="preserve">gemini-38-flash</text>
+<text x="1162" y="324" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="12" font-weight="400" fill="#5F6368" text-anchor="start" xml:space="preserve">.../publishers/google/models/</text>
+<text x="1162" y="344" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="12" font-weight="400" fill="#5F6368" text-anchor="start" xml:space="preserve">gemini-3.8-flash:generateContent</text>
+<rect x="1130" y="376" width="422" height="96" rx="12" fill="#FFFFFF" stroke="#DADCE0" stroke-width="1.5" filter="url(#shadow)"/>
+<line x1="1146" y1="394" x2="1146" y2="454" stroke="#C15F3C" stroke-width="4" stroke-linecap="round"/>
+<text x="1162" y="408" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="15" font-weight="500" fill="#202124" text-anchor="start" xml:space="preserve">anthropic-claude-opus-47</text>
+<text x="1162" y="432" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="12" font-weight="400" fill="#5F6368" text-anchor="start" xml:space="preserve">.../publishers/anthropic/models/</text>
+<text x="1162" y="452" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="12" font-weight="400" fill="#5F6368" text-anchor="start" xml:space="preserve">claude-opus-4-7:rawPredict</text>
+<rect x="1130" y="484" width="422" height="96" rx="12" fill="#FFFFFF" stroke="#DADCE0" stroke-width="1.5" filter="url(#shadow)"/>
+<line x1="1146" y1="502" x2="1146" y2="562" stroke="#C15F3C" stroke-width="4" stroke-linecap="round"/>
+<text x="1162" y="516" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="15" font-weight="500" fill="#202124" text-anchor="start" xml:space="preserve">anthropic-claude-sonnet-5</text>
+<text x="1162" y="540" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="12" font-weight="400" fill="#5F6368" text-anchor="start" xml:space="preserve">.../publishers/anthropic/models/</text>
+<text x="1162" y="560" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="12" font-weight="400" fill="#5F6368" text-anchor="start" xml:space="preserve">claude-sonnet-5:rawPredict</text>
+<rect x="1130" y="592" width="422" height="96" rx="12" fill="#FFFFFF" stroke="#DADCE0" stroke-width="1.5" filter="url(#shadow)"/>
+<line x1="1146" y1="610" x2="1146" y2="670" stroke="#C15F3C" stroke-width="4" stroke-linecap="round"/>
+<text x="1162" y="624" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="15" font-weight="500" fill="#202124" text-anchor="start" xml:space="preserve">anthropic-claude-haiku-45</text>
+<text x="1162" y="648" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="12" font-weight="400" fill="#5F6368" text-anchor="start" xml:space="preserve">.../publishers/anthropic/models/</text>
+<text x="1162" y="668" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="12" font-weight="400" fill="#5F6368" text-anchor="start" xml:space="preserve">claude-haiku-4-5:rawPredict</text>
+<rect x="1130" y="722" width="422" height="96" rx="12" fill="#FFFFFF" stroke="#DADCE0" stroke-width="1.5" filter="url(#shadow)"/>
+<line x1="1146" y1="740" x2="1146" y2="800" stroke="#10A37F" stroke-width="4" stroke-linecap="round"/>
+<text x="1162" y="754" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="15" font-weight="500" fill="#202124" text-anchor="start" xml:space="preserve">vertex-maas-openapi</text>
+<text x="1162" y="778" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="12" font-weight="400" fill="#5F6368" text-anchor="start" xml:space="preserve">.../endpoints/openapi/</text>
+<text x="1162" y="798" font-family="'Roboto Mono', Menlo, Consolas, monospace" font-size="12" font-weight="400" fill="#5F6368" text-anchor="start" xml:space="preserve">chat/completions</text>
+<path d="M1016,325 C1071.0,325 1071.0,316 1126,316" stroke="#5F6368" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ah-gray)"/>
+<path d="M1016,381 C1071.0,381 1071.0,424 1126,424" stroke="#5F6368" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ah-gray)"/>
+<path d="M1016,437 C1071.0,437 1071.0,532 1126,532" stroke="#5F6368" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ah-gray)"/>
+<path d="M1016,493 C1071.0,493 1071.0,640 1126,640" stroke="#5F6368" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ah-gray)"/>
+<path d="M1016,705 C1071.0,705 1071.0,770 1126,770" stroke="#5F6368" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ah-gray)"/>
+<path d="M1016,761 C1071.0,761 1071.0,770 1126,770" stroke="#5F6368" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ah-gray)"/>
+<text x="48" y="872" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="18" font-weight="500" fill="#202124" text-anchor="start" xml:space="preserve">Rules the management plane checks when you create the API config</text>
+<rect x="48" y="892" width="182.0" height="38" rx="10" fill="#F8F9FA" stroke="#DADCE0" stroke-width="1.5"/>
+<text x="139.0" y="915.86" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="13.5" font-weight="500" fill="#202124" text-anchor="middle" xml:space="preserve">POST operations only</text>
+<rect x="242.0" y="892" width="330.0" height="38" rx="10" fill="#F8F9FA" stroke="#DADCE0" stroke-width="1.5"/>
+<text x="407.0" y="915.86" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="13.5" font-weight="500" fill="#202124" text-anchor="middle" xml:space="preserve">x-google-model-router at operation level</text>
+<rect x="584.0" y="892" width="352.2" height="38" rx="10" fill="#F8F9FA" stroke="#DADCE0" stroke-width="1.5"/>
+<text x="760.1" y="915.86" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="13.5" font-weight="500" fill="#202124" text-anchor="middle" xml:space="preserve">No x-google-backend or MCP in the same spec</text>
+<rect x="948.2" y="892" width="270.8" height="38" rx="10" fill="#F8F9FA" stroke="#DADCE0" stroke-width="1.5"/>
+<text x="1083.6000000000001" y="915.86" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="13.5" font-weight="500" fill="#202124" text-anchor="middle" xml:space="preserve">One hostname + scheme per router</text>
+<rect x="1231.0" y="892" width="278.20000000000005" height="38" rx="10" fill="#F8F9FA" stroke="#DADCE0" stroke-width="1.5"/>
+<text x="1370.1" y="915.86" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="13.5" font-weight="500" fill="#202124" text-anchor="middle" xml:space="preserve">pathTranslation: CONSTANT_ADDRESS</text>
+<rect x="48" y="942" width="293.0" height="38" rx="10" fill="#F8F9FA" stroke="#DADCE0" stroke-width="1.5"/>
+<text x="194.5" y="965.86" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="13.5" font-weight="500" fill="#202124" text-anchor="middle" xml:space="preserve">targetModel = &lt;provider&gt;/&lt;model-id&gt;</text>
+<rect x="353.0" y="942" width="307.8" height="38" rx="10" fill="#F8F9FA" stroke="#DADCE0" stroke-width="1.5"/>
+<text x="506.9" y="965.86" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="13.5" font-weight="500" fill="#202124" text-anchor="middle" xml:space="preserve">provider: google · anthropic · openai</text>
+<rect x="672.8" y="942" width="256.0" height="38" rx="10" fill="#F8F9FA" stroke="#DADCE0" stroke-width="1.5"/>
+<text x="800.8" y="965.86" font-family="'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-size="13.5" font-weight="500" fill="#202124" text-anchor="middle" xml:space="preserve">Unique model values per router</text>
+</svg>
