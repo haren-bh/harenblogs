@@ -2,6 +2,11 @@
 
 ## Change Log
 
+### [2026-11-08 23:11:00 +09:00]
+- Added the new blog post "Cracking the Uncrackable: How Autonomous AI Agents Outsmarted my Bespoke Cipher by launching a side channel attack" to the top of the English Publications section in [index.html](file:///Users/bharen/Documents/Blogs/index.html).
+- The new blog is referenced with the path `en/Blog_Cracking_the_Uncrackable__How_Autonomous_AI_Agents_Outsmarted_my_Bespoke_Cipher_by_launching_a_side_channel_attack/index.html`, featuring the category badge "Autonomous Agents" and date "November 8, 2026".
+- Reindexed subsequent blog post numbers (Blogs 2 to 19) in the HTML comments.
+
 ### [2026-11-05 17:34:00 +09:00]
 - Added the new blog post "Model Routing in Google Cloud using API Gateway" to the top of the English Publications section in [index.html](file:///Users/bharen/Documents/Blogs/index.html).
 - The new blog is referenced with the path `en/Blog_Model_Routing_in_Google_Cloud_using_API_Gateway/index.html`, featuring the category badge "Model Routing" and date "November 5, 2026".
