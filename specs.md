@@ -2,6 +2,11 @@
 
 ## Change Log
 
+### [2026-11-09 12:43:00 +09:00]
+- Translated [md/modelrouting_blog/[Blog] Model Routing in Google Cloud using API Gateway.md](file:///Users/bharen/Documents/Blogs/md/modelrouting_blog/%5BBlog%5D%20Model%20Routing%20in%20Google%20Cloud%20using%20API%20Gateway.md) into Japanese and saved it as [md/modelrouting_blog/[JP Blog] Model Routing in Google Cloud using API Gateway.md](file:///Users/bharen/Documents/Blogs/md/modelrouting_blog/%5BJP%20Blog%5D%20Model%20Routing%20in%20Google%20Cloud%20using%20API%20Gateway.md), matching the style, `です・ます` engineering tone, half-width spacing conventions, and formatting of the Google Cloud Japan Zenn publication articles (`0e7a7bd1573dfb`, `d660e277740c41`, `7aad16e9b5760d`) as well as `blogsbestpractice.md`.
+- Converted Google Docs Markdown export code paragraphs and escaped characters into clean, copy-pasteable fenced code blocks (`bash`, `yaml`, `text`) for `gcloud`, `apispec.yaml`, `agy` (Antigravity CLI) prompts, and `curl` test commands.
+- Replaced Base64 inline image payloads (`[image1]`–`[image11]`) with hosted raw GitHub URLs (`en/Blog_Model_Routing_in_Google_Cloud_using_API_Gateway/images/` and `md/modelrouting/images/image3.png` for the API Config screenshot) and translated Zenn-style figure captions (`*図1*`–`*図10*`) and alt text.
+
 ### [2026-11-09 09:33:00 +09:00]
 - Updated [jp/[JP] Blog_Cracking the Uncrackable_ How Autonomous AI Agents Outsmarted my Bespoke Cipher by launching a side channel attack./index.md](file:///Users/bharen/Documents/Blogs/jp/%5BJP%5D%20Blog_Cracking%20the%20Uncrackable_%20How%20Autonomous%20AI%20Agents%20Outsmarted%20my%20Bespoke%20Cipher%20by%20launching%20a%20side%20channel%20attack./index.md) to replace all four relative `./images/` URLs (`image3.png`, `image4.jpg`, `image2.png`, `image1.png`) with full raw GitHub URLs under `https://raw.githubusercontent.com/haren-bh/harenblogs/refs/heads/main/jp/%5BJP%5D%20Blog_Cracking%20the%20Uncrackable_%20How%20Autonomous%20AI%20Agents%20Outsmarted%20my%20Bespoke%20Cipher%20by%20launching%20a%20side%20channel%20attack./images/`.
 
