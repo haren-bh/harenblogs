@@ -1,6 +1,6 @@
 # 解読不能な暗号に挑む：自律型 AI エージェントはいかにしてサイドチャネル攻撃で独自暗号を攻略したのか
 
-![サンドボックス環境内のサイドチャネルの脆弱性を突き、強固な金庫のロックを迂回する AI エージェントのイラスト](./images/image3.png)
+![サンドボックス環境内のサイドチャネルの脆弱性を突き、強固な金庫のロックを迂回する AI エージェントのイラスト](https://raw.githubusercontent.com/haren-bh/harenblogs/refs/heads/main/jp/%5BJP%5D%20Blog_Cracking%20the%20Uncrackable_%20How%20Autonomous%20AI%20Agents%20Outsmarted%20my%20Bespoke%20Cipher%20by%20launching%20a%20side%20channel%20attack./images/image3.png)
 *図1: サンドボックス環境内のサイドチャネルを突いて強固な金庫のロックを迂回する AI エージェントのイメージ*
 
 数学的に解読不可能なよう設計された独自暗号に対し、Google 検索やコード実行といったツールを与えた自律型 AI エージェントの群れ（スウォーム）を挑ませたら、一体何が起きるでしょうか。結論から言うと、エージェントたちは数学を正面から打ち破るのではなく、「ズル（チート）」をして突破しようと試みたのです！
@@ -25,7 +25,7 @@ FHHSKK7-R92SJQ9-DVPG89Q-J67FPTH-8TPRR6W-4KM62XH-WHDPJGP-F9GW2S7-HPT3KJC
 
 事前学習コーパスから暗号方式を特定されたり、頻度分析によって解読されたりするのを防ぐため、ドキュメント化されていない完全オリジナルの暗号アルゴリズム **Loom-97** を設計しました。4 ステージ構成の Loom-97 パイプラインは以下のように動作します。
 
-![4 ステージから成る Loom-97 エンコードパイプラインのフローチャート](./images/image4.jpg)
+![4 ステージから成る Loom-97 エンコードパイプラインのフローチャート](https://raw.githubusercontent.com/haren-bh/harenblogs/refs/heads/main/jp/%5BJP%5D%20Blog_Cracking%20the%20Uncrackable_%20How%20Autonomous%20AI%20Agents%20Outsmarted%20my%20Bespoke%20Cipher%20by%20launching%20a%20side%20channel%20attack./images/image4.jpg)
 *図2: 暗号文の生成プロセス（4 ステージの Loom-97 パイプライン）*
 
 リファレンス実装となるコアのエンコーダコードは以下のとおりです。
@@ -98,12 +98,12 @@ def loom97_encode(
 
 エージェントの開発とテストは **Google Cloud Workstations** 上で行いました。Google Cloud Workstations は、AI エージェントの開発からデプロイまでを柔軟に行えるクラウド開発環境であり、AI コーディングを支援する **Antigravity** が標準で組み込まれています。
 
-![Google Cloud Workstations に組み込まれた Antigravity](./images/image2.png)
+![Google Cloud Workstations に組み込まれた Antigravity](https://raw.githubusercontent.com/haren-bh/harenblogs/refs/heads/main/jp/%5BJP%5D%20Blog_Cracking%20the%20Uncrackable_%20How%20Autonomous%20AI%20Agents%20Outsmarted%20my%20Bespoke%20Cipher%20by%20launching%20a%20side%20channel%20attack./images/image2.png)
 *図3: Google Cloud Workstations に組み込まれた Antigravity*
 
 エージェントのアーキテクチャは以下のとおりです。
 
-![evidence_agent、decipher_agent、verifier_agent、recorder_agent、loop_guard の実行シーケンスを示す ADK LoopAgent マルチエージェントワークフロー図](./images/image1.png)
+![evidence_agent、decipher_agent、verifier_agent、recorder_agent、loop_guard の実行シーケンスを示す ADK LoopAgent マルチエージェントワークフロー図](https://raw.githubusercontent.com/haren-bh/harenblogs/refs/heads/main/jp/%5BJP%5D%20Blog_Cracking%20the%20Uncrackable_%20How%20Autonomous%20AI%20Agents%20Outsmarted%20my%20Bespoke%20Cipher%20by%20launching%20a%20side%20channel%20attack./images/image1.png)
 *図4: ADK LoopAgent によるマルチエージェントワークフローの全体像*
 
 * **`evidence_agent`**：GCS からスウォーム全体の過去の試行履歴を読み取り、すでに棄却された暗号ファミリーや既知の制約条件を整理した構造化レポート（Evidence Briefing）を作成します。

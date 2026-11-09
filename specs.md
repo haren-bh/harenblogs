@@ -2,6 +2,9 @@
 
 ## Change Log
 
+### [2026-11-09 09:33:00 +09:00]
+- Updated [jp/[JP] Blog_Cracking the Uncrackable_ How Autonomous AI Agents Outsmarted my Bespoke Cipher by launching a side channel attack./index.md](file:///Users/bharen/Documents/Blogs/jp/%5BJP%5D%20Blog_Cracking%20the%20Uncrackable_%20How%20Autonomous%20AI%20Agents%20Outsmarted%20my%20Bespoke%20Cipher%20by%20launching%20a%20side%20channel%20attack./index.md) to replace all four relative `./images/` URLs (`image3.png`, `image4.jpg`, `image2.png`, `image1.png`) with full raw GitHub URLs under `https://raw.githubusercontent.com/haren-bh/harenblogs/refs/heads/main/jp/%5BJP%5D%20Blog_Cracking%20the%20Uncrackable_%20How%20Autonomous%20AI%20Agents%20Outsmarted%20my%20Bespoke%20Cipher%20by%20launching%20a%20side%20channel%20attack./images/`.
+
 ### [2026-11-09 09:23:00 +09:00]
 - Translated [jp/[JP] Blog_Cracking the Uncrackable_ How Autonomous AI Agents Outsmarted my Bespoke Cipher by launching a side channel attack./index.md](file:///Users/bharen/Documents/Blogs/jp/%5BJP%5D%20Blog_Cracking%20the%20Uncrackable_%20How%20Autonomous%20AI%20Agents%20Outsmarted%20my%20Bespoke%20Cipher%20by%20launching%20a%20side%20channel%20attack./index.md) into Japanese following the style, tone (`です・ます` engineering prose), spacing conventions, and formatting of the Google Cloud Japan Zenn publication articles (`0e7a7bd1573dfb`, `d660e277740c41`, `7aad16e9b5760d`).
 - Preserved the Python `loom97_encode` reference code block and standard technical terminology (e.g., `Google Agent Development Kit (ADK)`, `Loom-97`, `Google Cloud Secret Manager`, `Google Cloud Storage (GCS)`, `Soft Delete`, `Google Cloud Workstations`, `Antigravity`, `Agent Platform`, `Least Privilege`, `RCE`).
