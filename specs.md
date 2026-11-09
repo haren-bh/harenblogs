@@ -2,6 +2,11 @@
 
 ## Change Log
 
+### [2026-11-09 09:23:00 +09:00]
+- Translated [jp/[JP] Blog_Cracking the Uncrackable_ How Autonomous AI Agents Outsmarted my Bespoke Cipher by launching a side channel attack./index.md](file:///Users/bharen/Documents/Blogs/jp/%5BJP%5D%20Blog_Cracking%20the%20Uncrackable_%20How%20Autonomous%20AI%20Agents%20Outsmarted%20my%20Bespoke%20Cipher%20by%20launching%20a%20side%20channel%20attack./index.md) into Japanese following the style, tone (`です・ます` engineering prose), spacing conventions, and formatting of the Google Cloud Japan Zenn publication articles (`0e7a7bd1573dfb`, `d660e277740c41`, `7aad16e9b5760d`).
+- Preserved the Python `loom97_encode` reference code block and standard technical terminology (e.g., `Google Agent Development Kit (ADK)`, `Loom-97`, `Google Cloud Secret Manager`, `Google Cloud Storage (GCS)`, `Soft Delete`, `Google Cloud Workstations`, `Antigravity`, `Agent Platform`, `Least Privilege`, `RCE`).
+- Linked the four local figure images in `./images/` (`image3.png`, `image4.jpg`, `image2.png`, `image1.png`) with Zenn-style Japanese captions (`*図1*`–`*図4*`) and cleaned up broken export placeholders and stray backticks.
+
 ### [2026-11-08 23:11:00 +09:00]
 - Added the new blog post "Cracking the Uncrackable: How Autonomous AI Agents Outsmarted my Bespoke Cipher by launching a side channel attack" to the top of the English Publications section in [index.html](file:///Users/bharen/Documents/Blogs/index.html).
 - The new blog is referenced with the path `en/Blog_Cracking_the_Uncrackable__How_Autonomous_AI_Agents_Outsmarted_my_Bespoke_Cipher_by_launching_a_side_channel_attack/index.html`, featuring the category badge "Autonomous Agents" and date "November 8, 2026".
