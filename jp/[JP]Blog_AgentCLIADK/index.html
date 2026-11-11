@@ -745,7 +745,37 @@
           <a href="#start-agy-cli">Antigravity CLIの起動</a>
         </li>
         <li class="toc-item toc-h1">
-          <a href="#build-first-agent"><span class="toc-badge">2</span> 最初のエージェントの構築</a>
+          <a href="#research-gemini-notebook"><span class="toc-badge">2</span> Gemini Notebookを利用しアプリを調査する</a>
+        </li>
+        <li class="toc-item toc-h2">
+          <a href="#create-notebook">1. 新しい Notebook を作成する</a>
+        </li>
+        <li class="toc-item toc-h2">
+          <a href="#choose-topic">2. 調査したいトピックを決める</a>
+        </li>
+        <li class="toc-item toc-h2">
+          <a href="#deep-research-import">3. Deep Research で検索し、リソースをインポートする</a>
+        </li>
+        <li class="toc-item toc-h2">
+          <a href="#create-markdown-spec">4. Markdown 形式でスペック（仕様書）を作成する</a>
+        </li>
+        <li class="toc-item toc-h1">
+          <a href="#improve-spec"><span class="toc-badge">3</span> Cloud Shell EditorでMarkdownの仕様書を改善する</a>
+        </li>
+        <li class="toc-item toc-h1">
+          <a href="#generate-code"><span class="toc-badge">4</span> コードを生成</a>
+        </li>
+        <li class="toc-item toc-h1">
+          <a href="#test-and-deploy-cloud-run"><span class="toc-badge">5</span> テストと Cloud Run にデプロイ</a>
+        </li>
+        <li class="toc-item toc-h2">
+          <a href="#test-flask-app">1. Flask アプリケーションのローカルテスト</a>
+        </li>
+        <li class="toc-item toc-h2">
+          <a href="#deploy-cloud-run">2. Cloud Run へのデプロイ</a>
+        </li>
+        <li class="toc-item toc-h1">
+          <a href="#build-first-agent"><span class="toc-badge">6</span> 最初のエージェントの構築</a>
         </li>
         <li class="toc-item toc-h2">
           <a href="#playground">プレイグラウンド（Playground）</a>
@@ -773,10 +803,14 @@
           <a href="#enable-api" class="quick-nav-pill">2. API の有効化</a>
           <a href="#install-agent-cli" class="quick-nav-pill">3. Agent CLI インストール</a>
           <a href="#start-agy-cli" class="quick-nav-pill">4. Antigravity CLI 起動</a>
-          <a href="#build-first-agent" class="quick-nav-pill">5. エージェントの構築</a>
-          <a href="#playground" class="quick-nav-pill">6. Playground テスト</a>
-          <a href="#deploy-agent-platform" class="quick-nav-pill">7. Agent Platform デプロイ</a>
-          <a href="#next-challenge" class="quick-nav-pill">8. 次のチャレンジ</a>
+          <a href="#research-gemini-notebook" class="quick-nav-pill">5. Gemini Notebook 調査</a>
+          <a href="#improve-spec" class="quick-nav-pill">6. 仕様書の改善</a>
+          <a href="#generate-code" class="quick-nav-pill">7. コードを生成</a>
+          <a href="#test-and-deploy-cloud-run" class="quick-nav-pill">8. テストと Cloud Run デプロイ</a>
+          <a href="#build-first-agent" class="quick-nav-pill">9. エージェントの構築</a>
+          <a href="#playground" class="quick-nav-pill">10. Playground テスト</a>
+          <a href="#deploy-agent-platform" class="quick-nav-pill">11. Agent Platform デプロイ</a>
+          <a href="#next-challenge" class="quick-nav-pill">12. 次のチャレンジ</a>
         </div>
       </section>
 
@@ -959,8 +993,8 @@ gcloud services enable cloudresourcemanager.googleapis.com</code></pre>
             </span>
             <button class="copy-btn" type="button">コピー</button>
           </div>
-          <pre><code>mkdir nototoki
-cd nototoki &amp;&amp; uv venv
+          <pre><code>mkdir myproject
+cd myproject &amp;&amp; uv venv
 source .venv/bin/activate
 uv pip install google-adk
 uvx google-agents-cli setup</code></pre>
@@ -976,7 +1010,7 @@ uvx google-agents-cli setup</code></pre>
         <!-- Antigravity CLIの起動 -->
         <h2 class="section-h2" id="start-agy-cli">Antigravity CLIの起動</h2>
 
-        <p>Cloud Shell ターミナルで Antigravity CLI（<code class="inline-code">agy</code>）を起動します。</p>
+        <p>Cloud Shell ターミナルで Antigravity CLI（<code class="inline-code">agy</code>）を起動します。認証や初期設定が求められた場合は、以下のステップに従って設定を行ってください。</p>
 
         <div class="command-box">
           <div class="command-box-header">
@@ -986,23 +1020,340 @@ uvx google-agents-cli setup</code></pre>
             </span>
             <button class="copy-btn" type="button">コピー</button>
           </div>
-          <pre><code>agy</code></pre>
+          <pre><code>export AGY_ADC_AUTH=true &amp;&amp; agy</code></pre>
         </div>
 
         <p>起動すると、以下のような画面が表示されます。</p>
 
+        <div class="hint-box">
+          <strong>注意：</strong><code class="inline-code">agy</code> の設定時、ターミナルの表示領域が狭いと画面全体が表示できない場合があります。その際はターミナル画面を大きくしてください。
+        </div>
+
         <figure class="doc-figure">
-          <img src="images/image2.png" alt="Antigravity CLI起動">
-          <figcaption>図２：Antigravity CLI起動</figcaption>
+          <img src="images/image13.png" alt="ターミナルパネルのツールバー" style="max-width: 360px;">
         </figure>
+
+        <p>
+          ターミナルパネルにある <img src="images/image14.png" alt="最大化アイコン"
+            style="height: 30px; width: auto; vertical-align: middle; border-radius: 4px; border: 1px solid var(--border-medium); margin: 0 0.2rem;">
+          をクリックすると、ターミナル画面が大きくなります。
+        </p>
 
         <div class="hint-box">
           <strong>ヒント:</strong> <span class="kbd-shortcut">Shift + Tab</span>
           を押すと、ファイル変更の確認ステップをスキップし、コマンド実行の確認のみに短縮できます。
         </div>
 
+        <figure class="doc-figure">
+          <img src="images/image15.png" alt="テーマ選択と拡張機能のインポート">
+        </figure>
+
+        <p>
+          <strong>まずは <span class="kbd-shortcut">Enter</span> キーを押して <code class="inline-code">terminal</code>（テーマ）を選択し、スペースキーを押して <code class="inline-code">Import extensions...</code> を選択、下矢印キー（<span class="kbd-shortcut">↓</span>）を押して <code class="inline-code">Next</code> を選択し <span class="kbd-shortcut">Enter</span> キーを押します。</strong>
+        </p>
+
+        <figure class="doc-figure">
+          <img src="images/image16.png" alt="利用規約とデータ利用の確認">
+        </figure>
+
+        <p><strong><code class="inline-code">Done</code> を選択し <span class="kbd-shortcut">Enter</span> キーを押します。</strong></p>
+
+        <figure class="doc-figure">
+          <img src="images/image17.png" alt="ワークスペースの信頼確認">
+        </figure>
+
+        <p><strong>このまま <span class="kbd-shortcut">Enter</span> キー（<code class="inline-code">Yes, I trust this folder</code>）を押します。</strong></p>
+
+        <figure class="doc-figure">
+          <img src="images/image18.png" alt="Antigravity CLI 起動完了画面">
+          <figcaption>図２：Antigravity CLI起動</figcaption>
+        </figure>
+
+        <p><strong>これで Antigravity CLI が利用可能になります。</strong></p>
+
         <div class="segment-nav">
           <div></div>
+          <a href="#research-gemini-notebook" class="segment-nav-link">
+            <span>次のセクション</span>
+            Gemini Notebookを利用しアプリを調査する →
+          </a>
+        </div>
+      </section>
+
+      <!-- Segment 2: Gemini Notebookを利用しアプリを調査する -->
+      <section class="segment-card" id="research-gemini-notebook">
+        <div class="segment-header">
+          <span class="segment-step">Part 2</span>
+          <h1 class="section-h1">Gemini Notebookを利用しアプリを調査する</h1>
+        </div>
+
+        <p>
+          エージェントやアプリケーションの実装に入る前に、<a href="https://notebook.google.com/" target="_blank"
+            rel="noopener noreferrer">Gemini Notebook</a> を活用して事前の技術調査と仕様書（スペック）の作成を行います。あらかじめ要件を整理した Markdown
+          形式の仕様書を用意しておくことで、後続のステップで Antigravity CLI（<code class="inline-code">agy</code>）に正確なコンテキストを渡せるようになり、設計から実装までをスムーズに進められます。
+        </p>
+
+        <h2 class="section-h2" id="create-notebook">1. 新しい Notebook を作成する</h2>
+        <p>
+          ブラウザで <a href="https://notebook.google.com/" target="_blank" rel="noopener noreferrer">Gemini Notebook</a>
+          にアクセスし、<strong>[新しい Notebook]</strong> をクリックして新規ノートブックを作成します。
+        </p>
+
+        <h2 class="section-h2" id="choose-topic">2. 調査したいトピックを決める</h2>
+        <p>作成したいアプリケーションやゲームのテーマを決めます。以下は調査時に入力するプロンプトの例です。</p>
+
+        <ul>
+          <li>
+            <strong>例 1：カメラ連動シミュレーションゲーム</strong>
+            <div class="command-box">
+              <div class="command-box-header">
+                <span class="command-box-label">
+                  <span class="command-box-dots"><span></span><span></span><span></span></span>
+                  Gemini Notebook Prompt
+                </span>
+                <button class="copy-btn" type="button">コピー</button>
+              </div>
+              <pre><code>カメラを使って野球ボールを投げるシミュレーションゲームの作り方について調べてください。</code></pre>
+            </div>
+          </li>
+          <li>
+            <strong>例 2：2D アクションゲーム</strong>
+            <div class="command-box">
+              <div class="command-box-header">
+                <span class="command-box-label">
+                  <span class="command-box-dots"><span></span><span></span><span></span></span>
+                  Gemini Notebook Prompt
+                </span>
+                <button class="copy-btn" type="button">コピー</button>
+              </div>
+              <pre><code>以下のようなゲームの作り方について調べてください。
+「Dino Dash」は、素早い恐竜を操作してプレイする、ハイオクタンな 2D カートゥーン・プラットフォーマーです。障害物を飛び越え、激しい攻撃をかわし、熱い炎のブレスで敵を焼き払いながら、ゴールを目指して駆け抜けよう！</code></pre>
+            </div>
+          </li>
+          <li>
+            <strong>例 3：セキュリティ・脆弱性対策アプリ</strong>
+            <div class="command-box">
+              <div class="command-box-header">
+                <span class="command-box-label">
+                  <span class="command-box-dots"><span></span><span></span><span></span></span>
+                  Gemini Notebook Prompt
+                </span>
+                <button class="copy-btn" type="button">コピー</button>
+              </div>
+              <pre><code>直近のオープンソースソフトウェアで見つかった CVE（脆弱性情報）を動的に取得し、その対策方法を教えてくれるアプリの作り方について調べてください。</code></pre>
+            </div>
+          </li>
+        </ul>
+
+        <h2 class="section-h2" id="deep-research-import">3. Deep Research で検索し、リソースをインポートする</h2>
+        <ol>
+          <li>画面左側の検索ボックスに上記のようなプロンプトを入力し、<strong>[Deep Research]</strong> を選択して検索を実行します。</li>
+          <li>Web 上から関連する技術記事やドキュメントが自動収集されます。検索が完了したら、表示されたリソースを Notebook に<strong>インポート</strong>します。</li>
+        </ol>
+
+        <h2 class="section-h2" id="create-markdown-spec">4. Markdown 形式でスペック（仕様書）を作成する</h2>
+        <p>
+          インポートした技術リソースをベースに、Gemini Notebook のチャット欄でアプリケーションの仕様書（スペック）を作成します。後の開発工程で Antigravity CLI
+          にそのまま読み込ませて活用できるよう、<strong>Markdown（<code class="inline-code">.md</code>）ファイル形式</strong>で出力してもらうことを推奨します。
+        </p>
+        <p>チャット欄に以下のプロンプトを入力し、スペックを生成してください（<code class="inline-code">〇〇</code> の部分には作成したいアプリの内容を入力します）。</p>
+
+        <div class="command-box">
+          <div class="command-box-header">
+            <span class="command-box-label">
+              <span class="command-box-dots"><span></span><span></span><span></span></span>
+              Gemini Notebook Prompt
+            </span>
+            <button class="copy-btn" type="button">コピー</button>
+          </div>
+          <pre><code>〇〇をするアプリを作りたいです。以下の項目を含めて、Markdown 形式でスペック（仕様書）を作成してください。
+
+- アプリの概要
+- 必要なコンポーネント
+- コンポーネントごとの機能要件
+- 非機能要件
+- テストケース</code></pre>
+        </div>
+
+        <p>生成されたスペックは、手元の環境に <code class="inline-code">spec.md</code> というファイル名で保存しておきます。</p>
+
+        <div class="segment-nav">
+          <a href="#env-setup" class="segment-nav-link">
+            <span>前のセクション</span>
+            ← 環境のセットアップ
+          </a>
+          <a href="#improve-spec" class="segment-nav-link">
+            <span>次のセクション</span>
+            Cloud Shell EditorでMarkdownの仕様書を改善する →
+          </a>
+        </div>
+      </section>
+
+      <!-- Segment 3: Cloud Shell EditorでMarkdownの仕様書を改善する -->
+      <section class="segment-card" id="improve-spec">
+        <div class="segment-header">
+          <span class="segment-step">Part 3</span>
+          <h1 class="section-h1">Cloud Shell EditorでMarkdownの仕様書を改善する</h1>
+        </div>
+
+        <p>
+          Gemini Notebook で作成した仕様書（<code class="inline-code">spec.md</code>）を Cloud Shell Editor に取り込み、Antigravity
+          CLI（<code class="inline-code">agy</code>）を使って実装に最適化された仕様書へとブラッシュアップします。
+        </p>
+
+        <ol>
+          <li>
+            <strong>仕様書ファイルのアップロード</strong><br>
+            Cloud Shell Editor 左側のエクスプローラーで自分のプロジェクトフォルダ（例：<code class="inline-code">myproject</code>）を開き、保存した <code
+              class="inline-code">spec.md</code> ファイルをフォルダ内へ<strong>ドラッグ＆ドロップ</strong>してアップロードします。
+          </li>
+          <li>
+            <strong>Antigravity CLI による仕様書の改善</strong><br>
+            Antigravity CLI（<code class="inline-code">agy</code>）に以下のプロンプトを入力し、仕様書のレビューと改善を依頼します（<code
+              class="inline-code">〇〇</code> の部分には作成したいアプリの内容を入力します）。
+            <div class="command-box">
+              <div class="command-box-header">
+                <span class="command-box-label">
+                  <span class="command-box-dots"><span></span><span></span><span></span></span>
+                  Antigravity CLI Prompt
+                </span>
+                <button class="copy-btn" type="button">コピー</button>
+              </div>
+              <pre><code>spec.md を利用して〇〇をするアプリを作成したいです。仕様書に不足している点や改善すべき箇所があればブラッシュアップしてください。</code></pre>
+            </div>
+          </li>
+          <li>
+            <strong>仕様書の最終チェック</strong><br>
+            Antigravity CLI が <code class="inline-code">spec.md</code> を解析し、不足している技術要件や構成を自動的に改善します。更新された <code
+              class="inline-code">spec.md</code> をエディタで開き、実装に入る前の<strong>最終チェック</strong>を行いましょう。
+          </li>
+        </ol>
+
+        <div class="segment-nav">
+          <a href="#research-gemini-notebook" class="segment-nav-link">
+            <span>前のセクション</span>
+            ← Gemini Notebookを利用しアプリを調査する
+          </a>
+          <a href="#generate-code" class="segment-nav-link">
+            <span>次のセクション</span>
+            コードを生成 →
+          </a>
+        </div>
+      </section>
+
+      <!-- Segment 4: コードを生成 -->
+      <section class="segment-card" id="generate-code">
+        <div class="segment-header">
+          <span class="segment-step">Part 4</span>
+          <h1 class="section-h1">コードを生成</h1>
+        </div>
+
+        <p>
+          仕様書の準備が整ったら、Antigravity CLI（<code class="inline-code">agy</code>）に以下のプロンプトを入力して、仕様書（<code
+            class="inline-code">spec.md</code>）に基づいたアプリケーションのコードを生成します。
+        </p>
+
+        <div class="command-box">
+          <div class="command-box-header">
+            <span class="command-box-label">
+              <span class="command-box-dots"><span></span><span></span><span></span></span>
+              Antigravity CLI Prompt
+            </span>
+            <button class="copy-btn" type="button">コピー</button>
+          </div>
+          <pre><code>spec.md を利用してアプリを生成してください。</code></pre>
+        </div>
+
+        <div class="segment-nav">
+          <a href="#improve-spec" class="segment-nav-link">
+            <span>前のセクション</span>
+            ← Cloud Shell EditorでMarkdownの仕様書を改善する
+          </a>
+          <a href="#test-and-deploy-cloud-run" class="segment-nav-link">
+            <span>次のセクション</span>
+            テストと Cloud Run にデプロイ →
+          </a>
+        </div>
+      </section>
+
+      <!-- Segment 5: テストと Cloud Run にデプロイ -->
+      <section class="segment-card" id="test-and-deploy-cloud-run">
+        <div class="segment-header">
+          <span class="segment-step">Part 5</span>
+          <h1 class="section-h1">テストと Cloud Run にデプロイ</h1>
+        </div>
+
+        <p>
+          コードの生成が完了したら、ローカル（Cloud Shell 上）で Flask アプリケーションの動作をテストし、問題がなければ Google Cloud Run へデプロイします。
+        </p>
+
+        <h2 class="section-h2" id="test-flask-app">1. Flask アプリケーションのローカルテスト</h2>
+        <p>
+          まず、Antigravity CLI（<code class="inline-code">agy</code>）に指示して、仕様書（<code
+            class="inline-code">spec.md</code>）のテストケースに基づくテストの実行と、Flask 開発サーバーの起動を行います。
+        </p>
+
+        <div class="command-box">
+          <div class="command-box-header">
+            <span class="command-box-label">
+              <span class="command-box-dots"><span></span><span></span><span></span></span>
+              Antigravity CLI Prompt
+            </span>
+            <button class="copy-btn" type="button">コピー</button>
+          </div>
+          <pre><code>生成した Flask アプリのテストを実行し、ポート 8080 でローカルサーバーを起動してください。</code></pre>
+        </div>
+
+        <p>
+          （※別のターミナルから手動で起動する場合は、仮想環境を有効化した状態で <code class="inline-code">python app.py</code> または <code
+            class="inline-code">flask run --host=0.0.0.0 --port=8080</code> を実行します。）
+        </p>
+        <p>サーバーが起動したら、以下のいずれかの方法でブラウザから画面と動作を確認します。</p>
+
+        <ul>
+          <li>
+            ターミナルに出力された <code class="inline-code">http://localhost:8080</code>（または <code
+              class="inline-code">http://127.0.0.1:8080</code>）を <span class="kbd-shortcut">Ctrl + クリック</span> して開く
+          </li>
+          <li>
+            Cloud Shell Editor 右上の <strong>[ウェブでプレビュー]（Web Preview）</strong> アイコンをクリックし、<strong>[ポート 8080 でプレビュー]</strong>
+            を選択する
+          </li>
+        </ul>
+
+        <p>
+          画面の表示や各機能が <code class="inline-code">spec.md</code> の要件通りに動作しているか確認しましょう。もし修正したい点があれば、そのまま Antigravity CLI
+          に伝えて修正させることができます。
+        </p>
+
+        <h2 class="section-h2" id="deploy-cloud-run">2. Cloud Run へのデプロイ</h2>
+        <p>
+          ローカルでの動作確認が完了したら、Antigravity CLI（<code class="inline-code">agy</code>）に以下のプロンプトを入力して、アプリケーションを Cloud Run
+          にデプロイします。
+        </p>
+
+        <div class="command-box">
+          <div class="command-box-header">
+            <span class="command-box-label">
+              <span class="command-box-dots"><span></span><span></span><span></span></span>
+              Antigravity CLI Prompt
+            </span>
+            <button class="copy-btn" type="button">コピー</button>
+          </div>
+          <pre><code>このアプリを Cloud Run にデプロイしてください。</code></pre>
+        </div>
+
+        <p>
+          Antigravity CLI が必要な設定（<code class="inline-code">Dockerfile</code> や依存関係の構成、必要な API
+          の有効化、ビルドおよびデプロイコマンドの実行など）を自動的に処理します。数分ほどでデプロイが完了し、発行された Cloud Run の公開 URL（<code
+            class="inline-code">https://...run.app</code>）からアプリケーションにアクセスできるようになります。
+        </p>
+
+        <div class="segment-nav">
+          <a href="#generate-code" class="segment-nav-link">
+            <span>前のセクション</span>
+            ← コードを生成
+          </a>
           <a href="#build-first-agent" class="segment-nav-link">
             <span>次のセクション</span>
             最初のエージェントの構築 →
@@ -1010,10 +1361,10 @@ uvx google-agents-cli setup</code></pre>
         </div>
       </section>
 
-      <!-- Segment 2: 最初のエージェントの構築 -->
+      <!-- Segment 6: 最初のエージェントの構築 -->
       <section class="segment-card" id="build-first-agent">
         <div class="segment-header">
-          <span class="segment-step">Part 2</span>
+          <span class="segment-step">Part 6</span>
           <h1 class="section-h1">最初のエージェントの構築</h1>
         </div>
 
@@ -1178,9 +1529,9 @@ uvx google-agents-cli setup</code></pre>
         </ul>
 
         <div class="segment-nav">
-          <a href="#env-setup" class="segment-nav-link">
+          <a href="#test-and-deploy-cloud-run" class="segment-nav-link">
             <span>前のセクション</span>
-            ← 環境のセットアップ
+            ← テストと Cloud Run にデプロイ
           </a>
           <a href="#" class="segment-nav-link">
             <span>ページ上部</span>
@@ -1219,7 +1570,7 @@ uvx google-agents-cli setup</code></pre>
 
     // Active TOC Highlighting on Scroll
     const headings = Array.from(document.querySelectorAll('[id]')).filter(el =>
-      el.matches('#env-setup, #project-setup, #enable-api, #api-overview, #install-agent-cli, #start-agy-cli, #build-first-agent, #playground, #deploy-agent-platform, #next-challenge')
+      el.matches('#env-setup, #project-setup, #enable-api, #api-overview, #install-agent-cli, #start-agy-cli, #research-gemini-notebook, #create-notebook, #choose-topic, #deep-research-import, #create-markdown-spec, #improve-spec, #generate-code, #test-and-deploy-cloud-run, #test-flask-app, #deploy-cloud-run, #build-first-agent, #playground, #deploy-agent-platform, #next-challenge')
     );
     const tocLinks = document.querySelectorAll('.toc-item a');
 

@@ -1,6 +1,6 @@
 # API Gateway を活用した Google Cloud でのモデルルーティング
 
-![API Gateway を用いた Google Cloud でのモデルルーティングの概要図](https://raw.githubusercontent.com/haren-bh/harenblogs/refs/heads/main/en/Blog_Model_Routing_in_Google_Cloud_using_API_Gateway/images/image10.png)
+![API Gateway を用いた Google Cloud でのモデルルーティングの概要図](https://bufferof.com/md/modelrouting_blog/images/image10.png)
 
 現在の本番環境における AI システムの多くは、もはや単一のモデルだけでは動作していません。たとえば、計画立案には最先端の推論モデルを使い、要約には高速かつ低コストなモデルを使い、さらにフォールバック用として別のプロバイダを用意しておくといった構成が一般的になっています。しかし、モデルプロバイダごとに独自の API 仕様が存在するため、実際にこれらを組み合わせようとすると、コード内に複数の SDK が乱立（SDK スプロール）したり、自前でプロキシサーバーを構築して運用・スケール・セキュリティ対策まで抱え込んだりすることになりがちです。
 
@@ -23,14 +23,14 @@ Gemini Enterprise Agent Platform（旧 Vertex AI）では、モデルファミ�
 
 [API Gateway のモデルルーティング](https://docs.cloud.google.com/api-gateway/docs/model-routing-overview)は、こうした課題を解決するマネージドなトラフィック管理レイヤーです。OpenAI 互換のプロンプトリクエストを受け取り、通信の途中で（インフライトで）対象モデルの形式へ変換したうえで、Model Garden 内の特定のモデルへとルーティングします。サードパーティ製のルーターも存在しますが、Google Cloud をベースにインフラを構築しているのであれば、Google Cloud ネイティブのモデルルーティングを利用することで、手間のかからない標準統合された体験をすぐに得ることができます。
 
-![モデルルーティングのアーキテクチャ：クライアントは OpenAI 互換リクエストを API Gateway に送信します。モデルルーターが model フィールドを読み取ってルールと照合し、リクエストを変換したうえで、ゲートウェイのサービスアカウントを使用して Model Garden 内の Gemini、Claude、または gpt-oss を呼び出します。](https://raw.githubusercontent.com/haren-bh/harenblogs/refs/heads/main/en/Blog_Model_Routing_in_Google_Cloud_using_API_Gateway/images/image2.png)
+![モデルルーティングのアーキテクチャ：クライアントは OpenAI 互換リクエストを API Gateway に送信します。モデルルーターが model フィールドを読み取ってルールと照合し、リクエストを変換したうえで、ゲートウェイのサービスアカウントを使用して Model Garden 内の Gemini、Claude、または gpt-oss を呼び出します。](https://bufferof.com/md/modelrouting_blog/images/image2.png)
 *図1: API Gateway を経由してクライアントリクエストを Model Garden 内の各 LLM プロバイダへルーティングするアーキテクチャ図*
 
 ## なぜ Google Cloud のモデルルーティングなのか
 
 モデルルーターの有用性は「どのモデルに到達できるか」によって決まりますが、まさにこの点において Google Cloud は際立った強みを持っています。現在 Google Cloud は、主要な 3 大クローズドソース LLM すべてへのアクセスを提供している唯一のハイパースケール クラウドプロバイダであり、さらに 200 種類以上のファーストパーティ、サードパーティ、およびオープンモデルを統合されたエンタープライズ AI プラットフォーム上で提供しています。
 
-![Model Garden は Google、Anthropic、OpenAI、xAI、Meta、DeepSeek、Mistral AI、Z.ai のモデルを同一のエンタープライズ管理下に統合します。モデルルーティングのターゲットとしては Google、Anthropic、OpenAI がサポートされています。](https://raw.githubusercontent.com/haren-bh/harenblogs/refs/heads/main/en/Blog_Model_Routing_in_Google_Cloud_using_API_Gateway/images/image3.png)
+![Model Garden は Google、Anthropic、OpenAI、xAI、Meta、DeepSeek、Mistral AI、Z.ai のモデルを同一のエンタープライズ管理下に統合します。モデルルーティングのターゲットとしては Google、Anthropic、OpenAI がサポートされています。](https://bufferof.com/md/modelrouting_blog/images/image3.png)
 *図2: エンタープライズ AI プラットフォーム上でサポートされている多様なモデルファミリーの概要*
 
 ## API Gateway とは
@@ -47,7 +47,7 @@ Gemini Enterprise Agent Platform（旧 Vertex AI）では、モデルファミ�
 
 ここからは、API Gateway でモデルルーティングを設定する具体的な手順を解説します。
 
-![設定ワークフロー：事前準備（モデルの有効化、API の有効化、サービスアカウントの作成、apispec.yaml の記述）を一度行い、コンソール、gcloud、または Antigravity CLI でデプロイして動作確認を行います。](https://raw.githubusercontent.com/haren-bh/harenblogs/refs/heads/main/en/Blog_Model_Routing_in_Google_Cloud_using_API_Gateway/images/image4.png)
+![設定ワークフロー：事前準備（モデルの有効化、API の有効化、サービスアカウントの作成、apispec.yaml の記述）を一度行い、コンソール、gcloud、または Antigravity CLI でデプロイして動作確認を行います。](https://bufferof.com/md/modelrouting_blog/images/image4.png)
 *図3: モデルルーティングの設定およびデプロイのワークフロー*
 
 ### 事前準備
@@ -56,7 +56,7 @@ Gemini Enterprise Agent Platform（旧 Vertex AI）では、モデルファミ�
 
 Gemini モデルは Agent Platform API が有効化されていればすぐに呼び出すことができます。一方、Claude などのパートナーモデルや、`gpt-oss` などのマネージド オープンモデルを利用する場合は、事前に Model Garden 上で有効化しておく必要があります。
 
-![Model Garden でのパートナーモデルの有効化画面](https://raw.githubusercontent.com/haren-bh/harenblogs/refs/heads/main/en/Blog_Model_Routing_in_Google_Cloud_using_API_Gateway/images/image1.png)
+![Model Garden でのパートナーモデルの有効化画面](https://bufferof.com/md/modelrouting_blog/images/image1.png)
 *図4: Model Garden でのパートナーモデル（Grok 4.6 など）の有効化画面*
 
 #### Step 2: 必要な API を有効化する
@@ -216,27 +216,27 @@ paths:
 
 1. Google Cloud コンソールの [API Gateway](https://console.cloud.google.com/api-gateway/) ページを開き、**Create Gateway** をクリックします。
 
-![Create Gateway ボタンが表示された API Gateway の API 一覧画面](https://raw.githubusercontent.com/haren-bh/harenblogs/refs/heads/main/en/Blog_Model_Routing_in_Google_Cloud_using_API_Gateway/images/image5.png)
+![Create Gateway ボタンが表示された API Gateway の API 一覧画面](https://bufferof.com/md/modelrouting_blog/images/image5.png)
 *図5: Google Cloud コンソールの API Gateway メイン画面*
 
 2. **API** セクションで **Create new API** を選択します。表示名（例：`ModelRouting`）と API ID（例：`modelrouting`）を入力します。コンソール上に API のマネージド サービス名のプレビューが表示されます。
 
-![Create new API が選択され、表示名 ModelRouting と API ID modelrouting が入力された API セクション](https://raw.githubusercontent.com/haren-bh/harenblogs/refs/heads/main/en/Blog_Model_Routing_in_Google_Cloud_using_API_Gateway/images/image7.png)
+![Create new API が選択され、表示名 ModelRouting と API ID modelrouting が入力された API セクション](https://bufferof.com/md/modelrouting_blog/images/image7.png)
 *図6: Cloud コンソールでの API 表示名と API ID の定義*
 
 3. **API Config** セクションで **Create new API config** を選択し、**Browse** をクリックして前のステップで作成した `apispec.yaml` をアップロードします。表示名を入力し、**Select a Service Account** で先ほど作成したサービスアカウント（または必要な権限を持つ既存のサービスアカウント）を選択します。
 
-![OpenAPI 仕様ファイルのアップロードとゲートウェイ用サービスアカウントの割り当て画面](https://raw.githubusercontent.com/haren-bh/harenblogs/refs/heads/main/md/modelrouting/images/image3.png)
+![OpenAPI 仕様ファイルのアップロードとゲートウェイ用サービスアカウントの割り当て画面](https://bufferof.com/md/modelrouting/images/image3.png)
 *図7: OpenAPI 仕様ファイルのアップロードとゲートウェイ用サービスアカウントの指定*
 
 4. **Gateway details** セクションで表示名を入力し、ロケーション（例：`us-central1`）を選択して **Create gateway** をクリックします。
 
-![ロケーション us-central1 と Create gateway ボタンが表示された Gateway details セクション](https://raw.githubusercontent.com/haren-bh/harenblogs/refs/heads/main/en/Blog_Model_Routing_in_Google_Cloud_using_API_Gateway/images/image6.png)
+![ロケーション us-central1 と Create gateway ボタンが表示された Gateway details セクション](https://bufferof.com/md/modelrouting_blog/images/image6.png)
 *図8: Cloud コンソールでのゲートウェイのリージョン設定*
 
 5. ゲートウェイの作成には数分かかります。完了すると、API 一覧に作成した API とそのマネージド サービス名が表示されます。
 
-![modelrouting API とそのマネージド サービスが表示された API 一覧画面](https://raw.githubusercontent.com/haren-bh/harenblogs/refs/heads/main/en/Blog_Model_Routing_in_Google_Cloud_using_API_Gateway/images/image8.png)
+![modelrouting API とそのマネージド サービスが表示された API 一覧画面](https://bufferof.com/md/modelrouting_blog/images/image8.png)
 *図9: 新たに作成され有効化された API とマネージド サービス エンドポイントの表示*
 
 6. API 名をクリックし、**Gateways** タブを開いてゲートウェイの URL をコピーします。
@@ -431,7 +431,7 @@ curl -N -s -X POST "${GATEWAY_URL}/v1/chat/gemini-claude" \
 
 コンソールで対象 API の **Overview** タブを開くと、リクエストレート、95 パーセンタイル（p95）レイテンシ、および `4xx` / `5xx` エラー率をひと目で確認できます。
 
-![平均リクエスト数、95 パーセンタイル レイテンシ、および 4xx・5xx エラー率を表示する API Overview ダッシュボード](https://raw.githubusercontent.com/haren-bh/harenblogs/refs/heads/main/en/Blog_Model_Routing_in_Google_Cloud_using_API_Gateway/images/image9.png)
+![平均リクエスト数、95 パーセンタイル レイテンシ、および 4xx・5xx エラー率を表示する API Overview ダッシュボード](https://bufferof.com/md/modelrouting_blog/images/image9.png)
 *図10: リクエストトラフィックやエラーメトリクスを表示する API の Overview モニタリングダッシュボード*
 
 ## まとめ

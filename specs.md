@@ -2,6 +2,63 @@
 
 ## Change Log
 
+### [2026-11-11 22:11:30 +09:00]
+- Updated the `Antigravity CLIの起動` (`#start-agy-cli`) section in [jp/[JP]Blog_AgentCLIADK/index.html](file:///Users/bharen/Documents/Blogs/jp/%5BJP%5DBlog_AgentCLIADK/index.html) to match the latest content from [jp/[JP]Blog_AgentCLIADK/blog.md](file:///Users/bharen/Documents/Blogs/jp/%5BJP%5DBlog_AgentCLIADK/blog.md), including the terminal resize instructions, inline maximize icon (`images/image14.png`), and step-by-step initial configuration figures (`images/image13.png`, `images/image15.png`–`images/image18.png`).
+
+### [2026-11-11 22:10:00 +09:00]
+- Updated the `## Antigravity CLIの起動` section in [jp/[JP]Blog_AgentCLIADK/blog.md](file:///Users/bharen/Documents/Blogs/jp/%5BJP%5DBlog_AgentCLIADK/blog.md) with the initial setup and authentication steps from [jp/[JP]Blog_AgentCLIADK/agycli/agycli.html](file:///Users/bharen/Documents/Blogs/jp/%5BJP%5DBlog_AgentCLIADK/agycli/agycli.html):
+  - Copied the 6 images from `jp/[JP]Blog_AgentCLIADK/agycli/images/` (`image1.png`–`image6.png`) into `jp/[JP]Blog_AgentCLIADK/images/` with sequential non-conflicting filenames (`image13.png`–`image18.png`):
+    - `agycli/images/image3.png` → `images/image13.png` (terminal panel toolbar)
+    - `agycli/images/image2.png` → `images/image14.png` (terminal maximize icon)
+    - `agycli/images/image4.png` → `images/image15.png` (theme selection & `Import extensions...` migration step)
+    - `agycli/images/image1.png` → `images/image16.png` (`Terms of Service & Data Use` / `Done` step)
+    - `agycli/images/image6.png` → `images/image17.png` (`Accessing workspace` / `Yes, I trust this folder` step)
+    - `agycli/images/image5.png` → `images/image18.png` (`Antigravity CLI` ready screen)
+  - Refined the Japanese instructions and fixed typos (`したの` → `以下の`, `スペースを教えて` → `スペースキーを押して`) while keeping all step-by-step screenshots and key prompts.
+
+### [2026-11-11 21:55:00 +09:00]
+- Merged all recent updates from [jp/[JP]Blog_AgentCLIADK/blog.md](file:///Users/bharen/Documents/Blogs/jp/%5BJP%5DBlog_AgentCLIADK/blog.md) into [jp/[JP]Blog_AgentCLIADK/index.html](file:///Users/bharen/Documents/Blogs/jp/%5BJP%5DBlog_AgentCLIADK/index.html):
+  - Updated the `Agent CLIをインストール` setup commands (`mkdir myproject`, `cd myproject && uv venv`) and the `Antigravity CLIの起動` command (`export AGY_ADC_AUTH=true && agy`).
+  - Added the four new segment cards with copyable command/prompt boxes:
+    - **Part 2: Gemini Notebookを利用しアプリを調査する** (`#research-gemini-notebook` with subsections 1–4 and Gemini Notebook prompt examples).
+    - **Part 3: Cloud Shell EditorでMarkdownの仕様書を改善する** (`#improve-spec` with upload, `agy` spec refinement prompt, and final check steps).
+    - **Part 4: コードを生成** (`#generate-code` with `spec.md を利用してアプリを生成してください。` prompt).
+    - **Part 5: テストと Cloud Run にデプロイ** (`#test-and-deploy-cloud-run` with local Flask testing on port 8080 and Cloud Run deployment via `agy`).
+  - Renumbered `最初のエージェントの構築` to **Part 6** (`#build-first-agent`) and updated the sticky sidebar TOC, top quick-navigation pills, previous/next segment navigation links, and scroll-spy heading selectors.
+
+### [2026-11-11 21:48:25 +09:00]
+- Added the `# テストと Cloud Run にデプロイ` section directly after `# コードを生成` in [jp/[JP]Blog_AgentCLIADK/blog.md](file:///Users/bharen/Documents/Blogs/jp/%5BJP%5DBlog_AgentCLIADK/blog.md):
+  - `## 1. Flask アプリケーションのローカルテスト`: Covered running tests and starting the Flask server on port `8080` via Antigravity CLI (`agy`) or terminal (`python app.py` / `flask run --host=0.0.0.0 --port=8080`), and verifying the app in the browser using `Ctrl + クリック` on `http://localhost:8080` or Cloud Shell's **Web Preview（ウェブでプレビュー）**.
+  - `## 2. Cloud Run へのデプロイ`: Added the Antigravity CLI prompt (`このアプリを Cloud Run にデプロイしてください。`) and explained the automated build/deployment flow and resulting `run.app` URL.
+
+### [2026-11-11 21:41:05 +09:00]
+- Added instructions and the Antigravity CLI (`agy`) prompt (`spec.md を利用してアプリを生成してください。`) under the `# コードを生成` section in [jp/[JP]Blog_AgentCLIADK/blog.md](file:///Users/bharen/Documents/Blogs/jp/%5BJP%5DBlog_AgentCLIADK/blog.md).
+
+### [2026-11-11 21:27:15 +09:00]
+- Refined and polished the Japanese prose and prompt examples in the `# Gemini Notebookを利用しアプリを調査する` and `# Cloud Shell EditorでMarkdownの仕様書を改善する` sections of [jp/[JP]Blog_AgentCLIADK/blog.md](file:///Users/bharen/Documents/Blogs/jp/%5BJP%5DBlog_AgentCLIADK/blog.md):
+  - Rewrote all example prompts (`例 1`–`例 3`), the Markdown spec generation prompt, and the Antigravity CLI (`agy`) spec improvement prompt into natural, polite Japanese (`です・ます` style) with consistent half-width spacing around alphanumeric terms (`2D`, `CVE`, `Markdown`, `spec.md`).
+  - Improved step descriptions in `# Cloud Shell EditorでMarkdownの仕様書を改善する` with bold step titles (`仕様書ファイルのアップロード`, `Antigravity CLI による仕様書の改善`, `仕様書の最終チェック`) and localized "Drag and Drop" to `ドラッグ＆ドロップ`.
+
+### [2026-11-11 21:20:35 +09:00]
+- Added steps and refined prose to the `# Cloud Shell EditorでMarkdownの仕様書を改善する` section in [jp/[JP]Blog_AgentCLIADK/blog.md](file:///Users/bharen/Documents/Blogs/jp/%5BJP%5DBlog_AgentCLIADK/blog.md):
+  - Instructed uploading `spec.md` into the user's project folder in Cloud Shell Editor via the Upload button.
+  - Added the Antigravity CLI (`agy`) prompt (`spec.mdを利用し〇〇をするアプリを作成したい、仕様書を改善するところがあれば改善して、`) in a copy-pasteable code block.
+  - Added the final step to review and perform a final check on the improved `spec.md` specification before implementation.
+
+### [2026-11-11 21:10:30 +09:00]
+- Updated the `## Gemini Notebookを利用しアプリを調査する` section in [jp/[JP]Blog_AgentCLIADK/blog.md](file:///Users/bharen/Documents/Blogs/jp/%5BJP%5DBlog_AgentCLIADK/blog.md):
+  - Added introductory text explaining the purpose of researching the target application and generating a structured specification before building with Antigravity CLI.
+  - Added step-by-step instructions covering:
+    1. Navigating to [Gemini Notebook](https://notebook.google.com/) and creating a new Notebook.
+    2. Selecting a research topic with three example prompts (camera-based baseball pitching simulation game, "Dino Dash" 2D cartoon platformer game, and a dynamic open-source CVE fetching & remediation app).
+    3. Running **Deep Research** from the left search box and importing the discovered web resources into the Notebook.
+    4. Prompting Gemini Notebook to generate a Markdown (`.md`) specification containing application overview (`アプリの概要`), required components (`必要なコンポーネント`), per-component functional requirements (`コンポーネント毎の機能要件`), non-functional requirements (`非機能要件`), and test cases (`テストケース`).
+
+### [2026-11-09 12:53:00 +09:00]
+- Updated all 11 image URLs in [md/modelrouting_blog/[JP Blog] Model Routing in Google Cloud using API Gateway.md](file:///Users/bharen/Documents/Blogs/md/modelrouting_blog/%5BJP%20Blog%5D%20Model%20Routing%20in%20Google%20Cloud%20using%20API%20Gateway.md) from `raw.githubusercontent.com` links to full custom domain URLs hosted at `https://bufferof.com/`:
+  - Replaced the 10 `en/Blog_Model_Routing_in_Google_Cloud_using_API_Gateway/images/` URLs (`image10.png` hero image, `image2.png` 図1, `image3.png` 図2, `image4.png` 図3, `image1.png` 図4, `image5.png` 図5, `image7.png` 図6, `image6.png` 図8, `image8.png` 図9, and `image9.png` 図10) with `https://bufferof.com/md/modelrouting_blog/images/<filename>`.
+  - Replaced the 図7 API Config screenshot URL (`md/modelrouting/images/image3.png`, since `md/modelrouting_blog/images/` contains `image1.png`–`image10.png` without that screenshot) with `https://bufferof.com/md/modelrouting/images/image3.png`.
+
 ### [2026-11-09 12:43:00 +09:00]
 - Translated [md/modelrouting_blog/[Blog] Model Routing in Google Cloud using API Gateway.md](file:///Users/bharen/Documents/Blogs/md/modelrouting_blog/%5BBlog%5D%20Model%20Routing%20in%20Google%20Cloud%20using%20API%20Gateway.md) into Japanese and saved it as [md/modelrouting_blog/[JP Blog] Model Routing in Google Cloud using API Gateway.md](file:///Users/bharen/Documents/Blogs/md/modelrouting_blog/%5BJP%20Blog%5D%20Model%20Routing%20in%20Google%20Cloud%20using%20API%20Gateway.md), matching the style, `です・ます` engineering tone, half-width spacing conventions, and formatting of the Google Cloud Japan Zenn publication articles (`0e7a7bd1573dfb`, `d660e277740c41`, `7aad16e9b5760d`) as well as `blogsbestpractice.md`.
 - Converted Google Docs Markdown export code paragraphs and escaped characters into clean, copy-pasteable fenced code blocks (`bash`, `yaml`, `text`) for `gcloud`, `apispec.yaml`, `agy` (Antigravity CLI) prompts, and `curl` test commands.
