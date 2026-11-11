@@ -2,6 +2,9 @@
 
 ## Change Log
 
+### [2026-11-11 22:18:30 +09:00]
+- Changed the blog title from `"Agent CLI を利用した Google Cloud 上でのエージェント構築とデプロイ"` to `"Antigravityを利用しアプリやAIエージェントの作成"` in [jp/[JP]Blog_AgentCLIADK/blog.md](file:///Users/bharen/Documents/Blogs/jp/%5BJP%5DBlog_AgentCLIADK/blog.md), [jp/[JP]Blog_AgentCLIADK/index.html](file:///Users/bharen/Documents/Blogs/jp/%5BJP%5DBlog_AgentCLIADK/index.html) (`<title>`, `.header-doc-title`, and `.hero-title`), and [index.html](file:///Users/bharen/Documents/Blogs/index.html) (`日本語の投稿` listing).
+
 ### [2026-11-11 22:11:30 +09:00]
 - Updated the `Antigravity CLIの起動` (`#start-agy-cli`) section in [jp/[JP]Blog_AgentCLIADK/index.html](file:///Users/bharen/Documents/Blogs/jp/%5BJP%5DBlog_AgentCLIADK/index.html) to match the latest content from [jp/[JP]Blog_AgentCLIADK/blog.md](file:///Users/bharen/Documents/Blogs/jp/%5BJP%5DBlog_AgentCLIADK/blog.md), including the terminal resize instructions, inline maximize icon (`images/image14.png`), and step-by-step initial configuration figures (`images/image13.png`, `images/image15.png`–`images/image18.png`).
 
