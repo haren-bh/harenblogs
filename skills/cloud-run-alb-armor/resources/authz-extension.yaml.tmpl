@@ -1,0 +1,11 @@
+# Replace ${PROJECT_ID}, ${REGION}, ${EXTENSION_NAME}, ${REQ_TEMPLATE_ID}, and ${RESP_TEMPLATE_ID}
+# Import with:
+#   gcloud service-extensions authz-extensions import "${EXTENSION_NAME}" \
+#     --project="${PROJECT_ID}" --location="${REGION}" --source=authz-extension.yaml
+name: projects/${PROJECT_ID}/locations/${REGION}/authzExtensions/${EXTENSION_NAME}
+loadBalancingScheme: EXTERNAL_MANAGED
+service: modelarmor.${REGION}.rep.googleapis.com
+timeout: 1s
+failOpen: false
+metadata:
+  model_armor_settings: '[{"request_template_id": "projects/${PROJECT_ID}/locations/${REGION}/templates/${REQ_TEMPLATE_ID}", "response_template_id": "projects/${PROJECT_ID}/locations/${REGION}/templates/${RESP_TEMPLATE_ID}"}]'
