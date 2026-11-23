@@ -17,15 +17,15 @@ const textureLoader = new THREE.TextureLoader();
  *  - Albedo map: Utility - sRGB - Texture (THREE.SRGBColorSpace)
  *  - Normal map: Utility - Raw (THREE.NoColorSpace)
  */
-export function loadNanoBananaPBRPair(baseName, repeatX = 1, repeatY = 1) {
-  const map = textureLoader.load(`./textures/${baseName}.jpg`);
+export function loadNanoBananaPBRPair(baseName, repeatX = 1, repeatY = 1, normalBaseName = `${baseName}_normal`) {
+  const map = textureLoader.load(new URL(`../textures/${baseName}.jpg`, import.meta.url).href);
   map.colorSpace = THREE.SRGBColorSpace; // Utility - sRGB - Texture
   map.wrapS = THREE.RepeatWrapping;
   map.wrapT = THREE.RepeatWrapping;
   map.repeat.set(repeatX, repeatY);
   map.anisotropy = 8;
 
-  const normalMap = textureLoader.load(`./textures/${baseName}_normal.jpg`);
+  const normalMap = textureLoader.load(new URL(`../textures/${normalBaseName}.jpg`, import.meta.url).href);
   normalMap.colorSpace = THREE.NoColorSpace; // Utility - Raw
   normalMap.wrapS = THREE.RepeatWrapping;
   normalMap.wrapT = THREE.RepeatWrapping;
@@ -376,7 +376,7 @@ export function createEpidermisMaterial(sunDirUniform, customTexPair = null, nor
  */
 export function createHeadFaceMaterial(sunDirUniform) {
   createValidatedPBRColor('Hero_Golfer_Face_Unwrap', [214, 154, 121], false);
-  const facePair = loadNanoBananaPBRPair('golfer_face_uv', 1, 1);
+  const facePair = loadNanoBananaPBRPair('golfer_face_uv', 1, 1, 'golfer_face_normal');
   facePair.map.wrapT = THREE.ClampToEdgeWrapping;
   facePair.normalMap.wrapT = THREE.ClampToEdgeWrapping;
   return createEpidermisMaterial(sunDirUniform, facePair, 0.22);

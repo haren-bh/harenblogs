@@ -4,11 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tokyo GP 2026 — Photorealistic F1 Racing Simulation</title>
+  <link rel="icon" href="data:,">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23111315'/%3E%3Cpath d='M6 21h20l-3-8h-9l-3 3H7z' fill='%23f8f9fa'/%3E%3Ccircle cx='11' cy='21' r='3.2' fill='%23e03131'/%3E%3Ccircle cx='22' cy='21' r='3.2' fill='%23e03131'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="./css/styles.css">
   <script type="importmap">
   {
     "imports": {
-      "three": "./vendor/three/build/three.module.js",
+      "three": "./vendor/three/three.module.js",
       "three/addons/": "./vendor/three/examples/jsm/"
     }
   }
@@ -672,9 +674,23 @@
 
   <!-- MANDATORY Modern Web Guidance Conditional Polyfills & Progressive Fallbacks -->
   <script type="module">
-    // Conditionally load Invoker Commands polyfill ONLY when native support is missing.
+    // Conditionally load Invoker Commands polyfill ONLY when native support is missing,
+    // with a zero-dependency local click fallback if offline or blocked by CSP.
     if (!('commandForElement' in HTMLButtonElement.prototype)) {
-      import('https://esm.run/invokers-polyfill').catch(() => {});
+      import('https://esm.run/invokers-polyfill').catch(() => {
+        document.getElementById('btn-setup')?.addEventListener('click', () => {
+          document.getElementById('setup-popover')?.togglePopover?.();
+        });
+        document.getElementById('btn-setup-close')?.addEventListener('click', () => {
+          document.getElementById('setup-popover')?.hidePopover?.();
+        });
+        document.getElementById('btn-inspector')?.addEventListener('click', () => {
+          document.getElementById('inspector-dialog')?.showModal?.();
+        });
+        document.getElementById('btn-inspector-close')?.addEventListener('click', () => {
+          document.getElementById('inspector-dialog')?.close?.();
+        });
+      });
     }
 
     // Conditionally load Popover API polyfill ONLY when native support is missing.

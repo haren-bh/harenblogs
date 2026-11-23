@@ -13,7 +13,7 @@ import * as THREE from 'three';
 import { PBR_BOUNDS, TIRE_COMPOUNDS } from './constants.js';
 
 const DEG2RAD = Math.PI / 180;
-const TEX_BASE_PATH = './textures/';
+const TEX_BASE_PATH = new URL('../textures/', import.meta.url).href;
 
 // Sun azimuth aligned to illuminate the hero Showroom front-left 3/4 view (-X, -Z)
 // with sweeping clearcoat highlights and clean late-afternoon track shadows.
@@ -381,7 +381,7 @@ export class PBRMaterialLibrary {
       return this._texCache.get(cacheKey);
     }
 
-    const url = filename.startsWith('./') || filename.startsWith('/') ? filename : `${TEX_BASE_PATH}${filename}`;
+    const url = /^(?:https?:|data:|\.?\/)/.test(filename) ? filename : `${TEX_BASE_PATH}${filename}`;
     const tex = this.textureLoader.load(url);
     tex.name = filename;
     tex.colorSpace = expectedColorSpace;

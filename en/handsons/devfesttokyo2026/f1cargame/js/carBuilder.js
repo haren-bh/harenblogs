@@ -14,7 +14,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { CAR_DIMS } from './constants.js';
 
-const MODEL_PATH = './models/f1_car.glb';
+const MODEL_PATH = new URL('../models/f1_car.glb', import.meta.url).href;
 const CREASE_ANGLE_DEG = 42.0;
 
 const REQUIRED_ARTICULATED_NODES = Object.freeze([

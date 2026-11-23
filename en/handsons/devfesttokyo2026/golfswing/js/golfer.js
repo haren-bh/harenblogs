@@ -234,8 +234,8 @@ export class BiomechanicalGolfer {
   async _loadGLBAssets() {
     const loader = new GLTFLoader();
     const [golferGltf, clubGltf] = await Promise.all([
-      loader.loadAsync('./models/golfer.glb'),
-      loader.loadAsync('./models/golf_club.glb'),
+      loader.loadAsync(new URL('../models/golfer.glb', import.meta.url).href),
+      loader.loadAsync(new URL('../models/golf_club.glb', import.meta.url).href),
     ]);
 
     const golferScene = golferGltf.scene;

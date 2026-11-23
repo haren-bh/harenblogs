@@ -428,7 +428,8 @@ class GolfDrivingSimulatorApp {
       const kf = SWING_25_KEYFRAMES[clamped - 1];
       if (!kf) return;
 
-      previewImg.src = kf.image;
+      const resolvedImgUrl = new URL(`../${kf.image.replace(/^\.?\//, '')}`, import.meta.url).href;
+      previewImg.src = resolvedImgUrl;
       previewImg.alt = `Frame ${String(kf.frame).padStart(2, '0')}: ${kf.label}`;
       phasePill.textContent = `${kf.phaseNum}. ${kf.phase}`;
       captionEl.textContent = kf.label;
@@ -449,13 +450,14 @@ class GolfDrivingSimulatorApp {
     };
 
     for (const kf of SWING_25_KEYFRAMES) {
+      const thumbImgUrl = new URL(`../${kf.image.replace(/^\.?\//, '')}`, import.meta.url).href;
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'swing-thumb-btn';
       btn.setAttribute('role', 'listitem');
       btn.title = `${kf.phaseNum}. ${kf.phase} — ${kf.label}`;
       btn.innerHTML =
-        `<img src="${kf.image}" alt="${kf.label}" width="64" height="85" loading="lazy" fetchpriority="low">` +
+        `<img src="${thumbImgUrl}" alt="${kf.label}" width="64" height="85" loading="lazy" fetchpriority="low">` +
         `<span class="swing-thumb-num">${String(kf.frame).padStart(2, '0')}</span>`;
       btn.addEventListener('click', () => {
         stopSweep();
