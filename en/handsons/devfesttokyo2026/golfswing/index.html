@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GolfSwing Studio | Photorealistic Golf Driving Simulator</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23f8f9fa' stroke='%23111315' stroke-width='2.5'/%3E%3Ccircle cx='12' cy='12' r='1.6' fill='%23adb5bd'/%3E%3Ccircle cx='18' cy='11' r='1.6' fill='%23adb5bd'/%3E%3Ccircle cx='15' cy='17' r='1.6' fill='%23adb5bd'/%3E%3Ccircle cx='21' cy='16' r='1.6' fill='%23adb5bd'/%3E%3Ccircle cx='13' cy='21' r='1.6' fill='%23adb5bd'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./css/styles.css">
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+      }
+    }
+  </script>
+
+  <script type="module">
+    // Feature-detect native Invoker Commands and Popover API; load polyfills ONLY when missing.
+    if (!('commandForElement' in HTMLButtonElement.prototype)) {
+      import('https://esm.run/invokers-polyfill');
+    }
+    if (!Object.hasOwn(HTMLElement.prototype, 'popover')) {
+      import('https://unpkg.com/@oddbird/popover-polyfill@latest/dist/popover.min.js');
+    }
+  </script>
+</head>
+<body>
+  <!-- Compact Top Broadcast Bar -->
+  <header class="hud-header">
+    <div class="hud-cluster">
+      <h1 class="brand-title">GolfSwing Studio</h1>
+      <span class="hud-divider" aria-hidden="true"></span>
+      <span id="hud-state-badge" class="status-pill" data-state="address">STATE_TEE_ADDRESS</span>
+      <span id="hud-camera-badge" class="camera-pill">Camera_Address_Tee · 50mm f/2.8</span>
+    </div>
+
+    <div class="hud-cluster">
+      <div class="wind-chip" aria-label="Ambient wind speed and direction">
+        <svg id="hud-wind-arrow" class="wind-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 19V5"></path>
+          <path d="M6 11l6-6 6 6"></path>
+        </svg>
+        <span id="hud-wind-badge">5 mph</span>
+      </div>
+
+      <button type="button" id="btn-audio" class="studio-btn" aria-pressed="true">Sound On</button>
+      <button type="button" id="btn-pause" class="studio-btn">Pause</button>
+      <button type="button" id="btn-swing-ref" class="studio-btn" commandfor="swing-ref-popover" command="toggle-popover" aria-expanded="false">25-Frame Ref</button>
+      <button type="button" class="studio-btn" popovertarget="tuning-popover">Launch Lab</button>
+      <button type="button" class="studio-btn" commandfor="inspector-dialog" command="show-modal">Inspector</button>
+    </div>
+  </header>
+
+  <!-- Main Interactive 3D Viewport -->
+  <main class="sim-stage">
+    <canvas id="sim-canvas" aria-label="Interactive 3D photorealistic golf driving simulation viewport. Drag during Tee Address to orbit and inspect the golfer, titanium driver, and dimpled golf ball."></canvas>
+
+    <!-- Post-Landing Result Summary Banner -->
+    <div id="shot-summary-banner" class="shot-summary-banner" hidden>
+      <span id="summary-total" class="summary-distance">285.0 yds</span>
+      <div class="summary-meta">
+        <span id="summary-detail" class="summary-detail">Carry 262.0 yds · Roll 23.0 yds</span>
+        <span id="summary-surface" class="summary-surface">Bentgrass Fairway</span>
+      </div>
+    </div>
+
+    <!-- Bottom Telemetry & Primary Drive Controls -->
+    <aside class="hud-dock" aria-label="Launch telemetry and swing controls">
+      <div class="telemetry-strip" aria-label="Live shot flight telemetry">
+        <div class="tel-cell">
+          <span class="tel-label">Ball Speed</span>
+          <span id="tel-ball-speed" class="tel-value">162 mph</span>
+        </div>
+        <div class="tel-cell">
+          <span class="tel-label">Launch</span>
+          <span id="tel-launch-angle" class="tel-value">11.5°</span>
+        </div>
+        <div class="tel-cell">
+          <span class="tel-label">Backspin</span>
+          <span id="tel-backspin" class="tel-value">2600 rpm</span>
+        </div>
+        <div class="tel-cell">
+          <span class="tel-label">Carry</span>
+          <span id="tel-carry" class="tel-value">0.0 yds</span>
+        </div>
+        <div class="tel-cell">
+          <span class="tel-label">Total</span>
+          <span id="tel-total" class="tel-value">0.0 yds</span>
+        </div>
+        <div class="tel-cell">
+          <span class="tel-label">Apex</span>
+          <span id="tel-apex" class="tel-value">0 ft</span>
+        </div>
+      </div>
+
+      <div class="action-deck">
+        <div id="skill-gauge" class="skill-gauge" hidden>
+          <div id="skill-gauge-label" class="skill-gauge-label">Tap to Lock Power</div>
+          <div class="skill-gauge-track">
+            <div id="skill-gauge-cursor" class="skill-gauge-cursor"></div>
+          </div>
+        </div>
+
+        <div class="drive-controls-row">
+          <button type="button" id="btn-drive" class="drive-btn">
+            <span id="btn-drive-label" class="drive-btn-label">DRIVE</span>
+            <span id="btn-drive-sub" class="drive-btn-sub">Deterministic Swing · Space</span>
+          </button>
+          <button type="button" id="btn-reset-tee" class="studio-btn">Reset Tee</button>
+        </div>
+      </div>
+
+      <div class="session-dock">
+        <div class="session-stat">
+          <span class="tel-label">Best</span>
+          <span id="tel-best-drive" class="tel-value">0.0 yds</span>
+        </div>
+        <div class="session-stat">
+          <span class="tel-label">Drives</span>
+          <span id="tel-shot-count" class="tel-value">0</span>
+        </div>
+        <span class="hud-divider" aria-hidden="true"></span>
+        <label for="select-camera" class="visually-hidden">Active camera rig</label>
+        <select id="select-camera" class="studio-select">
+          <option value="AUTO">Director: Auto</option>
+          <option value="Camera_Address_Tee">Address · 50mm</option>
+          <option value="Camera_Face_On">Face-On · 38mm</option>
+          <option value="Camera_Down_The_Line">Down-The-Line · 40mm</option>
+          <option value="Camera_Flight_Chase">Chase · 85mm</option>
+          <option value="Camera_Landing_Downrange">Landing · 135mm</option>
+          <option value="Camera_FACS_Closeup">FACS · Face Rig</option>
+        </select>
+      </div>
+    </aside>
+  </main>
+
+  <!-- Native Non-Modal Popover: Launch Lab & Environment Controls -->
+  <div id="tuning-popover" class="studio-popover" popover="auto" aria-labelledby="tuning-title">
+    <div class="popover-header">
+      <h2 id="tuning-title">Launch Lab &amp; Conditions</h2>
+      <button type="button" class="studio-btn" popovertarget="tuning-popover" popovertargetaction="hide">Close</button>
+    </div>
+
+    <fieldset class="control-fieldset">
+      <legend>Swing Control Mode</legend>
+      <div class="radio-row">
+        <label class="radio-option" for="mode-deterministic">
+          <input type="radio" id="mode-deterministic" name="swing-mode" value="deterministic" checked>
+          Deterministic Pro
+        </label>
+        <label class="radio-option" for="mode-skill">
+          <input type="radio" id="mode-skill" name="swing-mode" value="skill">
+          Skill Timing Meter
+        </label>
+      </div>
+    </fieldset>
+
+    <div class="slider-group">
+      <div class="slider-label-row">
+        <label for="ctrl-club-speed">Clubhead Speed</label>
+        <output id="out-club-speed" for="ctrl-club-speed">50.0 m/s (112 mph)</output>
+      </div>
+      <input type="range" id="ctrl-club-speed" min="38" max="60" step="0.5" value="50">
+    </div>
+
+    <div class="slider-group">
+      <div class="slider-label-row">
+        <label for="ctrl-launch-angle">Launch Elevation</label>
+        <output id="out-launch-angle" for="ctrl-launch-angle">11.5°</output>
+      </div>
+      <input type="range" id="ctrl-launch-angle" min="7.5" max="16.5" step="0.5" value="11.5">
+    </div>
+
+    <div class="slider-group">
+      <div class="slider-label-row">
+        <label for="ctrl-backspin">Backspin Rate</label>
+        <output id="out-backspin" for="ctrl-backspin">2600 rpm</output>
+      </div>
+      <input type="range" id="ctrl-backspin" min="1600" max="4200" step="50" value="2600">
+    </div>
+
+    <div class="slider-group">
+      <div class="slider-label-row">
+        <label for="ctrl-sidespin">Sidespin Axis (Draw / Fade)</label>
+        <output id="out-sidespin" for="ctrl-sidespin">0 rpm (Neutral)</output>
+      </div>
+      <input type="range" id="ctrl-sidespin" min="-1200" max="1200" step="40" value="0">
+    </div>
+
+    <div class="slider-group">
+      <div class="slider-label-row">
+        <label for="ctrl-wind-speed">Wind Speed</label>
+        <output id="out-wind-speed" for="ctrl-wind-speed">2.2 m/s (5 mph)</output>
+      </div>
+      <input type="range" id="ctrl-wind-speed" min="0" max="14" step="0.2" value="2.2">
+    </div>
+
+    <div class="slider-group">
+      <div class="slider-label-row">
+        <label for="ctrl-wind-dir">Wind Azimuth</label>
+        <output id="out-wind-dir" for="ctrl-wind-dir">35°</output>
+      </div>
+      <input type="range" id="ctrl-wind-dir" min="0" max="355" step="5" value="35">
+    </div>
+
+    <div class="slider-group">
+      <div class="slider-label-row">
+        <label for="ctrl-sun-elev">Solar Elevation (HDRI)</label>
+        <output id="out-sun-elev" for="ctrl-sun-elev">34°</output>
+      </div>
+      <input type="range" id="ctrl-sun-elev" min="12" max="68" step="2" value="34">
+    </div>
+
+    <div class="checkbox-row">
+      <input type="checkbox" id="ctrl-tracer" checked>
+      <label for="ctrl-tracer">Show Broadcast Ball Flight Tracer</label>
+    </div>
+
+    <fieldset class="control-fieldset">
+      <legend>Shot Presets</legend>
+      <div class="preset-grid">
+        <button type="button" class="preset-btn" data-preset="spec_reference">Spec Reference</button>
+        <button type="button" class="preset-btn" data-preset="tour_bomber">Tour Bomber</button>
+        <button type="button" class="preset-btn" data-preset="power_draw">Power Draw</button>
+        <button type="button" class="preset-btn" data-preset="stinger_fade">Piercing Fade</button>
+        <button type="button" class="preset-btn" data-preset="crosswind">Crosswind</button>
+      </div>
+    </fieldset>
+  </div>
+
+  <!-- Native Non-Modal Popover: 25-Frame Nano Banana Swing Reference & 3D Pose Scrubber -->
+  <div id="swing-ref-popover" class="studio-popover swing-ref-popover" popover="auto" aria-labelledby="swing-ref-title">
+    <div class="popover-header">
+      <h2 id="swing-ref-title">25-Frame Swing Reference</h2>
+      <button type="button" id="btn-close-swing-ref" class="studio-btn" commandfor="swing-ref-popover" command="hide-popover">Close</button>
+    </div>
+
+    <div class="swing-ref-preview">
+      <img
+        id="swing-ref-img"
+        src="references/swing_sequence/frame_01.jpg"
+        alt="Frame 01: Address Setup"
+        width="240"
+        height="320"
+        fetchpriority="low"
+        loading="lazy"
+      >
+      <div class="swing-ref-meta">
+        <span id="swing-ref-phase" class="status-pill">1. Address</span>
+        <span id="swing-ref-caption" class="swing-ref-caption">01 · Address Setup</span>
+      </div>
+    </div>
+
+    <div class="slider-group">
+      <div class="slider-label-row">
+        <label for="ctrl-swing-frame">Sync 3D Golfer to Frame</label>
+        <output id="out-swing-frame" for="ctrl-swing-frame">Frame 01 / 25</output>
+      </div>
+      <input type="range" id="ctrl-swing-frame" min="1" max="25" step="1" value="1">
+    </div>
+
+    <div class="swing-ref-actions">
+      <button type="button" id="btn-frame-prev" class="studio-btn">Prev</button>
+      <button type="button" id="btn-frame-next" class="studio-btn">Next</button>
+      <button type="button" id="btn-frame-play" class="studio-btn">Step Sweep</button>
+      <button type="button" id="btn-frame-reset" class="studio-btn">Exit Pose</button>
+    </div>
+
+    <div id="swing-ref-grid" class="swing-ref-grid" role="list" aria-label="25 Nano Banana swing reference frames"></div>
+  </div>
+
+  <!-- Native Modal Dialog: System Architecture, Biomechanics, PBR Audit & Shot History -->
+  <dialog id="inspector-dialog" class="studio-dialog" closedby="any" aria-labelledby="inspector-title">
+    <div class="dialog-header">
+      <h2 id="inspector-title">Technical Architecture &amp; Telemetry Inspector</h2>
+      <button type="button" class="studio-btn" commandfor="inspector-dialog" command="close">Close</button>
+    </div>
+
+    <div class="dialog-body">
+      <section aria-label="Technical inspection panels">
+        <details class="spec-accordion" name="spec-tabs" open>
+          <summary>Shot History &amp; Aerodynamic Dispersion Log</summary>
+          <div class="accordion-panel">
+            <div class="table-scroll">
+              <table>
+                <caption>Recorded tee drives integrated via 240Hz RK4 aerodynamics</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Shot</th>
+                    <th scope="col">Ball Speed</th>
+                    <th scope="col">Launch</th>
+                    <th scope="col">Backspin</th>
+                    <th scope="col">Carry</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">Apex</th>
+                    <th scope="col">Offline</th>
+                    <th scope="col">Landing Surface</th>
+                  </tr>
+                </thead>
+                <tbody id="shot-history-body">
+                  <tr>
+                    <td colspan="9" class="empty-cell">No drives recorded yet. Press DRIVE or Space to tee off.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </details>
+
+        <details class="spec-accordion" name="spec-tabs">
+          <summary>Biomechanical Armature, SO(3) RBF PSD &amp; 52 ARKit FACS</summary>
+          <div class="accordion-panel" id="inspector-biomechanics"></div>
+        </details>
+
+        <details class="spec-accordion" name="spec-tabs">
+          <summary>PBR Reflectance Validation &amp; ACES Color Management Audit</summary>
+          <div class="accordion-panel" id="inspector-pbr-audit"></div>
+        </details>
+
+        <details class="spec-accordion" name="spec-tabs">
+          <summary>OpenUSD LIVRPS Composed Stage Graph</summary>
+          <div class="accordion-panel" id="inspector-usd-stage"></div>
+        </details>
+      </section>
+    </div>
+  </dialog>
+
+  <!-- Centralized Polite Live Region for Screen Readers -->
+  <div id="live-announcer" class="visually-hidden" aria-live="polite" aria-atomic="true"></div>
+
+  <script type="module" src="./js/main.js"></script>
+</body>
+</html>

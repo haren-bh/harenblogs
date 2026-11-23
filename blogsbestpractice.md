@@ -55,6 +55,14 @@ When writing single-topic engineering posts rather than roundups, follow:
 
 ---
 
+### Template C: Interactive Hands-On / Workshop Codelab Blogs (Static Web)
+When publishing hands-on event workshops or multi-track tutorials as static HTML pages (e.g., GitHub Pages):
+1. **Progressive Disclosure Landing (Summary First):** Show **only** the high-level summarized instructions, checklist, and environment path selector on initial load; keep detailed setup tracks and deep-dive guides behind clean hash-routed views (`#hash` + `document.startViewTransition` + programmatic heading focus) with a persistent **"← Back to Summary"** control and an optional **"Show All Sections"** toggle.
+2. **Interactive Copy & Parameter Sync:** Provide 1-click Copy buttons on all CLI/prompt blocks and allow attendees to enter shared parameters once (such as `<YOUR_PROJECT_ID>`) to auto-populate downstream commands.
+3. **Static Hosting & Raw Markdown Spec Hygiene:** Always link sub-apps via explicit `.../index.html` paths so relative `./js/`, `./models/`, and `./textures/` imports resolve identically across static hosts and local servers. Include `.nojekyll` at the repository root (plus an in-page Spec Preview / Blob `.md` download option) so GitHub Pages serves raw `.md` specification files without `404` rewrites.
+
+---
+
 ## 4. Readability, Visuals & Code Standards
 * **Scannable formatting:**
   * Keep paragraphs to **3–4 lines max**.

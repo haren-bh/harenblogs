@@ -1,0 +1,2747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Let's Cook with Gemini 4 in 3D! | DevFest Tokyo 2026 Hands-On</title>
+  <meta name="description" content="Interactive DevFest Tokyo 2026 hands-on guide: build playable 3D web games, simulations, and animations with Gemini 4, Nano Banana textures, Google AI Studio, and Antigravity CLI.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-canvas: #f4f5f7;
+      --bg-surface: #ffffff;
+      --bg-subtle: #f9fafb;
+      --bg-muted: #f1f3f5;
+      --bg-pill: #eef0f3;
+      --bg-pill-active: #18181b;
+      --bg-terminal: #18181b;
+      --bg-terminal-bar: #27272a;
+      --border-subtle: #e4e7ec;
+      --border-strong: #cbd5e1;
+      --border-focus: #18181b;
+      --text-primary: #111827;
+      --text-secondary: #374151;
+      --text-muted: #6b7280;
+      --text-on-dark: #f9fafb;
+      --shadow-xs: 0 1px 2px rgba(17, 24, 39, 0.04);
+      --shadow-sm: 0 2px 8px rgba(17, 24, 39, 0.05), 0 1px 2px rgba(17, 24, 39, 0.04);
+      --shadow-md: 0 10px 24px -6px rgba(17, 24, 39, 0.08), 0 2px 6px -2px rgba(17, 24, 39, 0.04);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 18px;
+      --radius-pill: 999px;
+      --header-h: 3.5rem;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      container-type: scroll-state;
+      scroll-behavior: smooth;
+      font-size: 100%;
+    }
+
+    :target {
+      scroll-margin-top: 4.75rem;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-canvas);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    /* Compact single-row sticky top bar (<12% viewport height) */
+    .top-bar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      height: var(--header-h);
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-subtle);
+      transition: transform 0.22s ease;
+    }
+
+    @container scroll-state((scrolled: bottom) and (scrollable: top)) {
+      .top-bar {
+        transform: translateY(-100%);
+      }
+    }
+
+    .top-bar.is-hidden:not(:focus-within) {
+      transform: translateY(-100%);
+    }
+
+    .top-bar:focus-within {
+      transform: none;
+    }
+
+    .top-bar-inner {
+      max-width: 1120px;
+      height: 100%;
+      margin: 0 auto;
+      padding: 0 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .brand-cluster {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      min-width: 0;
+    }
+
+    .home-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.84rem;
+      font-weight: 600;
+      padding: 0.35rem 0.65rem;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-surface);
+      white-space: nowrap;
+      transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+    }
+
+    .home-link:hover {
+      background: var(--bg-muted);
+      border-color: var(--border-strong);
+      color: var(--text-primary);
+    }
+
+    .event-pill {
+      font-size: 0.76rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-subtle);
+      padding: 0.25rem 0.65rem;
+      border-radius: var(--radius-pill);
+      white-space: nowrap;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.42rem;
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 600;
+      line-height: 1.2;
+      padding: 0.5rem 0.9rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-strong);
+      background: var(--bg-surface);
+      color: var(--text-primary);
+      text-decoration: none;
+      cursor: pointer;
+      transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      background: var(--bg-muted);
+      border-color: #9ca3af;
+    }
+
+    .btn:focus-visible,
+    a:focus-visible,
+    summary:focus-visible,
+    input:focus-visible,
+    select:focus-visible,
+    pre:focus-visible {
+      outline: 2px solid var(--border-focus);
+      outline-offset: 2px;
+    }
+
+    .btn-primary {
+      background: var(--text-primary);
+      border-color: var(--text-primary);
+      color: var(--text-on-dark);
+    }
+
+    .btn-primary:hover {
+      background: #27272a;
+      border-color: #27272a;
+      color: #ffffff;
+    }
+
+    .btn-sm {
+      font-size: 0.78rem;
+      padding: 0.38rem 0.7rem;
+    }
+
+    .btn-ghost {
+      border-color: var(--border-subtle);
+      background: var(--bg-subtle);
+      color: var(--text-secondary);
+    }
+
+    /* Native Popover Jump Menu */
+    #quick-nav-popover {
+      margin: 3.9rem 1rem auto auto;
+      padding: 0.65rem;
+      width: min(320px, calc(100vw - 2rem));
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-md);
+      background: var(--bg-surface);
+      color: var(--text-primary);
+      box-shadow: var(--shadow-md);
+    }
+
+    [popover]:is(:popover-open, .\:popover-open) {
+      display: block;
+    }
+
+    .popover-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      padding: 0.35rem 0.6rem 0.5rem;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 0.35rem;
+    }
+
+    .popover-nav-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .popover-nav-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      padding: 0.5rem 0.65rem;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      color: var(--text-secondary);
+      font-size: 0.86rem;
+      font-weight: 500;
+    }
+
+    .popover-nav-link:hover,
+    .popover-nav-link[aria-current="location"] {
+      background: var(--bg-muted);
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    .popover-time {
+      font-size: 0.73rem;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Main Container */
+    main {
+      flex: 1;
+      width: 100%;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem 3.5rem;
+    }
+
+    /* Sub-view navigation bar (visible when viewing any linked section) */
+    .subview-bar {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 0.65rem 0.85rem;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      box-shadow: var(--shadow-xs);
+    }
+
+    .section-tabs {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      overflow-x: auto;
+      padding-bottom: 2px;
+      scrollbar-width: thin;
+    }
+
+    .tab-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.36rem 0.72rem;
+      border-radius: var(--radius-pill);
+      font-size: 0.79rem;
+      font-weight: 600;
+      text-decoration: none;
+      color: var(--text-secondary);
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-subtle);
+      white-space: nowrap;
+      transition: all 0.15s ease;
+    }
+
+    .tab-pill:hover {
+      background: var(--bg-muted);
+      color: var(--text-primary);
+    }
+
+    .tab-pill.is-active {
+      background: var(--bg-pill-active);
+      border-color: var(--bg-pill-active);
+      color: var(--text-on-dark);
+    }
+
+    /* Hero Card in Section 1 */
+    .hero-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      box-shadow: var(--shadow-sm);
+      display: grid;
+      grid-template-columns: 1.12fr 0.88fr;
+      gap: 2rem;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      background: var(--bg-muted);
+      border: 1px solid var(--border-subtle);
+      padding: 0.3rem 0.75rem;
+      border-radius: var(--radius-pill);
+      margin-bottom: 0.9rem;
+    }
+
+    h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(1.85rem, 3.2vw, 2.55rem);
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin: 0 0 0.85rem;
+      color: var(--text-primary);
+      width: fit-content;
+    }
+
+    .hero-lead {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      margin: 0 0 1.25rem;
+      max-width: 58ch;
+    }
+
+    .hero-figure {
+      margin: 0;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+
+    .hero-figure img,
+    .editorial-banner img,
+    .showcase-thumb img,
+    .step-figure img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .hero-figure figcaption,
+    .editorial-banner figcaption {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      padding: 0.5rem 0.85rem;
+      border-top: 1px solid var(--border-subtle);
+      background: var(--bg-surface);
+      text-align: center;
+    }
+
+    /* Interactive Progress Checklist Bar */
+    .progress-strip {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 0.85rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .progress-strip-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .progress-track {
+      height: 6px;
+      background: var(--border-subtle);
+      border-radius: var(--radius-pill);
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: var(--progress-pct, 0%);
+      background: var(--text-primary);
+      transition: width 0.25s ease;
+    }
+
+    .checklist-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+    }
+
+    .check-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-pill);
+      padding: 0.3rem 0.7rem;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.15s ease;
+    }
+
+    .check-chip:hover {
+      border-color: var(--border-strong);
+    }
+
+    .check-chip input {
+      accent-color: var(--text-primary);
+      margin: 0;
+      cursor: pointer;
+    }
+
+    .check-chip:has(input:checked) {
+      background: var(--text-primary);
+      border-color: var(--text-primary);
+      color: var(--text-on-dark);
+    }
+
+    /* Summarized 4-Step Grid in Section 1 */
+    .summary-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin: 0 0 1rem;
+    }
+
+    .summary-header h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.35rem;
+      margin: 0;
+      letter-spacing: -0.01em;
+    }
+
+    .summary-hint {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .steps-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 1.15rem;
+    }
+
+    .step-summary-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-xs);
+    }
+
+    .step-card-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .step-num {
+      flex-shrink: 0;
+      width: 2.1rem;
+      height: 2.1rem;
+      border-radius: 50%;
+      background: var(--text-primary);
+      color: var(--text-on-dark);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .step-card-head h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.18rem;
+      margin: 0 0 0.2rem;
+      color: var(--text-primary);
+    }
+
+    .step-card-head p {
+      margin: 0;
+      font-size: 0.93rem;
+      color: var(--text-secondary);
+    }
+
+    /* Mini 3D Games + Specs Grid inside Step 1 */
+    .mini-demos-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+
+    .demo-card {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+    }
+
+    .demo-card:hover {
+      border-color: #9ca3af;
+      box-shadow: var(--shadow-sm);
+      transform: translateY(-2px);
+    }
+
+    .showcase-thumb {
+      position: relative;
+      aspect-ratio: 16 / 10;
+      background: #e5e7eb;
+      overflow: hidden;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .showcase-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .demo-tag {
+      position: absolute;
+      top: 0.55rem;
+      left: 0.55rem;
+      background: rgba(24, 24, 27, 0.84);
+      color: #ffffff;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.2rem 0.55rem;
+      border-radius: var(--radius-pill);
+      backdrop-filter: blur(4px);
+    }
+
+    .demo-body {
+      padding: 0.95rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      flex: 1;
+    }
+
+    .demo-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.02rem;
+      font-weight: 700;
+      margin: 0;
+      color: var(--text-primary);
+    }
+
+    .demo-desc {
+      font-size: 0.83rem;
+      color: var(--text-secondary);
+      margin: 0;
+      flex: 1;
+    }
+
+    .demo-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 0.2rem;
+    }
+
+    .link-pills-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    /* Step 2 Environment Path Cards */
+    .env-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .env-card {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 1.15rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 0.85rem;
+    }
+
+    .env-badge {
+      display: inline-block;
+      width: fit-content;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.22rem 0.6rem;
+      border-radius: var(--radius-pill);
+      background: var(--bg-surface);
+      border: 1px solid var(--border-strong);
+      color: var(--text-primary);
+      margin-bottom: 0.45rem;
+    }
+
+    .env-card h4 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.05rem;
+      margin: 0 0 0.35rem;
+    }
+
+    .env-card p {
+      margin: 0;
+      font-size: 0.86rem;
+      color: var(--text-secondary);
+    }
+
+    .split-steps-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.15rem;
+    }
+
+    /* Quick Directory Grid at bottom of Section 1 */
+    .directory-box {
+      margin-top: 1.75rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1.4rem 1.5rem;
+      box-shadow: var(--shadow-xs);
+    }
+
+    .directory-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.75rem;
+      margin-top: 0.9rem;
+    }
+
+    .dir-link-card {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      padding: 0.9rem 1rem;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-subtle);
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.15s ease;
+    }
+
+    .dir-link-card:hover {
+      background: var(--bg-muted);
+      border-color: #9ca3af;
+      transform: translateY(-1px);
+    }
+
+    .dir-link-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .dir-link-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .dir-link-sub {
+      font-size: 0.81rem;
+      color: var(--text-secondary);
+    }
+
+    /* Detailed Guide Sections */
+    .guide-section {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 1.5rem;
+    }
+
+    .section-head {
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 1.15rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.55rem;
+    }
+
+    .meta-badge {
+      font-size: 0.74rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.22rem 0.62rem;
+      border-radius: var(--radius-pill);
+      background: var(--bg-muted);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .guide-section h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(1.45rem, 2.5vw, 1.85rem);
+      margin: 0 0 0.45rem;
+      letter-spacing: -0.015em;
+      color: var(--text-primary);
+    }
+
+    .guide-section h2:focus {
+      outline: none;
+    }
+
+    .guide-section h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.2rem;
+      margin: 1.75rem 0 0.65rem;
+      color: var(--text-primary);
+    }
+
+    .editorial-banner {
+      margin: 0 0 1.5rem;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      max-width: 760px;
+    }
+
+    /* Comparison Table */
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      margin: 1.25rem 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      text-align: left;
+    }
+
+    th, td {
+      padding: 0.75rem 0.95rem;
+      border-bottom: 1px solid var(--border-subtle);
+      vertical-align: top;
+    }
+
+    th {
+      background: var(--bg-subtle);
+      font-weight: 700;
+      color: var(--text-primary);
+      white-space: nowrap;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Ordered Tutorial Steps */
+    .tutorial-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1.15rem;
+      counter-reset: tut-step;
+    }
+
+    .tutorial-item {
+      counter-increment: tut-step;
+      position: relative;
+      padding: 1.1rem 1.2rem 1.1rem 3.3rem;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+    }
+
+    .tutorial-item::before {
+      content: counter(tut-step);
+      position: absolute;
+      left: 1rem;
+      top: 1.05rem;
+      width: 1.65rem;
+      height: 1.65rem;
+      border-radius: 50%;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-strong);
+      color: var(--text-primary);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .tutorial-item p {
+      margin: 0 0 0.55rem;
+      color: var(--text-secondary);
+      font-size: 0.94rem;
+    }
+
+    .tutorial-item p:last-child {
+      margin-bottom: 0;
+    }
+
+    .tutorial-item ul {
+      margin: 0.45rem 0 0.65rem;
+      padding-left: 1.2rem;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .tutorial-item li {
+      margin-bottom: 0.3rem;
+    }
+
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.84em;
+      background: var(--bg-pill);
+      border: 1px solid var(--border-subtle);
+      padding: 0.12rem 0.38rem;
+      border-radius: 5px;
+      color: var(--text-primary);
+    }
+
+    /* Step Screenshot Figures with Click-to-Zoom */
+    .step-figure {
+      margin: 0.8rem 0 0.2rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      max-width: 660px;
+    }
+
+    .zoom-trigger {
+      display: block;
+      width: 100%;
+      padding: 0;
+      border: none;
+      background: transparent;
+      cursor: zoom-in;
+      text-align: left;
+    }
+
+    .step-figure figcaption {
+      padding: 0.45rem 0.75rem;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border-subtle);
+      background: var(--bg-surface);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+
+    /* Terminal / Prompt Code Blocks */
+    .cmd-card {
+      margin: 0.7rem 0;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      border: 1px solid #27272a;
+      background: var(--bg-terminal);
+    }
+
+    .cmd-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      padding: 0.42rem 0.75rem;
+      background: var(--bg-terminal-bar);
+      border-bottom: 1px solid #3f3f46;
+    }
+
+    .cmd-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #d4d4d8;
+    }
+
+    .copy-btn {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.74rem;
+      font-weight: 600;
+      padding: 0.24rem 0.6rem;
+      border-radius: 5px;
+      border: 1px solid #52525b;
+      background: #18181b;
+      color: #f4f4f5;
+      cursor: pointer;
+      transition: background-color 0.15s ease;
+    }
+
+    .copy-btn:hover {
+      background: #3f3f46;
+    }
+
+    .cmd-card pre {
+      margin: 0;
+      padding: 0.85rem 1rem;
+      overflow-x: auto;
+      color: #f4f4f5;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.84rem;
+      line-height: 1.55;
+    }
+
+    .cmd-card pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      color: inherit;
+      font-size: inherit;
+    }
+
+    /* Callout / Note Boxes */
+    .callout {
+      margin: 1rem 0;
+      padding: 0.9rem 1.05rem;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-subtle);
+      border-left: 4px solid var(--text-primary);
+      border-radius: var(--radius-sm);
+      font-size: 0.89rem;
+      color: var(--text-secondary);
+    }
+
+    .callout strong {
+      color: var(--text-primary);
+    }
+
+    /* Interactive Project ID Helper & Prompt Builder */
+    .interactive-widget {
+      margin: 1.15rem 0;
+      padding: 1.15rem;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-md);
+    }
+
+    .widget-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      margin: 0 0 0.35rem;
+      color: var(--text-primary);
+    }
+
+    .widget-sub {
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      margin: 0 0 0.85rem;
+    }
+
+    .field-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: flex-end;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .field-group label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .text-input,
+    .select-input {
+      font-family: inherit;
+      font-size: 0.88rem;
+      padding: 0.5rem 0.7rem;
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-sm);
+      background: var(--bg-surface);
+      color: var(--text-primary);
+    }
+
+    .feature-toggles {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 0.8rem 0;
+    }
+
+    /* Native Details / Summary Accordions */
+    details.inline-disclosure {
+      margin: 0.9rem 0;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      background: var(--bg-surface);
+      overflow: hidden;
+    }
+
+    details.inline-disclosure > summary {
+      padding: 0.8rem 1rem;
+      font-weight: 600;
+      font-size: 0.92rem;
+      cursor: pointer;
+      background: var(--bg-subtle);
+      color: var(--text-primary);
+    }
+
+    details.inline-disclosure[open] > summary {
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .disclosure-content {
+      padding: 1rem;
+    }
+
+    /* Bottom Section Prev / Next Nav */
+    .section-pager {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-top: 1.75rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    /* Modal Dialogs (Spec Explorer + Image Lightbox) */
+    dialog {
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-lg);
+      padding: 0;
+      background: var(--bg-surface);
+      color: var(--text-primary);
+      box-shadow: var(--shadow-md);
+      max-width: min(920px, calc(100vw - 1.5rem));
+      width: 100%;
+      max-height: calc(100dvh - 2rem);
+    }
+
+    dialog::backdrop {
+      background: rgba(17, 24, 39, 0.55);
+      backdrop-filter: blur(3px);
+    }
+
+    .modal-shell {
+      display: flex;
+      flex-direction: column;
+      max-height: calc(100dvh - 2rem);
+    }
+
+    .modal-head {
+      padding: 0.95rem 1.2rem;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      background: var(--bg-subtle);
+    }
+
+    .modal-head h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.08rem;
+      margin: 0;
+    }
+
+    .modal-toolbar {
+      padding: 0.65rem 1.2rem;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+      background: var(--bg-surface);
+    }
+
+    .modal-body {
+      padding: 1.25rem;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .spec-rendered h1,
+    .spec-rendered h2,
+    .spec-rendered h3 {
+      font-family: 'Outfit', sans-serif;
+      margin-top: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .spec-rendered h1 { font-size: 1.35rem; }
+    .spec-rendered h2 { font-size: 1.12rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.3rem; }
+    .spec-rendered h3 { font-size: 0.98rem; }
+    .spec-rendered p, .spec-rendered li { font-size: 0.89rem; color: var(--text-secondary); }
+    .spec-rendered pre {
+      background: var(--bg-terminal);
+      color: #f4f4f5;
+      padding: 0.8rem;
+      border-radius: var(--radius-sm);
+      overflow-x: auto;
+      font-size: 0.8rem;
+    }
+    .spec-rendered pre code {
+      background: none;
+      border: none;
+      color: inherit;
+      padding: 0;
+    }
+
+    #lightbox-dialog {
+      max-width: min(1080px, calc(100vw - 1.5rem));
+    }
+
+    .lightbox-img-wrap {
+      padding: 1rem;
+      background: var(--bg-subtle);
+      text-align: center;
+      overflow: auto;
+    }
+
+    .lightbox-img-wrap img {
+      max-width: 100%;
+      max-height: 76dvh;
+      width: auto;
+      height: auto;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-subtle);
+    }
+
+    footer {
+      border-top: 1px solid var(--border-subtle);
+      background: var(--bg-surface);
+      padding: 1.5rem 1.25rem;
+      text-align: center;
+      font-size: 0.83rem;
+      color: var(--text-muted);
+    }
+
+    footer a {
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      ::view-transition-group(*),
+      ::view-transition-old(*),
+      ::view-transition-new(*) {
+        animation: none !important;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .hero-card {
+        grid-template-columns: 1fr;
+        padding: 1.4rem;
+      }
+      .mini-demos-grid,
+      .directory-grid {
+        grid-template-columns: 1fr;
+      }
+      .env-grid,
+      .split-steps-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .event-pill {
+        display: none;
+      }
+      .guide-section,
+      .step-summary-card {
+        padding: 1.2rem;
+      }
+      .tutorial-item {
+        padding: 1rem 1rem 1rem 2.85rem;
+      }
+    }
+  </style>
+  <script defer src="specs-data.js"></script>
+</head>
+<body>
+  <header class="top-bar">
+    <div class="top-bar-inner">
+      <div class="brand-cluster">
+        <a href="../../../../index.html" class="home-link">&larr; Bufferof Blogs</a>
+        <span class="event-pill">DevFest Tokyo 2026</span>
+        <a href="#overview" id="top-back-overview" class="btn btn-sm btn-primary" hidden>&larr; Quickstart Summary</a>
+      </div>
+      <div class="top-actions">
+        <button type="button" id="toggle-all-btn" class="btn btn-sm btn-ghost" aria-pressed="false">Show All Sections</button>
+        <button type="button" class="btn btn-sm" popovertarget="quick-nav-popover">Sections &#9662;</button>
+      </div>
+    </div>
+  </header>
+
+  <nav id="quick-nav-popover" popover aria-label="Workshop sections">
+    <div class="popover-label">Jump to Section</div>
+    <ul class="popover-nav-list">
+      <li><a href="#overview" class="popover-nav-link" data-nav-link="overview"><span>1. Summarized Quickstart</span><span class="popover-time">Start</span></a></li>
+      <li><a href="#samples" class="popover-nav-link" data-nav-link="samples"><span>2. Sample 3D Games &amp; Specs</span><span class="popover-time">3 Demos</span></a></li>
+      <li><a href="#ai-studio" class="popover-nav-link" data-nav-link="ai-studio"><span>3. Option A: Google AI Studio</span><span class="popover-time">1 min</span></a></li>
+      <li><a href="#cloud-credits" class="popover-nav-link" data-nav-link="cloud-credits"><span>4. Option B1: Free Cloud Credits</span><span class="popover-time">5 min</span></a></li>
+      <li><a href="#antigravity-cli" class="popover-nav-link" data-nav-link="antigravity-cli"><span>5. Option B2: Antigravity CLI</span><span class="popover-time">7 min</span></a></li>
+      <li><a href="#create-specs" class="popover-nav-link" data-nav-link="create-specs"><span>6. Create Your Own Spec</span><span class="popover-time">4 min</span></a></li>
+      <li><a href="#improve-specs" class="popover-nav-link" data-nav-link="improve-specs"><span>7. Improve &amp; Texture Specs</span><span class="popover-time">3 min</span></a></li>
+    </ul>
+  </nav>
+
+  <main id="main-content">
+    <!-- Persistent context bar shown ONLY when navigating into a linked detail section -->
+    <nav id="subview-bar" class="subview-bar" aria-label="Section switcher" hidden>
+      <a href="#overview" class="btn btn-sm btn-primary">&larr; Back to Summarized Instructions</a>
+      <div class="section-tabs">
+        <a href="#samples" class="tab-pill" data-tab="samples">3D Games &amp; Specs</a>
+        <a href="#ai-studio" class="tab-pill" data-tab="ai-studio">AI Studio</a>
+        <a href="#cloud-credits" class="tab-pill" data-tab="cloud-credits">Cloud Credits</a>
+        <a href="#antigravity-cli" class="tab-pill" data-tab="antigravity-cli">Antigravity CLI</a>
+        <a href="#create-specs" class="tab-pill" data-tab="create-specs">Create Spec</a>
+        <a href="#improve-specs" class="tab-pill" data-tab="improve-specs">Improve Spec</a>
+      </div>
+    </nav>
+
+    <!-- ===================================================================== -->
+    <!-- SECTION 1 (VISIBLE FIRST BY DEFAULT): SUMMARIZED WORKSHOP QUICKSTART  -->
+    <!-- ===================================================================== -->
+    <section id="overview" data-view="overview" aria-labelledby="overview-heading">
+      <div class="hero-card">
+        <div>
+          <span class="eyebrow">DevFest Tokyo 2026 &bull; Hands-On Lab</span>
+          <h1 id="overview-heading" tabindex="-1">Let's Cook with Gemini 4 in 3D!</h1>
+          <p class="hero-lead">
+            Gemini 4 excels at building interactive 3D web artifacts&mdash;including WebGL games, physics simulations, and biomechanical animations. Follow the <strong>4 summarized steps</strong> below to launch your project, and click any guide link when you need step-by-step details.
+          </p>
+
+          <div class="progress-strip" aria-label="Personal workshop progress tracker">
+            <div class="progress-strip-top">
+              <span>Your Workshop Checklist</span>
+              <span id="progress-label">0 of 4 steps completed</span>
+            </div>
+            <div class="progress-track" aria-hidden="true">
+              <div id="progress-fill" class="progress-fill"></div>
+            </div>
+            <div class="checklist-pills">
+              <label class="check-chip"><input type="checkbox" data-step-check="1"> 1. Pick Idea / Spec</label>
+              <label class="check-chip"><input type="checkbox" data-step-check="2"> 2. Set Up Dev Env</label>
+              <label class="check-chip"><input type="checkbox" data-step-check="3"> 3. Build as a Team</label>
+              <label class="check-chip"><input type="checkbox" data-step-check="4"> 4. Submit &amp; Present</label>
+            </div>
+          </div>
+        </div>
+
+        <figure class="hero-figure">
+          <picture>
+            <source srcset="images/nb_hero_3d_cooking.webp" type="image/webp" width="1280" height="714">
+            <img src="images/nb_hero_3d_cooking.png" alt="Minimalist white and gray architectural diagram showing a specification sheet flowing through Gemini 4 into 3D F1 racing, golf swing, and ocean reef scenes" width="1280" height="714" fetchpriority="high">
+          </picture>
+          <figcaption>From Markdown blueprint to playable 3D WebGL experiences with Gemini 4 &amp; Nano Banana</figcaption>
+        </figure>
+      </div>
+
+      <div class="summary-header">
+        <h2>Today's Project: What to Do in 4 Steps</h2>
+        <p class="summary-hint">Everything you need at a glance&mdash;open detailed guides only as needed.</p>
+      </div>
+
+      <div class="steps-stack">
+        <!-- STEP 1 -->
+        <article class="step-summary-card">
+          <div class="step-card-head">
+            <span class="step-num" aria-hidden="true">1</span>
+            <div>
+              <h3>Pick What to Build&mdash;Or Start from a Sample 3D Spec</h3>
+              <p>Brainstorm your own 3D game, simulation, or animation, or test-drive and remix our three reference 3D web apps and their engineering specification files right now:</p>
+            </div>
+          </div>
+
+          <div class="mini-demos-grid">
+            <!-- F1 Car Game -->
+            <div class="demo-card">
+              <div class="showcase-thumb">
+                <span class="demo-tag">Three.js + PBR</span>
+                <picture>
+                  <source srcset="images/image16.webp" type="image/webp" width="1400" height="721">
+                  <img src="images/image16.png" alt="Tokyo GP 2026 3D F1 racing game screenshot" width="1999" height="1029" loading="lazy">
+                </picture>
+              </div>
+              <div class="demo-body">
+                <h4 class="demo-title">F1 Racing (Tokyo GP 2026)</h4>
+                <p class="demo-desc">240 Hz Pacejka physics, DRS zones, Nano Banana PBR liveries, and procedural V6 hybrid audio.</p>
+                <div class="demo-actions">
+                  <a href="../f1cargame/index.html" target="_blank" rel="noopener" class="btn btn-sm btn-primary">Play 3D Game &#8599;</a>
+                  <button type="button" class="btn btn-sm" data-open-spec="f1">Read Spec</button>
+                  <a href="../specs/f1carracing.md" target="_blank" rel="noopener" class="btn btn-sm btn-ghost">f1carracing.md &#8599;</a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Golf Swing -->
+            <div class="demo-card">
+              <div class="showcase-thumb">
+                <span class="demo-tag">25-Frame Mocap IK</span>
+                <picture>
+                  <source srcset="images/image5.webp" type="image/webp" width="1400" height="1033">
+                  <img src="images/image5.png" alt="GolfSwing Studio 3D golf driving simulator screenshot" width="1838" height="1356" loading="lazy">
+                </picture>
+              </div>
+              <div class="demo-body">
+                <h4 class="demo-title">3D Golf Swing Simulator</h4>
+                <p class="demo-desc">Articulated `.glb` golfer, 2-bone foot-pinned IK, 6 camera rigs, and aerodynamic ball flight.</p>
+                <div class="demo-actions">
+                  <a href="../golfswing/index.html" target="_blank" rel="noopener" class="btn btn-sm btn-primary">Play 3D Game &#8599;</a>
+                  <button type="button" class="btn btn-sm" data-open-spec="golf">Read Spec</button>
+                  <a href="../specs/golfswing.md" target="_blank" rel="noopener" class="btn btn-sm btn-ghost">golfswing.md &#8599;</a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Ocean Game -->
+            <div class="demo-card">
+              <div class="showcase-thumb">
+                <span class="demo-tag">Pure WebGL2</span>
+                <picture>
+                  <source srcset="images/image14.webp" type="image/webp" width="1400" height="935">
+                  <img src="images/image14.png" alt="Abyssal Reverie 3D ocean swim-through screenshot" width="1874" height="1252" loading="lazy">
+                </picture>
+              </div>
+              <div class="demo-body">
+                <h4 class="demo-title">Ocean Scape Swim-Through</h4>
+                <p class="demo-desc">Zero-dependency WebGL2 coral reef, swaying kelp forest, 420 boid fish, and Voronoi caustics.</p>
+                <div class="demo-actions">
+                  <a href="../oceangame/index.html" target="_blank" rel="noopener" class="btn btn-sm btn-primary">Play 3D Game &#8599;</a>
+                  <button type="button" class="btn btn-sm" data-open-spec="ocean">Read Spec</button>
+                  <a href="../specs/oceanflyby.md" target="_blank" rel="noopener" class="btn btn-sm btn-ghost">oceanflyby.md &#8599;</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="link-pills-row">
+            <a href="#samples" class="btn btn-sm">Compare All Sample Specs &amp; Controls &rarr;</a>
+            <a href="#create-specs" class="btn btn-sm">How to Create Your Own Specs &rarr;</a>
+            <a href="#improve-specs" class="btn btn-sm">How to Modify &amp; Texture Specs &rarr;</a>
+          </div>
+        </article>
+
+        <!-- STEP 2 -->
+        <article class="step-summary-card">
+          <div class="step-card-head">
+            <span class="step-num" aria-hidden="true">2</span>
+            <div>
+              <h3>Choose One Development Environment</h3>
+              <p>Pick the workflow that matches your Google Cloud familiarity&mdash;both let you generate complete 3D applications from prompts or Markdown specs:</p>
+            </div>
+          </div>
+
+          <div class="env-grid">
+            <div class="env-card">
+              <div>
+                <span class="env-badge">Path A &bull; New to Google Cloud (No Setup)</span>
+                <h4>Google AI Studio Apps</h4>
+                <p>Open <code>aistudio.google.com/apps</code> directly in your browser, paste a prompt or upload a <code>.md</code> specification file, and build immediately with zero CLI configuration.</p>
+              </div>
+              <div class="demo-actions">
+                <a href="#ai-studio" class="btn btn-sm btn-primary">AI Studio Quick Guide &rarr;</a>
+                <a href="https://aistudio.google.com/apps" target="_blank" rel="noopener" class="btn btn-sm">Launch AI Studio &#8599;</a>
+              </div>
+            </div>
+
+            <div class="env-card">
+              <div>
+                <span class="env-badge">Path B &bull; Familiar with Google Cloud (~7 Min Setup)</span>
+                <h4>Antigravity CLI (<code>agy</code>) in Cloud Shell Editor</h4>
+                <p>Claim your free event Google Cloud credits, create a project, enable Vertex AI APIs, and run the autonomous <code>agy</code> terminal coding agent inside Cloud Shell Editor.</p>
+              </div>
+              <div class="demo-actions">
+                <a href="#cloud-credits" class="btn btn-sm btn-primary">Step 2a: Claim Free Credits &rarr;</a>
+                <a href="#antigravity-cli" class="btn btn-sm">Step 2b: Set Up Antigravity CLI &rarr;</a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- STEPS 3 & 4 -->
+        <div class="split-steps-row">
+          <article class="step-summary-card">
+            <div class="step-card-head">
+              <span class="step-num" aria-hidden="true">3</span>
+              <div>
+                <h3>Work as a Team &amp; Let's Cook!</h3>
+                <p>Explore ideas independently first, rally around the strongest 3D concept as a team, and iterate on physics, camera angles, and Nano Banana textures together.</p>
+              </div>
+            </div>
+            <div class="link-pills-row">
+              <a href="#create-specs" class="btn btn-sm">Open Interactive Prompt Builder &rarr;</a>
+              <a href="#improve-specs" class="btn btn-sm">Add Nano Banana Textures &rarr;</a>
+            </div>
+          </article>
+
+          <article class="step-summary-card">
+            <div class="step-card-head">
+              <span class="step-num" aria-hidden="true">4</span>
+              <div>
+                <h3>Submit &amp; Present!</h3>
+                <p>Demo your playable 3D artifact to the room and share what your team cooked up. <strong>All submissions receive an official Workshop Submission Certificate!</strong></p>
+              </div>
+            </div>
+            <div class="link-pills-row">
+              <a href="#samples" class="btn btn-sm">Inspect Reference Demos for Inspiration &rarr;</a>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <!-- Complete Linked Guide Directory -->
+      <div class="directory-box">
+        <div class="summary-header">
+          <h2>Detailed Step-by-Step Guides</h2>
+          <p class="summary-hint">Select any topic below to open its full walkthrough.</p>
+        </div>
+        <div class="directory-grid">
+          <a href="#samples" class="dir-link-card">
+            <span class="dir-link-top"><span>Reference Gallery</span><span>3 Apps</span></span>
+            <span class="dir-link-title">Sample Specs &amp; 3D Applications</span>
+            <span class="dir-link-sub">Compare architecture, controls, live WebGL demos, and downloadable specs.</span>
+          </a>
+          <a href="#ai-studio" class="dir-link-card">
+            <span class="dir-link-top"><span>Option A</span><span>1 Min</span></span>
+            <span class="dir-link-title">Setting Up Google AI Studio</span>
+            <span class="dir-link-sub">Zero-setup browser workflow at aistudio.google.com/apps.</span>
+          </a>
+          <a href="#cloud-credits" class="dir-link-card">
+            <span class="dir-link-top"><span>Option B &bull; Part 1</span><span>5 Min</span></span>
+            <span class="dir-link-title">Obtaining Google Cloud Free Credits</span>
+            <span class="dir-link-sub">Redeem event credits with your personal Gmail and create a GCP project.</span>
+          </a>
+          <a href="#antigravity-cli" class="dir-link-card">
+            <span class="dir-link-top"><span>Option B &bull; Part 2</span><span>7 Min</span></span>
+            <span class="dir-link-title">Setting Up Antigravity CLI in Cloud Shell</span>
+            <span class="dir-link-sub">Open Cloud Shell Editor, enable Vertex AI APIs, and launch agy.</span>
+          </a>
+          <a href="#create-specs" class="dir-link-card">
+            <span class="dir-link-top"><span>Spec Authoring</span><span>4 Min</span></span>
+            <span class="dir-link-title">Researching &amp; Creating Initial Specs</span>
+            <span class="dir-link-sub">Use NotebookLM deep research + interactive prompt composer.</span>
+          </a>
+          <a href="#improve-specs" class="dir-link-card">
+            <span class="dir-link-top"><span>Spec Refinement</span><span>3 Min</span></span>
+            <span class="dir-link-title">Improving &amp; Modifying Your Spec</span>
+            <span class="dir-link-sub">Upgrade specs in Gemini with Nano Banana PBR textures &amp; physics tiers.</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- SECTION 2: SAMPLE 3D APPLICATIONS & SPECIFICATIONS                    -->
+    <!-- ===================================================================== -->
+    <section id="samples" class="guide-section" data-view="samples" aria-labelledby="samples-heading" hidden>
+      <div class="section-head">
+        <div class="section-meta-row">
+          <span class="meta-badge">Reference Blueprints</span>
+          <span class="meta-badge">3 Live WebGL Games + 3 Markdown Specs</span>
+        </div>
+        <h2 id="samples-heading" tabindex="-1">Sample Specifications &amp; Playable 3D Applications</h2>
+        <p class="summary-hint">Launch each 3D application in your browser, inspect its full engineering specification in the interactive reader, or download the raw <code>.md</code> blueprint to remix in AI Studio or Antigravity CLI.</p>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>3D Application</th>
+              <th>Rendering &amp; Tech Stack</th>
+              <th>Key Controls</th>
+              <th>Engineering Spec</th>
+              <th>Live 3D Demo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>F1 Racing &mdash; Tokyo GP 2026</strong></td>
+              <td>Three.js <code>0.170.0</code>, parametric <code>f1_car.glb</code>, 17 Nano Banana PBR maps, 240 Hz Pacejka physics, procedural V6 audio</td>
+              <td><code>WASD</code> / Arrows drive, <code>Space</code> DRS, <code>C</code>/<code>V</code> camera, <code>R</code> reset</td>
+              <td>
+                <button type="button" class="btn btn-sm" data-open-spec="f1">Preview Spec</button>
+                <a href="../specs/f1carracing.md" target="_blank" rel="noopener" class="btn btn-sm btn-ghost">f1carracing.md &#8599;</a>
+              </td>
+              <td><a href="../f1cargame/index.html" target="_blank" rel="noopener" class="btn btn-sm btn-primary">Launch F1 Game &#8599;</a></td>
+            </tr>
+            <tr>
+              <td><strong>Golf &mdash; GolfSwing Studio</strong></td>
+              <td>Three.js <code>0.170.0</code>, <code>golfer.glb</code> + <code>golf_club.glb</code>, 25-frame dual-angle mocap spline, 2-bone foot-pinned IK</td>
+              <td>Swing trigger &amp; club/power controls, 6 camera presets (Face-On, Down-the-Line, Follow), 25-frame pose scrubber</td>
+              <td>
+                <button type="button" class="btn btn-sm" data-open-spec="golf">Preview Spec</button>
+                <a href="../specs/golfswing.md" target="_blank" rel="noopener" class="btn btn-sm btn-ghost">golfswing.md &#8599;</a>
+              </td>
+              <td><a href="../golfswing/index.html" target="_blank" rel="noopener" class="btn btn-sm btn-primary">Launch Golf Sim &#8599;</a></td>
+            </tr>
+            <tr>
+              <td><strong>Ocean Scape &mdash; Abyssal Reverie</strong></td>
+              <td>Zero-dependency pure WebGL2 single-file runtime, procedural reef &amp; galleon wreck, 420 GPU-instanced boids, Voronoi caustics</td>
+              <td>Mouse steer, <code>WASD</code> swim, <code>Shift</code> burst dash, <code>V</code> camera, <code>T</code> auto-tour, <code>M</code> audio</td>
+              <td>
+                <button type="button" class="btn btn-sm" data-open-spec="ocean">Preview Spec</button>
+                <a href="../specs/oceanflyby.md" target="_blank" rel="noopener" class="btn btn-sm btn-ghost">oceanflyby.md &#8599;</a>
+              </td>
+              <td><a href="../oceangame/index.html" target="_blank" rel="noopener" class="btn btn-sm btn-primary">Launch Ocean Game &#8599;</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="mini-demos-grid">
+        <div class="demo-card">
+          <div class="showcase-thumb">
+            <button type="button" class="zoom-trigger" data-zoom-src="images/image16.webp" data-zoom-caption="F1 Racing — Tokyo GP 2026 live WebGL gameplay">
+              <picture>
+                <source srcset="images/image16.webp" type="image/webp" width="1400" height="721">
+                <img src="images/image16.png" alt="Tokyo GP 2026 F1 Racing screenshot" width="1999" height="1029" loading="lazy">
+              </picture>
+            </button>
+          </div>
+          <div class="demo-body">
+            <h3 class="demo-title">1. F1 Racing</h3>
+            <p class="demo-desc">Full 4.35 km closed C2 spline circuit with FIA kerbs, thermal tire/brake glow, AI rivals, and showroom orbit camera.</p>
+            <div class="demo-actions">
+              <a href="../f1cargame/index.html" target="_blank" rel="noopener" class="btn btn-sm btn-primary">Play F1 Racing &#8599;</a>
+              <button type="button" class="btn btn-sm" data-open-spec="f1">Inspect / Copy Spec</button>
+              <button type="button" class="btn btn-sm btn-ghost" data-download-spec="f1">Download .md</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <div class="showcase-thumb">
+            <button type="button" class="zoom-trigger" data-zoom-src="images/image5.webp" data-zoom-caption="GolfSwing Studio — Biomechanical 3D Golf Simulator">
+              <picture>
+                <source srcset="images/image5.webp" type="image/webp" width="1400" height="1033">
+                <img src="images/image5.png" alt="GolfSwing Studio 3D golfer screenshot" width="1838" height="1356" loading="lazy">
+              </picture>
+            </button>
+          </div>
+          <div class="demo-body">
+            <h3 class="demo-title">2. Golf Swing</h3>
+            <p class="demo-desc">Photorealistic golfer with Vardon grip, straight-arm reach solver, vestibular head lock, and TrackMan-style ball telemetry.</p>
+            <div class="demo-actions">
+              <a href="../golfswing/index.html" target="_blank" rel="noopener" class="btn btn-sm btn-primary">Play Golf Swing &#8599;</a>
+              <button type="button" class="btn btn-sm" data-open-spec="golf">Inspect / Copy Spec</button>
+              <button type="button" class="btn btn-sm btn-ghost" data-download-spec="golf">Download .md</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <div class="showcase-thumb">
+            <button type="button" class="zoom-trigger" data-zoom-src="images/image14.webp" data-zoom-caption="Ocean Scape — Abyssal Reverie Underwater Swim-Through">
+              <picture>
+                <source srcset="images/image14.webp" type="image/webp" width="1400" height="935">
+                <img src="images/image14.png" alt="Ocean Scape underwater reef screenshot" width="1874" height="1252" loading="lazy">
+              </picture>
+            </button>
+          </div>
+          <div class="demo-body">
+            <h3 class="demo-title">3. Ocean Scape</h3>
+            <p class="demo-desc">Articulated iridescent reef fish exploring kelp forests, coral gardens, sunken galleon ribs, and a whale-fluke sanctuary.</p>
+            <div class="demo-actions">
+              <a href="../oceangame/index.html" target="_blank" rel="noopener" class="btn btn-sm btn-primary">Play Ocean Scape &#8599;</a>
+              <button type="button" class="btn btn-sm" data-open-spec="ocean">Inspect / Copy Spec</button>
+              <button type="button" class="btn btn-sm btn-ghost" data-download-spec="ocean">Download .md</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <figure class="editorial-banner" style="margin-top: 1.5rem;">
+        <picture>
+          <source srcset="images/nb_team_sprint.webp" type="image/webp" width="1280" height="714">
+          <img src="images/nb_team_sprint.png" alt="Minimalist gray and white editorial illustration of a workshop team collaborating on 3D simulations and presenting for a certificate" width="1280" height="714" loading="lazy">
+        </picture>
+        <figcaption>Use a sample spec as-is, remix its rules, or author a brand-new 3D specification with your team.</figcaption>
+      </figure>
+
+      <div class="section-pager">
+        <a href="#overview" class="btn">&larr; Summarized Instructions</a>
+        <div class="demo-actions">
+          <a href="#create-specs" class="btn">How to Create Your Own Specs &rarr;</a>
+          <a href="#ai-studio" class="btn btn-primary">Next: AI Studio Setup &rarr;</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- SECTION 3: SETTING UP GOOGLE AI STUDIO (ZERO SETUP)                   -->
+    <!-- ===================================================================== -->
+    <section id="ai-studio" class="guide-section" data-view="ai-studio" aria-labelledby="ai-studio-heading" hidden>
+      <div class="section-head">
+        <div class="section-meta-row">
+          <span class="meta-badge">Option A &bull; Zero Setup</span>
+          <span class="meta-badge">Duration: ~1 Minute</span>
+        </div>
+        <h2 id="ai-studio-heading" tabindex="-1">Setting Up Google AI Studio</h2>
+        <p class="summary-hint">Recommended if you are new to Google Cloud and want to start building 3D web experiences immediately in your browser.</p>
+      </div>
+
+      <figure class="editorial-banner">
+        <picture>
+          <source srcset="images/nb_env_paths.webp" type="image/webp" width="1280" height="714">
+          <img src="images/nb_env_paths.png" alt="White and gray diptych comparing browser-based AI Studio drag-and-drop spec building on the left with Cloud Shell Antigravity CLI terminal orchestration on the right" width="1280" height="714" fetchpriority="low" loading="lazy">
+        </picture>
+        <figcaption>Left: Zero-setup browser workflow in Google AI Studio &bull; Right: Full agentic CLI workflow in Cloud Shell</figcaption>
+      </figure>
+
+      <ol class="tutorial-list">
+        <li class="tutorial-item">
+          <p>Open <a href="https://aistudio.google.com/apps" target="_blank" rel="noopener">Google AI Studio Apps (<code>https://aistudio.google.com/apps</code>)</a> and sign in with your Google account.</p>
+        </li>
+        <li class="tutorial-item">
+          <p>Enter your 3D build prompt directly in the prompt box, or upload a Markdown specification file (such as <a href="../specs/f1carracing.md" target="_blank" rel="noopener"><code>f1carracing.md</code></a>, <a href="../specs/golfswing.md" target="_blank" rel="noopener"><code>golfswing.md</code></a>, or <a href="../specs/oceanflyby.md" target="_blank" rel="noopener"><code>oceanflyby.md</code></a>) to start generating and previewing your interactive 3D app live.</p>
+          <figure class="step-figure">
+            <button type="button" class="zoom-trigger" data-zoom-src="images/image12.webp" data-zoom-caption="Google AI Studio Build Apps interface (aistudio.google.com/apps)">
+              <picture>
+                <source srcset="images/image12.webp" type="image/webp" width="1400" height="595">
+                <img src="images/image12.png" alt="Google AI Studio Build your ideas with Gemini interface showing Three.js 3D scenes chip" width="1999" height="849" loading="lazy">
+              </picture>
+            </button>
+            <figcaption><span>Google AI Studio Apps workspace &mdash; select "Three.js 3D scenes" or upload your <code>.md</code> spec</span><span>Click to zoom</span></figcaption>
+          </figure>
+        </li>
+        <li class="tutorial-item">
+          <p>Need a strong specification to upload? Jump to any of these resources:</p>
+          <div class="demo-actions">
+            <a href="#samples" class="btn btn-sm">Sample Specs &amp; 3D Apps &rarr;</a>
+            <a href="#create-specs" class="btn btn-sm">How to Create Your Own Specs &rarr;</a>
+            <a href="#improve-specs" class="btn btn-sm">How to Modify the Specs &rarr;</a>
+          </div>
+        </li>
+      </ol>
+
+      <div class="section-pager">
+        <a href="#overview" class="btn">&larr; Summarized Instructions</a>
+        <div class="demo-actions">
+          <a href="#cloud-credits" class="btn">Switch to Cloud CLI Path &rarr;</a>
+          <a href="#create-specs" class="btn btn-primary">Next: Create Your Own Spec &rarr;</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- SECTION 4: OBTAINING GOOGLE CLOUD FREE CREDITS                        -->
+    <!-- ===================================================================== -->
+    <section id="cloud-credits" class="guide-section" data-view="cloud-credits" aria-labelledby="cloud-credits-heading" hidden>
+      <div class="section-head">
+        <div class="section-meta-row">
+          <span class="meta-badge">Option B &bull; Step 1 of 2</span>
+          <span class="meta-badge">Duration: ~5 Minutes</span>
+        </div>
+        <h2 id="cloud-credits-heading" tabindex="-1">Obtaining Google Cloud Free Credits &amp; Creating a Project</h2>
+        <p class="summary-hint">Setting up Antigravity CLI involves two parts: (1) claiming your free Google Cloud workshop credits &amp; project below, then (2) launching Antigravity CLI in Cloud Shell Editor.</p>
+      </div>
+
+      <figure class="editorial-banner">
+        <picture>
+          <source srcset="images/nb_cloud_cli_setup.webp" type="image/webp" width="1280" height="714">
+          <img src="images/nb_cloud_cli_setup.png" alt="White and gray isometric illustration of a credit voucher shield, cloud project configuration switches, and an AI CLI terminal" width="1280" height="714" fetchpriority="low" loading="lazy">
+        </picture>
+        <figcaption>Cloud Track Overview: Redeem Credit &rarr; Create Billing-Linked Project &rarr; Launch Antigravity CLI</figcaption>
+      </figure>
+
+      <h3>Part A: Credit Claiming Procedure</h3>
+      <ol class="tutorial-list">
+        <li class="tutorial-item">
+          <p>Log in to <a href="https://console.cloud.google.com" target="_blank" rel="noopener">Google Cloud Console (<code>https://console.cloud.google.com</code>)</a> using your <strong>PERSONAL Gmail account</strong> (do not use a corporate or school Workspace account).</p>
+        </li>
+        <li class="tutorial-item">
+          <p>Locate the workshop credit redemption URL provided in the event materials (formatted like <code>https://me.developers.google.com/benefits/claim/XXXX</code> or <code>https://g.dev/credits/XXXX</code>).</p>
+        </li>
+        <li class="tutorial-item">
+          <p>Open the redemption link, confirm you are signed in with your personal Gmail account, and click <strong>[Claim Credit]</strong>.</p>
+          <figure class="step-figure">
+            <button type="button" class="zoom-trigger" data-zoom-src="images/image8.webp" data-zoom-caption="Select [Claim Credit] on the Google Builders Hub workshop benefit page">
+              <picture>
+                <source srcset="images/image8.webp" type="image/webp" width="1035" height="874">
+                <img src="images/image8.png" alt="Google Builders Hub screen highlighting the Claim Credit button" width="1035" height="874" loading="lazy">
+              </picture>
+            </button>
+            <figcaption><span>Select <strong>[Claim Credit]</strong> on the event benefit page</span><span>Click to zoom</span></figcaption>
+          </figure>
+        </li>
+        <li class="tutorial-item">
+          <p>When prompted, complete the short form to set up your <strong>Google Developer Program</strong> profile.</p>
+        </li>
+        <li class="tutorial-item">
+          <p>Scan the QR code on your mobile device to finish the human verification check.</p>
+        </li>
+        <li class="tutorial-item">
+          <p>Once verification succeeds, a confirmation screen is displayed.</p>
+          <figure class="step-figure">
+            <button type="button" class="zoom-trigger" data-zoom-src="images/image4.webp" data-zoom-caption="Confirmation screen after claiming your Google Cloud event credit">
+              <picture>
+                <source srcset="images/image4.webp" type="image/webp" width="1030" height="1038">
+                <img src="images/image4.png" alt="Confirmation screen showing Successfully claimed your event credit and Open Billing Account button" width="1030" height="1038" loading="lazy">
+              </picture>
+            </button>
+            <figcaption><span>Credit claimed confirmation with <strong>[Open Billing Account]</strong> button</span><span>Click to zoom</span></figcaption>
+          </figure>
+        </li>
+      </ol>
+
+      <details class="inline-disclosure">
+        <summary>How to Check Claimed Credits (may take a few minutes to reflect)</summary>
+        <div class="disclosure-content">
+          <p style="margin-top:0; font-size:0.92rem; color:var(--text-secondary);">Click <strong>[Open Billing Account]</strong> on the confirmation page, or open <a href="https://console.cloud.google.com/billing" target="_blank" rel="noopener">Cloud Billing</a> in the Google Cloud Console. Your workshop credit account will appear under <em>Billing Accounts</em>.</p>
+          <figure class="step-figure">
+            <button type="button" class="zoom-trigger" data-zoom-src="images/image9.webp" data-zoom-caption="Viewing the claimed workshop credit account under Cloud Billing">
+              <picture>
+                <source srcset="images/image9.webp" type="image/webp" width="888" height="463">
+                <img src="images/image9.png" alt="Cloud Billing management page showing the claimed GDP Event Credit billing account" width="888" height="463" loading="lazy">
+              </picture>
+            </button>
+            <figcaption><span>Verify your new event credit account under Billing Accounts</span><span>Click to zoom</span></figcaption>
+          </figure>
+        </div>
+      </details>
+
+      <h3>Part B: Creating a Google Cloud Project</h3>
+      <ol class="tutorial-list">
+        <li class="tutorial-item">
+          <p>Open the <a href="https://console.cloud.google.com/" target="_blank" rel="noopener">Google Cloud Console</a>. In the top-left navigation menu (&#9776;), select <strong>[IAM &amp; Admin] &gt; [Create a Project]</strong> (or open <a href="https://console.cloud.google.com/projectcreate" target="_blank" rel="noopener"><code>console.cloud.google.com/projectcreate</code></a> directly).</p>
+          <figure class="step-figure">
+            <button type="button" class="zoom-trigger" data-zoom-src="images/image1.webp" data-zoom-caption="Navigation menu: IAM & Admin > Create a Project">
+              <picture>
+                <source srcset="images/image1.webp" type="image/webp" width="773" height="859">
+                <img src="images/image1.png" alt="Google Cloud navigation menu highlighting IAM and Admin then Create a Project" width="773" height="859" loading="lazy">
+              </picture>
+            </button>
+            <figcaption><span>Navigate to <strong>IAM &amp; Admin &gt; Create a Project</strong></span><span>Click to zoom</span></figcaption>
+          </figure>
+        </li>
+        <li class="tutorial-item">
+          <p>Complete the project configuration fields:</p>
+          <ul>
+            <li><strong>Project Name:</strong> Enter a descriptive name and note the generated <strong>Project ID</strong>&mdash;you will use it in Cloud Shell next.</li>
+            <li><strong>Billing Account:</strong> Select your claimed <em>Google Developer Program Credit Account</em>. <em>(Note: If you only have one billing account, Google Cloud links it automatically and hides this field.)</em></li>
+            <li><strong>Parent Resource / Location:</strong> Select <strong>[No organization]</strong> (or an organization if applicable).</li>
+          </ul>
+          <figure class="step-figure">
+            <button type="button" class="zoom-trigger" data-zoom-src="images/image6.webp" data-zoom-caption="New Project form showing Project Name, Project ID, Billing Account, and Create button">
+              <picture>
+                <source srcset="images/image6.webp" type="image/webp" width="968" height="676">
+                <img src="images/image6.png" alt="Google Cloud New Project screen highlighting Project ID, Billing Account, and Create" width="968" height="676" loading="lazy">
+              </picture>
+            </button>
+            <figcaption><span>Record your generated <strong>Project ID</strong> and verify the linked Billing Account</span><span>Click to zoom</span></figcaption>
+          </figure>
+        </li>
+        <li class="tutorial-item">
+          <p>Click <strong>[Create]</strong> and wait a few seconds for provisioning. When the top-right notification bell updates, click <strong>[Select Project]</strong>.</p>
+          <figure class="step-figure">
+            <button type="button" class="zoom-trigger" data-zoom-src="images/image11.webp" data-zoom-caption="Notifications menu: click Select Project once created">
+              <picture>
+                <source srcset="images/image11.webp" type="image/webp" width="686" height="352">
+                <img src="images/image11.png" alt="Google Cloud notification dropdown highlighting Select Project" width="686" height="352" loading="lazy">
+              </picture>
+            </button>
+            <figcaption><span>Select your newly provisioned project from Notifications</span><span>Click to zoom</span></figcaption>
+          </figure>
+        </li>
+        <li class="tutorial-item">
+          <p>Confirm that your new project appears in the project selector pill at the top of the Google Cloud Console.</p>
+          <figure class="step-figure">
+            <button type="button" class="zoom-trigger" data-zoom-src="images/image17.webp" data-zoom-caption="Confirm active project in the top console header bar">
+              <picture>
+                <source srcset="images/image17.webp" type="image/webp" width="690" height="155">
+                <img src="images/image17.png" alt="Google Cloud header bar showing selected project name" width="690" height="155" loading="lazy">
+              </picture>
+            </button>
+            <figcaption><span>Verify the project selector displays your new project</span><span>Click to zoom</span></figcaption>
+          </figure>
+        </li>
+      </ol>
+
+      <div class="interactive-widget">
+        <p class="widget-title">Optional: Save Your Project ID for Step 2 Commands</p>
+        <p class="widget-sub">Type your Project ID below once&mdash;it will automatically populate <code>gcloud config set project</code> in the next guide so you can copy-paste directly.</p>
+        <div class="field-row">
+          <div class="field-group">
+            <label for="project-id-input-1">Your Google Cloud Project ID</label>
+            <input type="text" id="project-id-input-1" class="text-input" data-project-id-input placeholder="e.g. gemini4-3d-workshop-123">
+          </div>
+          <a href="#antigravity-cli" class="btn btn-primary">Continue to Antigravity CLI Setup &rarr;</a>
+        </div>
+      </div>
+
+      <div class="section-pager">
+        <a href="#overview" class="btn">&larr; Summarized Instructions</a>
+        <a href="#antigravity-cli" class="btn btn-primary">Next: Set Up Antigravity CLI &rarr;</a>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- SECTION 5: CLOUD SHELL EDITOR, ENABLE APIS & ANTIGRAVITY CLI          -->
+    <!-- ===================================================================== -->
+    <section id="antigravity-cli" class="guide-section" data-view="antigravity-cli" aria-labelledby="antigravity-cli-heading" hidden>
+      <div class="section-head">
+        <div class="section-meta-row">
+          <span class="meta-badge">Option B &bull; Step 2 of 2</span>
+          <span class="meta-badge">Duration: ~7 Minutes Total</span>
+        </div>
+        <h2 id="antigravity-cli-heading" tabindex="-1">Open Cloud Shell Editor, Enable APIs &amp; Launch Antigravity CLI</h2>
+        <p class="summary-hint">The <a href="https://antigravity.google/product/antigravity-cli" target="_blank" rel="noopener">Antigravity CLI (<code>agy</code>)</a> is an autonomous AI coding agent pre-installed in Google Cloud Shell that can architect, code, and verify multi-file 3D web applications right from your terminal.</p>
+      </div>
+
+      <div class="interactive-widget">
+        <p class="widget-title">Active Project ID Helper</p>
+        <p class="widget-sub">Enter your Project ID to auto-fill the CLI commands below:</p>
+        <div class="field-row">
+          <div class="field-group">
+            <label for="project-id-input-2">Google Cloud Project ID</label>
+            <input type="text" id="project-id-input-2" class="text-input" data-project-id-input placeholder="&lt;YOUR_PROJECT_ID&gt;">
+          </div>
+        </div>
+      </div>
+
+      <h3>Stage 1: Open Cloud Shell Editor &amp; Set Active Project</h3>
+      <ol class="tutorial-list">
+        <li class="tutorial-item">
+          <p>In the <a href="https://console.cloud.google.com" target="_blank" rel="noopener">Google Cloud Console</a>, confirm your billing-enabled project is selected in the top-left project dropdown.</p>
+          <figure class="step-figure">
+            <button type="button" class="zoom-trigger" data-zoom-src="images/image3.webp" data-zoom-caption="Click the project selector next to the Google Cloud logo">
+              <picture>
+                <source srcset="images/image3.webp" type="image/webp" width="732" height="282">
+                <img src="images/image3.png" alt="Google Cloud top bar showing project selector box next to logo" width="732" height="282" loading="lazy">
+              </picture>
+            </button>
+            <figcaption><span>Confirm your workshop project is selected</span><span>Click to zoom</span></figcaption>
+          </figure>
+        </li>
+        <li class="tutorial-item">
+          <p>Launch the <a href="https://ide.cloud.google.com/" target="_blank" rel="noopener"><strong>Cloud Shell Editor (<code>ide.cloud.google.com</code>)</strong></a> directly (see <a href="https://docs.cloud.google.com/shell/docs/launching-cloud-shell-editor" target="_blank" rel="noopener">Cloud Shell Editor documentation</a> for background).</p>
+        </li>
+        <li class="tutorial-item">
+          <p>In the left sidebar of Cloud Shell Editor, click <strong>Open Folder</strong> (if hidden, click the <strong>File Explorer</strong> icon on the far-left activity bar first), keep your home folder selected, and click <strong>OK</strong>.</p>
+          <figure class="step-figure">
+            <button type="button" class="zoom-trigger" data-zoom-src="images/image15.webp" data-zoom-caption="Cloud Shell Editor sidebar: click Open Folder">
+              <picture>
+                <source srcset="images/image15.webp" type="image/webp" width="544" height="128">
+                <img src="images/image15.png" alt="Cloud Shell Editor Open Folder button" width="544" height="128" loading="lazy">
+              </picture>
+            </button>
+            <figcaption><span>Click <strong>Open Folder</strong> in Explorer</span><span>Click to zoom</span></figcaption>
+          </figure>
+          <figure class="step-figure">
+            <button type="button" class="zoom-trigger" data-zoom-src="images/image10.webp" data-zoom-caption="Confirm home folder by clicking OK">
+              <picture>
+                <source srcset="images/image10.webp" type="image/webp" width="710" height="114">
+                <img src="images/image10.png" alt="Open Folder dialog with OK button highlighted" width="710" height="114" loading="lazy">
+              </picture>
+            </button>
+            <figcaption><span>Press <strong>OK</strong> to open your home directory</span><span>Click to zoom</span></figcaption>
+          </figure>
+        </li>
+        <li class="tutorial-item">
+          <p>Open a terminal via <strong>Terminal &gt; New Terminal</strong> in the top menu, then verify authentication and configure your active project:</p>
+          <div class="cmd-card">
+            <div class="cmd-bar">
+              <span class="cmd-label">Cloud Shell Terminal &bull; Verify Auth &amp; List Projects</span>
+              <button type="button" class="copy-btn" data-copy-target="cmd-auth">Copy</button>
+            </div>
+            <pre id="cmd-auth" role="region" aria-label="Verify gcloud authentication and list projects" tabindex="0"><code>gcloud auth list
+gcloud projects list</code></pre>
+          </div>
+          <div class="cmd-card">
+            <div class="cmd-bar">
+              <span class="cmd-label">Cloud Shell Terminal &bull; Set &amp; Confirm Project</span>
+              <button type="button" class="copy-btn" data-copy-target="cmd-set-project">Copy</button>
+            </div>
+            <pre id="cmd-set-project" role="region" aria-label="Set active Google Cloud project" tabindex="0"><code id="dynamic-project-cmd">gcloud config set project &lt;YOUR_PROJECT_ID&gt;
+gcloud config list project</code></pre>
+          </div>
+        </li>
+      </ol>
+
+      <h3>Stage 2: Enable Required APIs (~2 Minutes)</h3>
+      <p style="font-size:0.93rem; color:var(--text-secondary);">Enable Vertex AI and Cloud Resource Manager in Cloud Shell so Antigravity CLI can call Gemini 4 models using your project quota:</p>
+      <div class="cmd-card">
+        <div class="cmd-bar">
+          <span class="cmd-label">Cloud Shell Terminal &bull; Enable APIs</span>
+          <button type="button" class="copy-btn" data-copy-target="cmd-apis">Copy</button>
+        </div>
+        <pre id="cmd-apis" role="region" aria-label="Enable Vertex AI and Resource Manager APIs" tabindex="0"><code>gcloud services enable \
+    aiplatform.googleapis.com \
+    cloudresourcemanager.googleapis.com</code></pre>
+      </div>
+
+      <h3>Stage 3: Create Your 3D Workspace &amp; Launch Antigravity CLI (~5 Minutes)</h3>
+      <p style="font-size:0.93rem; color:var(--text-secondary);">Create a clean Python virtual environment for your 3D project (you can also pair <code>agy</code> with <a href="https://google.github.io/agents-cli/guide/getting-started/" target="_blank" rel="noopener">Agents CLI</a> and <a href="https://google.github.io/adk-docs/" target="_blank" rel="noopener">Agent Development Kit (ADK)</a> when building agent-backed apps):</p>
+
+      <ol class="tutorial-list">
+        <li class="tutorial-item">
+          <p>Install <code>uv</code> and initialize your <code>~/gemini43d</code> project folder:</p>
+          <div class="cmd-card">
+            <div class="cmd-bar">
+              <span class="cmd-label">Cloud Shell Terminal &bull; Workspace Setup</span>
+              <button type="button" class="copy-btn" data-copy-target="cmd-venv">Copy</button>
+            </div>
+            <pre id="cmd-venv" role="region" aria-label="Create gemini43d folder and virtual environment" tabindex="0"><code># Install uv if you do not have it installed yet
+pip install uv
+
+# Create the project folder and a Python virtual environment
+mkdir -p ~/gemini43d
+cd ~/gemini43d &amp;&amp; uv venv
+source .venv/bin/activate</code></pre>
+          </div>
+          <div class="callout">
+            <strong>Note:</strong> If you ever restart your Cloud Shell terminal, return to your workspace and re-activate the environment with <code>cd ~/gemini43d &amp;&amp; source .venv/bin/activate</code>.
+          </div>
+        </li>
+
+        <li class="tutorial-item">
+          <p>Configure Application Default Credentials (ADC) mode and launch <code>agy</code>:</p>
+          <div class="cmd-card">
+            <div class="cmd-bar">
+              <span class="cmd-label">Cloud Shell Terminal &bull; Launch Antigravity CLI</span>
+              <button type="button" class="copy-btn" data-copy-target="cmd-agy">Copy</button>
+            </div>
+            <pre id="cmd-agy" role="region" aria-label="Launch Antigravity CLI with ADC auth" tabindex="0"><code>export AGY_ADC_AUTH=true
+agy</code></pre>
+          </div>
+          <div class="callout">
+            <strong>Terminal Size Tip:</strong> Enlarge the bottom terminal panel before launching <code>agy</code> so the interactive first-run setup screens render cleanly without clipping.
+          </div>
+        </li>
+
+        <li class="tutorial-item">
+          <p>Complete the quick 3-prompt first-launch onboarding inside <code>agy</code> (arrow keys + <strong>Enter</strong>):</p>
+          <ul>
+            <li><strong>Select a color theme</strong> (e.g., <code>terminal</code>, <code>light</code>, or <code>dark</code>).</li>
+            <li><strong>Accept the Terms of Service</strong>.</li>
+            <li>Select <strong>Yes, I trust this folder</strong> to authorize file creation inside <code>~/gemini43d</code>.</li>
+          </ul>
+
+          <details class="inline-disclosure">
+            <summary>View First-Launch Onboarding Screenshots (Figures 7&ndash;10)</summary>
+            <div class="disclosure-content">
+              <figure class="step-figure">
+                <button type="button" class="zoom-trigger" data-zoom-src="images/image13.webp" data-zoom-caption="Figure 7: Selecting a theme in Antigravity CLI">
+                  <picture>
+                    <source srcset="images/image13.webp" type="image/webp" width="1219" height="855">
+                    <img src="images/image13.png" alt="Antigravity CLI theme selection screen" width="1219" height="855" loading="lazy">
+                  </picture>
+                </button>
+                <figcaption><span>1. Choose your preferred terminal theme</span><span>Click to zoom</span></figcaption>
+              </figure>
+              <figure class="step-figure">
+                <button type="button" class="zoom-trigger" data-zoom-src="images/image7.webp" data-zoom-caption="Figure 8: Accepting Antigravity CLI Terms of Service">
+                  <picture>
+                    <source srcset="images/image7.webp" type="image/webp" width="1348" height="730">
+                    <img src="images/image7.png" alt="Antigravity CLI Terms of Service screen" width="1348" height="730" loading="lazy">
+                  </picture>
+                </button>
+                <figcaption><span>2. Accept Terms of Service</span><span>Click to zoom</span></figcaption>
+              </figure>
+              <figure class="step-figure">
+                <button type="button" class="zoom-trigger" data-zoom-src="images/image18.webp" data-zoom-caption="Figure 9: Trusting the workspace folder">
+                  <picture>
+                    <source srcset="images/image18.webp" type="image/webp" width="1028" height="431">
+                    <img src="images/image18.png" alt="Antigravity CLI workspace trust prompt" width="1028" height="431" loading="lazy">
+                  </picture>
+                </button>
+                <figcaption><span>3. Select "Yes, I trust this folder"</span><span>Click to zoom</span></figcaption>
+              </figure>
+              <figure class="step-figure">
+                <button type="button" class="zoom-trigger" data-zoom-src="images/image2.webp" data-zoom-caption="Figure 10: Antigravity CLI ready with Gemini 4">
+                  <picture>
+                    <source srcset="images/image2.webp" type="image/webp" width="753" height="306">
+                    <img src="images/image2.png" alt="Antigravity CLI ready prompt connected to GCP project and Gemini 4" width="753" height="306" loading="lazy">
+                  </picture>
+                </button>
+                <figcaption><span>4. Antigravity CLI is ready&mdash;verify your GCP Project and workspace path</span><span>Click to zoom</span></figcaption>
+              </figure>
+            </div>
+          </details>
+        </li>
+      </ol>
+
+      <div class="callout">
+        <strong>Antigravity CLI Power Shortcuts:</strong> Press <code>Shift+Tab</code> to auto-approve file edits so you only confirm shell commands. Run <code>/model</code> to inspect or switch Gemini 4 models. Exit anytime with <code>/quit</code> and resume your exact session later with <code>agy --resume</code>. Once your web server runs in Cloud Shell (e.g. port <code>8080</code>), click Cloud Shell's <strong>Web Preview</strong> icon in the top-right toolbar to play your 3D app live!
+      </div>
+
+      <div class="link-pills-row">
+        <a href="#samples" class="btn btn-sm">Grab a Sample 3D Spec &rarr;</a>
+        <a href="#create-specs" class="btn btn-sm">Create Your Own Spec &rarr;</a>
+        <a href="#improve-specs" class="btn btn-sm">Improve &amp; Texture Specs &rarr;</a>
+      </div>
+
+      <div class="section-pager">
+        <a href="#cloud-credits" class="btn">&larr; Previous: Cloud Credits</a>
+        <a href="#create-specs" class="btn btn-primary">Next: Create Your Own Spec &rarr;</a>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- SECTION 6: RESEARCHING & CREATING INITIAL SPECIFICATION DOCUMENT      -->
+    <!-- ===================================================================== -->
+    <section id="create-specs" class="guide-section" data-view="create-specs" aria-labelledby="create-specs-heading" hidden>
+      <div class="section-head">
+        <div class="section-meta-row">
+          <span class="meta-badge">Spec Engineering &bull; Stage 1</span>
+          <span class="meta-badge">NotebookLM Deep Research</span>
+        </div>
+        <h2 id="create-specs-heading" tabindex="-1">Researching &amp; Creating Your Initial Specification Document</h2>
+        <p class="summary-hint">Great 3D artifacts start with grounded engineering specifications. Use NotebookLM to research rendering, physics, and procedural techniques before generating your initial <code>.md</code> blueprint.</p>
+      </div>
+
+      <figure class="editorial-banner">
+        <picture>
+          <source srcset="images/nb_spec_pipeline.webp" type="image/webp" width="1280" height="714">
+          <img src="images/nb_spec_pipeline.png" alt="Three-step monochrome diagram showing research notebooks distilling into a blueprint, loupe refining PBR material spheres and physics sliders, and a 3D viewport" width="1280" height="714" fetchpriority="low" loading="lazy">
+        </picture>
+        <figcaption>Two-Stage Spec Pipeline: (1) NotebookLM Deep Research &amp; Draft &rarr; (2) Gemini + Nano Banana Spec Upgrade</figcaption>
+      </figure>
+
+      <ol class="tutorial-list">
+        <li class="tutorial-item">
+          <p>Go to <a href="https://notebooklm.google" target="_blank" rel="noopener">NotebookLM (<code>https://notebooklm.google</code>)</a> and create a <strong>New Notebook</strong>.</p>
+        </li>
+        <li class="tutorial-item">
+          <p>In the Source / Research search box, run a <strong>Deep Research</strong> query on the 3D rendering, physics, or animation techniques your project needs:</p>
+          <div class="cmd-card">
+            <div class="cmd-bar">
+              <span class="cmd-label">NotebookLM Deep Research Prompt</span>
+              <button type="button" class="copy-btn" data-copy-target="prompt-research">Copy</button>
+            </div>
+            <pre id="prompt-research" role="region" aria-label="NotebookLM deep research prompt" tabindex="0"><code>Research for the methods needed to create 3D realistic animations with realistic textures.</code></pre>
+          </div>
+        </li>
+        <li class="tutorial-item">
+          <p>Once NotebookLM synthesizes the sources, ask it to draft your initial Markdown specification file:</p>
+          <div class="cmd-card">
+            <div class="cmd-bar">
+              <span class="cmd-label">NotebookLM Initial Spec Prompt</span>
+              <button type="button" class="copy-btn" data-copy-target="prompt-init-spec">Copy</button>
+            </div>
+            <pre id="prompt-init-spec" role="region" aria-label="NotebookLM initial spec generation prompt" tabindex="0"><code>Create a f1carracing.md to create specifications to build a visually stunning web based f1 racing game. The car should be controllable with wasd keys.</code></pre>
+          </div>
+        </li>
+      </ol>
+
+      <!-- Interactive Custom 3D Spec Prompt Composer -->
+      <div class="interactive-widget">
+        <p class="widget-title">Interactive 3D Spec Prompt Composer</p>
+        <p class="widget-sub">Customize your team's 3D concept below to generate a ready-to-copy NotebookLM specification prompt:</p>
+        <div class="field-row">
+          <div class="field-group">
+            <label for="genre-select">3D Concept / Genre</label>
+            <select id="genre-select" class="select-input">
+              <option value="f1carracing.md|visually stunning web-based F1 racing game|controllable with WASD keys and multiple camera views">F1 / Motorsport Racing Game</option>
+              <option value="golfswing.md|biomechanically accurate 3D golf driving simulator|interactive club selection, swing trigger, and ball-flight camera tracking">3D Sports / Golf Swing Simulator</option>
+              <option value="oceanflyby.md|serene 3D underwater coral reef swim-through game|mouse steering, WASD swimming, burst dash, and reactive fish schools">Underwater Ocean Exploration</option>
+              <option value="spaceflight.md|3D orbital space-station docking and asteroid flight simulator|6-DOF thrusters with WASD + mouse pitch/yaw controls">Orbital Space Flight Simulator</option>
+              <option value="citybuilder.md|interactive 3D isometric kinetic architecture &amp; transit simulation|orbit/pan camera controls and live simulation speed sliders">3D Kinetic City / Physics Sandbox</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label for="custom-idea-input">Or Type Your Own Custom Theme (Optional)</label>
+            <input type="text" id="custom-idea-input" class="text-input" placeholder="e.g. 3D Tokyo drone delivery obstacle course">
+          </div>
+        </div>
+        <div class="cmd-card" style="margin-top:0.85rem;">
+          <div class="cmd-bar">
+            <span class="cmd-label">Generated Custom Spec Prompt</span>
+            <button type="button" class="copy-btn" data-copy-target="composed-init-prompt">Copy</button>
+          </div>
+          <pre id="composed-init-prompt" role="region" aria-label="Generated custom NotebookLM specification prompt" tabindex="0"><code id="composed-init-code">Create a f1carracing.md to create specifications to build a visually stunning web-based F1 racing game. The experience should be controllable with WASD keys and multiple camera views, run smoothly in modern browsers using WebGL2 / Three.js, and feature a clean white-and-gray HUD.</code></pre>
+        </div>
+      </div>
+
+      <div class="section-pager">
+        <a href="#overview" class="btn">&larr; Summarized Instructions</a>
+        <a href="#improve-specs" class="btn btn-primary">Next: Improve &amp; Texture Your Spec &rarr;</a>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- SECTION 7: IMPROVING & MODIFYING THE SPECIFICATION DOCUMENT           -->
+    <!-- ===================================================================== -->
+    <section id="improve-specs" class="guide-section" data-view="improve-specs" aria-labelledby="improve-specs-heading" hidden>
+      <div class="section-head">
+        <div class="section-meta-row">
+          <span class="meta-badge">Spec Engineering &bull; Stage 2</span>
+          <span class="meta-badge">Gemini + Nano Banana Upgrade</span>
+        </div>
+        <h2 id="improve-specs-heading" tabindex="-1">Improving &amp; Modifying the Specification Document</h2>
+        <p class="summary-hint">Before handing your spec to AI Studio or Antigravity CLI, use Gemini to enrich it with explicit Nano Banana texture manifests, deterministic physics equations, and difficulty presets.</p>
+      </div>
+
+      <ol class="tutorial-list">
+        <li class="tutorial-item">
+          <p>Open <a href="https://gemini.google.com" target="_blank" rel="noopener">Gemini (<code>https://gemini.google.com</code>)</a>.</p>
+        </li>
+        <li class="tutorial-item">
+          <p>Upload your initial Markdown specification file (either your NotebookLM draft or one of the <a href="#samples">sample <code>.md</code> specs</a> you want to modify).</p>
+        </li>
+        <li class="tutorial-item">
+          <p>Prompt Gemini to upgrade the specification with Nano Banana realistic textures, solid game physics, and difficulty levels:</p>
+          <div class="cmd-card">
+            <div class="cmd-bar">
+              <span class="cmd-label">Gemini Spec Enhancement Prompt</span>
+              <button type="button" class="copy-btn" data-copy-target="prompt-improve">Copy</button>
+            </div>
+            <pre id="prompt-improve" role="region" aria-label="Gemini specification improvement prompt" tabindex="0"><code>Improve this specification file, make sure to include the textures using nanobanana for the realistic look and the game physics should be good along with game difficulty levels.</code></pre>
+          </div>
+        </li>
+      </ol>
+
+      <!-- Interactive Spec Upgrade Checklist Enhancer -->
+      <div class="interactive-widget">
+        <p class="widget-title">Interactive Spec Upgrade Customizer</p>
+        <p class="widget-sub">Toggle the production guardrails used in our DevFest reference specs (<code>f1carracing.md</code>, <code>golfswing.md</code>, <code>oceanflyby.md</code>) to build an advanced Gemini refinement prompt:</p>
+        <div class="feature-toggles">
+          <label class="check-chip"><input type="checkbox" data-upgrade-opt="Include a shadow-free top-down Nano Banana PBR texture manifest (albedo, normal, and roughness/ORM maps)." checked> Nano Banana PBR Textures</label>
+          <label class="check-chip"><input type="checkbox" data-upgrade-opt="Specify stable fixed-timestep physics, smooth collision response, and Beginner/Standard/Pro difficulty levels." checked> Physics &amp; Difficulty Tiers</label>
+          <label class="check-chip"><input type="checkbox" data-upgrade-opt="Add multiple selectable camera presets (Chase, First-Person, and Orbit Showroom) plus keyboard shortcuts." checked> Multi-Camera Director</label>
+          <label class="check-chip"><input type="checkbox" data-upgrade-opt="Include gesture-gated procedural Web Audio sound effects with a mute toggle (M)." > Procedural Web Audio</label>
+          <label class="check-chip"><input type="checkbox" data-upgrade-opt="Define a clean, unobtrusive white-and-gray studio HUD and zero console error verification checks."> White &amp; Gray HUD + QA Gate</label>
+        </div>
+        <div class="cmd-card">
+          <div class="cmd-bar">
+            <span class="cmd-label">Customized Gemini Refinement Prompt</span>
+            <button type="button" class="copy-btn" data-copy-target="composed-upgrade-prompt">Copy</button>
+          </div>
+          <pre id="composed-upgrade-prompt" role="region" aria-label="Customized Gemini spec refinement prompt" tabindex="0"><code id="composed-upgrade-code"></code></pre>
+        </div>
+      </div>
+
+      <div class="section-pager">
+        <a href="#create-specs" class="btn">&larr; Previous: Create Initial Spec</a>
+        <a href="#overview" class="btn btn-primary">&larr; Return to Summarized Instructions</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- ======================================================================= -->
+  <!-- MODAL DIALOG 1: INTERACTIVE SPEC READER / COPY / DOWNLOAD               -->
+  <!-- ======================================================================= -->
+  <dialog id="spec-dialog" closedby="any" aria-labelledby="spec-dialog-title">
+    <div class="modal-shell">
+      <div class="modal-head">
+        <h2 id="spec-dialog-title">Engineering Specification Explorer</h2>
+        <form method="dialog">
+          <button type="submit" class="btn btn-sm">Close &times;</button>
+        </form>
+      </div>
+      <div class="modal-toolbar">
+        <div class="demo-actions" role="group" aria-label="Select sample specification">
+          <button type="button" class="btn btn-sm" data-spec-switch="f1">f1carracing.md</button>
+          <button type="button" class="btn btn-sm" data-spec-switch="golf">golfswing.md</button>
+          <button type="button" class="btn btn-sm" data-spec-switch="ocean">oceanflyby.md</button>
+        </div>
+        <div class="demo-actions">
+          <button type="button" id="spec-toggle-raw" class="btn btn-sm btn-ghost" aria-pressed="false">View Raw .md</button>
+          <button type="button" id="spec-copy-btn" class="btn btn-sm">Copy Full Spec</button>
+          <button type="button" id="spec-download-btn" class="btn btn-sm">Download .md</button>
+          <a id="spec-raw-link" href="../specs/f1carracing.md" target="_blank" rel="noopener" class="btn btn-sm btn-ghost">Raw URL &#8599;</a>
+          <a id="spec-play-link" href="../f1cargame/index.html" target="_blank" rel="noopener" class="btn btn-sm btn-primary">Play 3D Game &#8599;</a>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div id="spec-meta-line" style="font-size:0.8rem; color:var(--text-muted); margin-bottom:0.85rem; font-family:'JetBrains Mono', monospace;"></div>
+        <div id="spec-rendered-view" class="spec-rendered"></div>
+        <pre id="spec-raw-view" role="region" aria-label="Raw Markdown specification" tabindex="0" hidden style="background:var(--bg-terminal); color:#f4f4f5; padding:1rem; border-radius:var(--radius-sm); overflow-x:auto; font-size:0.8rem; line-height:1.5;"><code id="spec-raw-code"></code></pre>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- ======================================================================= -->
+  <!-- MODAL DIALOG 2: CLICK-TO-ZOOM SCREENSHOT LIGHTBOX                       -->
+  <!-- ======================================================================= -->
+  <dialog id="lightbox-dialog" closedby="any" aria-labelledby="lightbox-dialog-title">
+    <div class="modal-shell">
+      <div class="modal-head">
+        <h2 id="lightbox-dialog-title">Screenshot Preview</h2>
+        <form method="dialog">
+          <button type="submit" class="btn btn-sm">Close &times;</button>
+        </form>
+      </div>
+      <div class="lightbox-img-wrap">
+        <img id="lightbox-img" src="images/nb_hero_3d_cooking.webp" alt="" width="1280" height="714">
+      </div>
+    </div>
+  </dialog>
+
+  <footer>
+    <p>&copy; 2026 <a href="../../../../index.html">Bufferof</a> &bull; DevFest Tokyo 2026 Hands-On Workshop &bull; Built with Gemini 4 &amp; Antigravity.</p>
+  </footer>
+
+  <script type="module">
+    // 1. Progressive enhancement polyfill for Popover API in older browsers
+    if (!Object.hasOwn(HTMLElement.prototype, 'popover')) {
+      import('https://unpkg.com/@oddbird/popover-polyfill@latest/dist/popover.min.js').catch(() => {});
+    }
+
+    // 2. Fallback for scroll-state sticky header hiding in browsers lacking CSS scroll-state queries
+    if (!CSS.supports('container-type', 'scroll-state')) {
+      const bar = document.querySelector('.top-bar');
+      let lastY = window.scrollY;
+      window.addEventListener('scroll', () => {
+        const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+        const y = Math.max(0, Math.min(window.scrollY, maxScroll));
+        if (y === lastY) return;
+        bar?.classList.toggle('is-hidden', y > lastY && y > (bar.offsetHeight || 56));
+        lastY = y;
+      }, { passive: true });
+    }
+
+    // 3. Mandatory light-dismiss fallback for <dialog closedby="any">
+    const allDialogs = document.querySelectorAll('dialog[closedby="any"]');
+    if (!('closedBy' in HTMLDialogElement.prototype)) {
+      allDialogs.forEach((dialog) => {
+        dialog.addEventListener('click', (event) => {
+          if (event.target !== dialog) return;
+          const rect = dialog.getBoundingClientRect();
+          const inside = (
+            rect.top <= event.clientY &&
+            event.clientY <= rect.top + rect.height &&
+            rect.left <= event.clientX &&
+            event.clientX <= rect.left + rect.width
+          );
+          if (!inside) dialog.close();
+        });
+      });
+    }
+
+    // 4. Single-Section Progressive Navigation (Only #overview visible first!)
+    const VALID_VIEWS = new Set([
+      'overview',
+      'samples',
+      'ai-studio',
+      'cloud-credits',
+      'antigravity-cli',
+      'create-specs',
+      'improve-specs'
+    ]);
+
+    const sections = Array.from(document.querySelectorAll('main > section[data-view]'));
+    const subviewBar = document.getElementById('subview-bar');
+    const topBackOverview = document.getElementById('top-back-overview');
+    const toggleAllBtn = document.getElementById('toggle-all-btn');
+    const quickNavPopover = document.getElementById('quick-nav-popover');
+    let showAllMode = false;
+    let currentView = 'overview';
+
+    function getViewFromHash() {
+      const raw = window.location.hash.replace(/^#/, '').trim();
+      return VALID_VIEWS.has(raw) ? raw : 'overview';
+    }
+
+    function updateNavHighlights(viewId) {
+      document.querySelectorAll('[data-tab]').forEach((tab) => {
+        const active = !showAllMode && tab.dataset.tab === viewId;
+        tab.classList.toggle('is-active', active);
+        if (active) {
+          tab.setAttribute('aria-current', 'location');
+        } else {
+          tab.removeAttribute('aria-current');
+        }
+      });
+      document.querySelectorAll('[data-nav-link]').forEach((link) => {
+        if (!showAllMode && link.dataset.navLink === viewId) {
+          link.setAttribute('aria-current', 'location');
+        } else {
+          link.removeAttribute('aria-current');
+        }
+      });
+    }
+
+    function applyDOMView(viewId) {
+      currentView = viewId;
+      if (showAllMode) {
+        sections.forEach((sec) => { sec.hidden = false; });
+        subviewBar.hidden = true;
+        topBackOverview.hidden = true;
+      } else {
+        sections.forEach((sec) => {
+          sec.hidden = sec.dataset.view !== viewId;
+        });
+        const isSubView = viewId !== 'overview';
+        subviewBar.hidden = !isSubView;
+        topBackOverview.hidden = !isSubView;
+      }
+      updateNavHighlights(viewId);
+    }
+
+    function focusActiveSectionHeading(viewId, shouldScrollTop = true) {
+      const targetSec = document.getElementById(viewId);
+      if (!targetSec) return;
+      if (showAllMode) {
+        targetSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else if (shouldScrollTop) {
+        window.scrollTo({ top: 0, behavior: 'instant' });
+      }
+      const heading = targetSec.querySelector('h1, h2');
+      heading?.focus({ preventScroll: showAllMode });
+    }
+
+    function navigateToView(viewId, { moveFocus = false } = {}) {
+      if (quickNavPopover?.matches(':popover-open')) {
+        quickNavPopover.hidePopover();
+      }
+      if (!document.startViewTransition || showAllMode) {
+        applyDOMView(viewId);
+        if (moveFocus) focusActiveSectionHeading(viewId);
+        return;
+      }
+      const transition = document.startViewTransition(() => {
+        applyDOMView(viewId);
+        if (!showAllMode) window.scrollTo({ top: 0, behavior: 'instant' });
+      });
+      transition.finished.finally(() => {
+        if (moveFocus) focusActiveSectionHeading(viewId, false);
+      });
+    }
+
+    // Intercept internal hash links so clicking the active hash or switching views uses View Transitions + focus routing
+    document.addEventListener('click', (event) => {
+      const anchor = event.target.closest('a[href^="#"]');
+      if (!anchor) return;
+      const targetId = anchor.getAttribute('href').slice(1);
+      if (!VALID_VIEWS.has(targetId)) return;
+      event.preventDefault();
+      if (showAllMode && targetId === 'overview') {
+        showAllMode = false;
+        toggleAllBtn.setAttribute('aria-pressed', 'false');
+        toggleAllBtn.textContent = 'Show All Sections';
+      }
+      if (window.location.hash !== `#${targetId}`) {
+        history.pushState(null, '', targetId === 'overview' ? window.location.pathname + window.location.search : `#${targetId}`);
+      }
+      navigateToView(targetId, { moveFocus: true });
+    });
+
+    window.addEventListener('popstate', () => {
+      navigateToView(getViewFromHash(), { moveFocus: true });
+    });
+
+    toggleAllBtn.addEventListener('click', () => {
+      showAllMode = !showAllMode;
+      toggleAllBtn.setAttribute('aria-pressed', String(showAllMode));
+      toggleAllBtn.textContent = showAllMode ? 'Single-Section View' : 'Show All Sections';
+      navigateToView(currentView, { moveFocus: false });
+    });
+
+    // Initial render (strictly only #overview unless deep-linked via URL #hash)
+    applyDOMView(getViewFromHash());
+
+    // 5. Workshop Checklist Persistence
+    const STORAGE_KEY = 'devfest_tokyo_2026_gemini4_checklist';
+    const stepChecks = Array.from(document.querySelectorAll('[data-step-check]'));
+    const progressFill = document.getElementById('progress-fill');
+    const progressLabel = document.getElementById('progress-label');
+
+    function loadChecklist() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+        stepChecks.forEach((cb) => {
+          cb.checked = Boolean(saved[cb.dataset.stepCheck]);
+        });
+      } catch (_) {}
+      renderChecklistProgress();
+    }
+
+    function renderChecklistProgress() {
+      const done = stepChecks.filter((cb) => cb.checked).length;
+      const total = stepChecks.length;
+      const pct = Math.round((done / total) * 100);
+      progressFill.style.setProperty('--progress-pct', `${pct}%`);
+      progressLabel.textContent = done === total
+        ? 'All 4 steps completed — ready to present!'
+        : `${done} of ${total} steps completed`;
+    }
+
+    stepChecks.forEach((cb) => {
+      cb.addEventListener('change', () => {
+        const state = {};
+        stepChecks.forEach((item) => { state[item.dataset.stepCheck] = item.checked; });
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (_) {}
+        renderChecklistProgress();
+      });
+    });
+    loadChecklist();
+
+    // 6. Copy-to-Clipboard for all Terminal & Prompt Blocks
+    async function copyTextWithFeedback(btn, text) {
+      const original = btn.textContent;
+      try {
+        await navigator.clipboard.writeText(text);
+        btn.textContent = 'Copied ✓';
+      } catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        ta.remove();
+        btn.textContent = 'Copied ✓';
+      }
+      setTimeout(() => { btn.textContent = original; }, 1600);
+    }
+
+    document.querySelectorAll('[data-copy-target]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const pre = document.getElementById(btn.dataset.copyTarget);
+        if (pre) copyTextWithFeedback(btn, pre.innerText.trim());
+      });
+    });
+
+    // 7. Synchronized Google Cloud Project ID Inputs
+    const projectInputs = Array.from(document.querySelectorAll('[data-project-id-input]'));
+    const dynamicProjectCmd = document.getElementById('dynamic-project-cmd');
+
+    function syncProjectId(rawVal, sourceEl) {
+      const cleaned = rawVal.trim();
+      projectInputs.forEach((inp) => {
+        if (inp !== sourceEl) inp.value = rawVal;
+      });
+      const token = cleaned || '<YOUR_PROJECT_ID>';
+      if (dynamicProjectCmd) {
+        dynamicProjectCmd.textContent = `gcloud config set project ${token}\ngcloud config list project`;
+      }
+    }
+
+    projectInputs.forEach((inp) => {
+      inp.addEventListener('input', () => syncProjectId(inp.value, inp));
+    });
+
+    // 8. Interactive Custom Spec Prompt Composer & Upgrade Builder
+    const genreSelect = document.getElementById('genre-select');
+    const customIdeaInput = document.getElementById('custom-idea-input');
+    const composedInitCode = document.getElementById('composed-init-code');
+
+    function updateComposedInitPrompt() {
+      const customIdea = customIdeaInput.value.trim();
+      const [fileSlug, presetDesc, controlsDesc] = genreSelect.value.split('|');
+      const targetFile = customIdea ? 'custom3dapp.md' : fileSlug;
+      const targetDesc = customIdea || presetDesc;
+      composedInitCode.textContent = `Create a ${targetFile} specification to build a ${targetDesc}. The experience should feature ${controlsDesc}, run smoothly in modern browsers using WebGL2 / Three.js, and include a clean white-and-gray HUD.`;
+    }
+
+    genreSelect?.addEventListener('change', updateComposedInitPrompt);
+    customIdeaInput?.addEventListener('input', updateComposedInitPrompt);
+
+    const upgradeChecks = Array.from(document.querySelectorAll('[data-upgrade-opt]'));
+    const composedUpgradeCode = document.getElementById('composed-upgrade-code');
+
+    function updateComposedUpgradePrompt() {
+      const extras = upgradeChecks.filter((c) => c.checked).map((c) => `- ${c.dataset.upgradeOpt}`);
+      const base = 'Improve this specification file, make sure to include realistic textures using Nano Banana and solid game physics along with selectable difficulty levels.';
+      composedUpgradeCode.textContent = extras.length
+        ? `${base}\n\nSpecifically ensure the updated Markdown specification covers:\n${extras.join('\n')}`
+        : base;
+    }
+
+    upgradeChecks.forEach((c) => c.addEventListener('change', updateComposedUpgradePrompt));
+    updateComposedUpgradePrompt();
+
+    // 9. Interactive Specification Explorer Modal + Download (.md)
+    const specDialog = document.getElementById('spec-dialog');
+    const specDialogTitle = document.getElementById('spec-dialog-title');
+    const specMetaLine = document.getElementById('spec-meta-line');
+    const specRenderedView = document.getElementById('spec-rendered-view');
+    const specRawView = document.getElementById('spec-raw-view');
+    const specRawCode = document.getElementById('spec-raw-code');
+    const specToggleRawBtn = document.getElementById('spec-toggle-raw');
+    const specCopyBtn = document.getElementById('spec-copy-btn');
+    const specDownloadBtn = document.getElementById('spec-download-btn');
+    const specRawLink = document.getElementById('spec-raw-link');
+    const specPlayLink = document.getElementById('spec-play-link');
+
+    let activeSpecKey = 'f1';
+    let isRawSpecView = false;
+
+    function escapeHtml(str) {
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    function renderLightweightMarkdown(md) {
+      const lines = md.split('\n');
+      const out = [];
+      let inCode = false;
+      let inList = false;
+
+      const formatInline = (text) => escapeHtml(text)
+        .replace(/`([^`]+)`/g, '<code>$1</code>')
+        .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+
+      for (const line of lines) {
+        if (line.startsWith('```')) {
+          if (inList) { out.push('</ul>'); inList = false; }
+          if (!inCode) {
+            out.push('<pre><code>');
+            inCode = true;
+          } else {
+            out.push('</code></pre>');
+            inCode = false;
+          }
+          continue;
+        }
+        if (inCode) {
+          out.push(escapeHtml(line) + '\n');
+          continue;
+        }
+        if (/^###\s+/.test(line)) {
+          if (inList) { out.push('</ul>'); inList = false; }
+          out.push(`<h3>${formatInline(line.replace(/^###\s+/, ''))}</h3>`);
+        } else if (/^##\s+/.test(line)) {
+          if (inList) { out.push('</ul>'); inList = false; }
+          out.push(`<h2>${formatInline(line.replace(/^##\s+/, ''))}</h2>`);
+        } else if (/^#\s+/.test(line)) {
+          if (inList) { out.push('</ul>'); inList = false; }
+          out.push(`<h1>${formatInline(line.replace(/^#\s+/, ''))}</h1>`);
+        } else if (/^\s*[-*]\s+/.test(line)) {
+          if (!inList) { out.push('<ul>'); inList = true; }
+          out.push(`<li>${formatInline(line.replace(/^\s*[-*]\s+/, ''))}</li>`);
+        } else if (line.trim() === '' || /^---+$/.test(line.trim())) {
+          if (inList) { out.push('</ul>'); inList = false; }
+        } else {
+          if (inList) { out.push('</ul>'); inList = false; }
+          out.push(`<p>${formatInline(line)}</p>`);
+        }
+      }
+      if (inList) out.push('</ul>');
+      if (inCode) out.push('</code></pre>');
+      return out.join('\n');
+    }
+
+    async function resolveSpecEntry(key) {
+      const embedded = window.WORKSHOP_SPECS?.[key];
+      if (embedded) return embedded;
+      const fallbackMap = {
+        f1: { filename: 'f1carracing.md', title: 'F1 Racing Specification', specUrl: '../specs/f1carracing.md', gameUrl: '../f1cargame/index.html' },
+        golf: { filename: 'golfswing.md', title: 'Golf Swing Specification', specUrl: '../specs/golfswing.md', gameUrl: '../golfswing/index.html' },
+        ocean: { filename: 'oceanflyby.md', title: 'Ocean Scape Specification', specUrl: '../specs/oceanflyby.md', gameUrl: '../oceangame/index.html' }
+      };
+      const meta = fallbackMap[key] || fallbackMap.f1;
+      try {
+        const res = await fetch(meta.specUrl);
+        const text = res.ok ? await res.text() : '# Specification unavailable offline';
+        return { ...meta, lines: text.split('\n').length, sizeKb: Math.round(text.length / 102.4) / 10, markdown: text };
+      } catch (_) {
+        return { ...meta, lines: 0, sizeKb: 0, markdown: `Open ${meta.specUrl} directly.` };
+      }
+    }
+
+    async function loadSpecIntoModal(key) {
+      activeSpecKey = key;
+      const spec = await resolveSpecEntry(key);
+      specDialogTitle.textContent = spec.title;
+      specMetaLine.textContent = `File: specs/${spec.filename} • ${spec.lines} lines • ${spec.sizeKb} KB`;
+      specRawLink.href = spec.specUrl;
+      specPlayLink.href = spec.gameUrl;
+      specRawCode.textContent = spec.markdown;
+      specRenderedView.innerHTML = renderLightweightMarkdown(spec.markdown);
+
+      document.querySelectorAll('[data-spec-switch]').forEach((btn) => {
+        btn.classList.toggle('btn-primary', btn.dataset.specSwitch === key);
+      });
+    }
+
+    function triggerMarkdownDownload(filename, content) {
+      const blob = new Blob([content], { type: 'text/markdown;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    document.querySelectorAll('[data-open-spec]').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        await loadSpecIntoModal(btn.dataset.openSpec);
+        if (!specDialog.open) specDialog.showModal();
+      });
+    });
+
+    document.querySelectorAll('[data-spec-switch]').forEach((btn) => {
+      btn.addEventListener('click', () => loadSpecIntoModal(btn.dataset.specSwitch));
+    });
+
+    document.querySelectorAll('[data-download-spec]').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const spec = await resolveSpecEntry(btn.dataset.downloadSpec);
+        triggerMarkdownDownload(spec.filename, spec.markdown);
+      });
+    });
+
+    specToggleRawBtn.addEventListener('click', () => {
+      isRawSpecView = !isRawSpecView;
+      specToggleRawBtn.setAttribute('aria-pressed', String(isRawSpecView));
+      specToggleRawBtn.textContent = isRawSpecView ? 'View Formatted' : 'View Raw .md';
+      specRenderedView.hidden = isRawSpecView;
+      specRawView.hidden = !isRawSpecView;
+    });
+
+    specCopyBtn.addEventListener('click', async () => {
+      const spec = await resolveSpecEntry(activeSpecKey);
+      copyTextWithFeedback(specCopyBtn, spec.markdown);
+    });
+
+    specDownloadBtn.addEventListener('click', async () => {
+      const spec = await resolveSpecEntry(activeSpecKey);
+      triggerMarkdownDownload(spec.filename, spec.markdown);
+    });
+
+    // 10. Click-to-Zoom Lightbox for Screenshots
+    const lightboxDialog = document.getElementById('lightbox-dialog');
+    const lightboxTitle = document.getElementById('lightbox-dialog-title');
+    const lightboxImg = document.getElementById('lightbox-img');
+
+    document.querySelectorAll('.zoom-trigger').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const src = btn.dataset.zoomSrc;
+        const caption = btn.dataset.zoomCaption || 'Screenshot Preview';
+        if (!src) return;
+        lightboxImg.src = src;
+        lightboxImg.alt = caption;
+        lightboxTitle.textContent = caption;
+        lightboxDialog.showModal();
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,523 @@
+{
+  "pipelineVersion": "1.0.0",
+  "colorSpaceStandard": {
+    "albedo": "Utility - sRGB - Texture",
+    "dataMaps": "Utility - Raw",
+    "dielectricSrgbBounds": [
+      30,
+      240
+    ],
+    "conductiveSrgbBounds": [
+      180,
+      255
+    ],
+    "binaryMetalness": [
+      0,
+      255
+    ]
+  },
+  "allPassed": true,
+  "materialCount": 18,
+  "materials": {
+    "car_carbon_weave": {
+      "resolution": [
+        1024,
+        1024
+      ],
+      "tileable": true,
+      "metallicMode": "dielectric",
+      "bumpStrength": 2.2,
+      "roughnessRange": [
+        0.2,
+        0.42
+      ],
+      "metalnessUniqueValues": [
+        0
+      ],
+      "minSrgb": 30,
+      "maxSrgb": 119,
+      "colorSpace": "Utility - sRGB - Texture",
+      "dataMaps": "Utility - Raw",
+      "files": {
+        "albedo": "car_carbon_weave.png",
+        "normal": "car_carbon_weave_normal.png",
+        "orm": "car_carbon_weave_orm.png"
+      },
+      "passed": true
+    },
+    "car_livery_player": {
+      "resolution": [
+        1024,
+        1024
+      ],
+      "tileable": false,
+      "metallicMode": "dielectric",
+      "bumpStrength": 1.1,
+      "roughnessRange": [
+        0.18,
+        0.32
+      ],
+      "metalnessUniqueValues": [
+        0
+      ],
+      "minSrgb": 30,
+      "maxSrgb": 240,
+      "colorSpace": "Utility - sRGB - Texture",
+      "dataMaps": "Utility - Raw",
+      "files": {
+        "albedo": "car_livery_player.png",
+        "normal": "car_livery_player_normal.png",
+        "orm": "car_livery_player_orm.png"
+      },
+      "passed": true
+    },
+    "car_livery_rival_a": {
+      "resolution": [
+        1024,
+        1024
+      ],
+      "tileable": false,
+      "metallicMode": "dielectric",
+      "bumpStrength": 1.1,
+      "roughnessRange": [
+        0.18,
+        0.32
+      ],
+      "metalnessUniqueValues": [
+        0
+      ],
+      "minSrgb": 30,
+      "maxSrgb": 240,
+      "colorSpace": "Utility - sRGB - Texture",
+      "dataMaps": "Utility - Raw",
+      "files": {
+        "albedo": "car_livery_rival_a.png",
+        "normal": "car_livery_rival_a_normal.png",
+        "orm": "car_livery_rival_a_orm.png"
+      },
+      "passed": true
+    },
+    "car_livery_rival_b": {
+      "resolution": [
+        1024,
+        1024
+      ],
+      "tileable": false,
+      "metallicMode": "dielectric",
+      "bumpStrength": 1.1,
+      "roughnessRange": [
+        0.18,
+        0.32
+      ],
+      "metalnessUniqueValues": [
+        0
+      ],
+      "minSrgb": 30,
+      "maxSrgb": 240,
+      "colorSpace": "Utility - sRGB - Texture",
+      "dataMaps": "Utility - Raw",
+      "files": {
+        "albedo": "car_livery_rival_b.png",
+        "normal": "car_livery_rival_b_normal.png",
+        "orm": "car_livery_rival_b_orm.png"
+      },
+      "passed": true
+    },
+    "tire_slick_tread": {
+      "resolution": [
+        1024,
+        1024
+      ],
+      "tileable": true,
+      "metallicMode": "dielectric",
+      "bumpStrength": 1.8,
+      "roughnessRange": [
+        0.42,
+        0.65
+      ],
+      "metalnessUniqueValues": [
+        0
+      ],
+      "minSrgb": 36,
+      "maxSrgb": 72,
+      "colorSpace": "Utility - sRGB - Texture",
+      "dataMaps": "Utility - Raw",
+      "files": {
+        "albedo": "tire_slick_tread.png",
+        "normal": "tire_slick_tread_normal.png",
+        "orm": "tire_slick_tread_orm.png"
+      },
+      "passed": true
+    },
+    "tire_sidewall_pirelli": {
+      "resolution": [
+        1024,
+        1024
+      ],
+      "tileable": false,
+      "metallicMode": "dielectric",
+      "bumpStrength": 2.0,
+      "roughnessRange": [
+        0.48,
+        0.68
+      ],
+      "metalnessUniqueValues": [
+        0
+      ],
+      "minSrgb": 30,
+      "maxSrgb": 240,
+      "colorSpace": "Utility - sRGB - Texture",
+      "dataMaps": "Utility - Raw",
+      "files": {
+        "albedo": "tire_sidewall_pirelli.png",
+        "normal": "tire_sidewall_pirelli_normal.png",
+        "orm": "tire_sidewall_pirelli_orm.png"
+      },
+      "passed": true
+    },
+    "wheel_rim_forged": {
+      "resolution": [
+        1024,
+        1024
+      ],
+      "tileable": false,
+      "metallicMode": "mixed",
+      "bumpStrength": 2.2,
+      "roughnessRange": [
+        0.18,
+        0.34
+      ],
+      "metalnessUniqueValues": [
+        0,
+        255
+      ],
+      "minSrgb": 30,
+      "maxSrgb": 248,
+      "dielectricMinSrgb": 30,
+      "dielectricMaxSrgb": 240,
+      "conductiveMinSrgb": 184,
+      "conductiveMaxSrgb": 248,
+      "conductiveCoverage": 0.2245,
+      "colorSpace": "Utility - sRGB - Texture",
+      "dataMaps": "Utility - Raw",
+      "files": {
+        "albedo": "wheel_rim_forged.png",
+        "normal": "wheel_rim_forged_normal.png",
+        "orm": "wheel_rim_forged_orm.png"
+      },
+      "passed": true
+    },
+    "brake_rotor_carbon": {
+      "resolution": [
+        512,
+        512
+      ],
+      "tileable": false,
+      "metallicMode": "dielectric",
+      "bumpStrength": 3.0,
+      "roughnessRange": [
+        0.62,
+        0.78
+      ],
+      "metalnessUniqueValues": [
+        0
+      ],
+      "minSrgb": 30,
+      "maxSrgb": 240,
+      "colorSpace": "Utility - sRGB - Texture",
+      "dataMaps": "Utility - Raw",
+      "files": {
+        "albedo": "brake_rotor_carbon.png",
+        "normal": "brake_rotor_carbon_normal.png",
+        "orm": "brake_rotor_carbon_orm.png"
+      },
+      "passed": true
+    },
+    "driver_helmet_livery": {
+      "resolution": [
+        1024,
+        1024
+      ],
+      "tileable": false,
+      "metallicMode": "dielectric",
+      "bumpStrength": 0.9,
+      "roughnessRange": [
+        0.1,
+        0.24
+      ],
+      "metalnessUniqueValues": [
+        0
+      ],
+      "minSrgb": 30,
+      "maxSrgb": 240,
+      "colorSpace": "Utility - sRGB - Texture",
+      "dataMaps": "Utility - Raw",
+      "files": {
+        "albedo": "driver_helmet_livery.png",
+        "normal": "driver_helmet_livery_normal.png",
+        "orm": "driver_helmet_livery_orm.png"
+      },
+      "passed": true
+    },
+    "cockpit_steering_dash": {
+      "resolution": [
+        1024,
+        512
+      ],
+      "tileable": false,
+      "metallicMode": "dielectric",
+      "bumpStrength": 1.6,
+      "roughnessRange": [
+        0.28,
+        0.55
+      ],
+      "metalnessUniqueValues": [
+        0
+      ],
+      "minSrgb": 30,
+      "maxSrgb": 240,
+      "colorSpace": "Utility - sRGB - Texture",
+      "dataMaps": "Utility - Raw",
+      "files": {
+        "albedo": "cockpit_steering_dash.png",
+        "normal": "cockpit_steering_dash_normal.png",
+        "orm": "cockpit_steering_dash_orm.png"
+      },
+      "passed": true
+    },
+    "track_asphalt_aggregate": {
+      "resolution": [
+        1024,
+        1024
+      ],
+      "tileable": true,
+      "metallicMode": "dielectric",
+      "bumpStrength": 3.4,
+      "roughnessRange": [
+        0.6,
+        0.88
+      ],
+      "metalnessUniqueValues": [
+        0
+      ],
+      "minSrgb": 30,
+      "maxSrgb": 240,
+      "colorSpace": "Utility - sRGB - Texture",
+      "dataMaps": "Utility - Raw",
+      "files": {
+        "albedo": "track_asphalt_aggregate.png",
+        "normal": "track_asphalt_aggregate_normal.png",
+        "orm": "track_asphalt_aggregate_orm.png"
+      },
+      "passed": true
+    },
+    "track_kerb_fia": {
+      "resolution": [
+        1024,
+        1024
+      ],
+      "tileable": true,
+      "metallicMode": "dielectric",
+      "bumpStrength": 2.6,
+      "roughnessRange": [
+        0.55,
+        0.75
+      ],
+      "metalnessUniqueValues": [
+        0
+      ],
+      "minSrgb": 30,
+      "maxSrgb": 239,
+      "colorSpace": "Utility - sRGB - Texture",
+      "dataMaps": "Utility - Raw",
+      "files": {
+        "albedo": "track_kerb_fia.png",
+        "normal": "track_kerb_fia_normal.png",
+        "orm": "track_kerb_fia_orm.png"
+      },
+      "passed": true
+    },
+    "track_barrier_sponsor": {
+      "resolution": [
+        1024,
+        512
+      ],
+      "tileable": false,
+      "metallicMode": "dielectric",
+      "bumpStrength": 1.4,
+      "roughnessRange": [
+        0.35,
+        0.55
+      ],
+      "metalnessUniqueValues": [
+        0
+      ],
+      "minSrgb": 30,
+      "maxSrgb": 240,
+      "colorSpace": "Utility - sRGB - Texture",
+      "dataMaps": "Utility - Raw",
+      "files": {
+        "albedo": "track_barrier_sponsor.png",
+        "normal": "track_barrier_sponsor_normal.png",
+        "orm": "track_barrier_sponsor_orm.png"
+      },
+      "passed": true
+    },
+    "env_grass_verge": {
+      "resolution": [
+        512,
+        512
+      ],
+      "tileable": true,
+      "metallicMode": "dielectric",
+      "bumpStrength": 2.4,
+      "roughnessRange": [
+        0.72,
+        0.92
+      ],
+      "metalnessUniqueValues": [
+        0
+      ],
+      "minSrgb": 30,
+      "maxSrgb": 197,
+      "colorSpace": "Utility - sRGB - Texture",
+      "dataMaps": "Utility - Raw",
+      "files": {
+        "albedo": "env_grass_verge.png",
+        "normal": "env_grass_verge_normal.png",
+        "orm": "env_grass_verge_orm.png"
+      },
+      "passed": true
+    },
+    "env_gravel_trap": {
+      "resolution": [
+        512,
+        512
+      ],
+      "tileable": true,
+      "metallicMode": "dielectric",
+      "bumpStrength": 3.8,
+      "roughnessRange": [
+        0.78,
+        0.94
+      ],
+      "metalnessUniqueValues": [
+        0
+      ],
+      "minSrgb": 30,
+      "maxSrgb": 240,
+      "colorSpace": "Utility - sRGB - Texture",
+      "dataMaps": "Utility - Raw",
+      "files": {
+        "albedo": "env_gravel_trap.png",
+        "normal": "env_gravel_trap_normal.png",
+        "orm": "env_gravel_trap_orm.png"
+      },
+      "passed": true
+    },
+    "tire_sidewall_soft": {
+      "resolution": [
+        1024,
+        1024
+      ],
+      "tileable": false,
+      "metallicMode": "dielectric",
+      "bumpStrength": 2.0,
+      "roughnessRange": [
+        0.48,
+        0.68
+      ],
+      "metalnessUniqueValues": [
+        0
+      ],
+      "minSrgb": 35,
+      "maxSrgb": 234,
+      "colorSpace": "Utility - sRGB - Texture",
+      "dataMaps": "Utility - Raw",
+      "files": {
+        "albedo": "tire_sidewall_soft.png",
+        "normal": "tire_sidewall_pirelli_normal.png",
+        "orm": "tire_sidewall_pirelli_orm.png"
+      },
+      "passed": true
+    },
+    "tire_sidewall_medium": {
+      "resolution": [
+        1024,
+        1024
+      ],
+      "tileable": false,
+      "metallicMode": "dielectric",
+      "bumpStrength": 2.0,
+      "roughnessRange": [
+        0.48,
+        0.68
+      ],
+      "metalnessUniqueValues": [
+        0
+      ],
+      "minSrgb": 34,
+      "maxSrgb": 240,
+      "colorSpace": "Utility - sRGB - Texture",
+      "dataMaps": "Utility - Raw",
+      "files": {
+        "albedo": "tire_sidewall_medium.png",
+        "normal": "tire_sidewall_pirelli_normal.png",
+        "orm": "tire_sidewall_pirelli_orm.png"
+      },
+      "passed": true
+    },
+    "tire_sidewall_hard": {
+      "resolution": [
+        1024,
+        1024
+      ],
+      "tileable": false,
+      "metallicMode": "dielectric",
+      "bumpStrength": 2.0,
+      "roughnessRange": [
+        0.48,
+        0.68
+      ],
+      "metalnessUniqueValues": [
+        0
+      ],
+      "minSrgb": 39,
+      "maxSrgb": 236,
+      "colorSpace": "Utility - sRGB - Texture",
+      "dataMaps": "Utility - Raw",
+      "files": {
+        "albedo": "tire_sidewall_hard.png",
+        "normal": "tire_sidewall_pirelli_normal.png",
+        "orm": "tire_sidewall_pirelli_orm.png"
+      },
+      "passed": true
+    }
+  },
+  "auxiliaryMaps": {
+    "car_flake_normal": {
+      "file": "car_flake_normal.png",
+      "resolution": [
+        512,
+        512
+      ],
+      "tileable": true,
+      "colorSpace": "Utility - Raw",
+      "passed": true
+    },
+    "brake_thermal_mask": {
+      "file": "brake_thermal_mask.png",
+      "resolution": [
+        512,
+        512
+      ],
+      "tileable": false,
+      "colorSpace": "Utility - Raw",
+      "annulusRadiusNormalized": [
+        0.42,
+        0.94
+      ],
+      "passed": true
+    }
+  }
+}

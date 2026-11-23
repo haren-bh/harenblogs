@@ -1,0 +1,725 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tokyo GP 2026 — Photorealistic F1 Racing Simulation</title>
+  <link rel="stylesheet" href="./css/styles.css">
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "./vendor/three/build/three.module.js",
+      "three/addons/": "./vendor/three/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body data-state="SHOWROOM_GRID">
+  <!-- Full-viewport 3D WebGL2 Canvas -->
+  <canvas
+    id="sim-canvas"
+    aria-label="Tokyo GP 2026 Formula 1 3D Simulation Viewport"
+  ></canvas>
+
+  <!-- Modern Gray-and-White Motorsport Broadcast HUD -->
+  <div class="hud-layer" aria-label="Motorsport Broadcast Telemetry HUD">
+
+    <!-- Top Broadcast Bar -->
+    <header id="hud-top-bar" class="hud-top-bar" role="banner">
+      <!-- Left Cluster: Circuit Brand, Race Position, Lap, FSM State -->
+      <div class="hud-cluster hud-cluster--left">
+        <div class="brand-badge">
+          <span class="brand-stripe" aria-hidden="true"></span>
+          <span class="brand-title">TOKYO GP 2026</span>
+        </div>
+        <span id="hud-position" class="hud-pill hud-pill--strong tabular">P1 / 4</span>
+        <span id="hud-lap" class="hud-pill tabular">LAP 1 / 3</span>
+        <span id="hud-state" class="hud-pill hud-pill--state">SHOWROOM</span>
+      </div>
+
+      <!-- Center Cluster: Live Lap Timer, Best Lap, Sector Splits, Camera Badge -->
+      <div class="hud-cluster hud-cluster--center">
+        <div class="timing-readout">
+          <span class="timing-label">LAP</span>
+          <span id="hud-lap-time" class="timing-value tabular">0:00.000</span>
+        </div>
+        <div class="timing-divider" aria-hidden="true"></div>
+        <div class="timing-readout">
+          <span class="timing-label">BEST</span>
+          <span id="hud-best-lap" class="timing-value timing-value--muted tabular">--:--.---</span>
+        </div>
+        <div class="timing-divider" aria-hidden="true"></div>
+        <div class="sector-strip" aria-label="Sector Splits">
+          <span id="hud-s1" class="sector-badge tabular" data-status="idle">S1 --.-</span>
+          <span id="hud-s2" class="sector-badge tabular" data-status="idle">S2 --.-</span>
+          <span id="hud-s3" class="sector-badge tabular" data-status="idle">S3 --.-</span>
+        </div>
+        <span id="hud-camera-label" class="hud-pill hud-pill--cam">SHOWROOM</span>
+      </div>
+
+      <!-- Right Cluster: Controls, Declarative Popover & Modal Invokers -->
+      <div class="hud-cluster hud-cluster--right">
+        <button
+          type="button"
+          id="btn-audio"
+          class="hud-btn"
+          aria-pressed="false"
+          title="Toggle Procedural Audio (M)"
+        >
+          <span class="btn-label">Audio</span>
+          <kbd class="hud-kbd">M</kbd>
+        </button>
+
+        <button
+          type="button"
+          id="btn-camera"
+          class="hud-btn"
+          title="Cycle Camera Rig (C / V)"
+        >
+          <span class="btn-label">Cam</span>
+          <kbd class="hud-kbd">C</kbd>
+        </button>
+
+        <button
+          type="button"
+          id="btn-showroom"
+          class="hud-btn"
+          aria-pressed="true"
+          title="Toggle Showroom Orbit View"
+        >
+          <span class="btn-label">Showroom</span>
+        </button>
+
+        <!-- MANDATORY modern-web-guidance: commandfor/command ONLY (never combine with popovertarget) -->
+        <button
+          type="button"
+          id="btn-setup"
+          class="hud-btn"
+          commandfor="setup-popover"
+          command="toggle-popover"
+          aria-expanded="false"
+          aria-controls="setup-popover"
+        >
+          Car Setup
+        </button>
+
+        <!-- Declarative modal dialog invoker -->
+        <button
+          type="button"
+          id="btn-inspector"
+          class="hud-btn hud-btn--accent-outline"
+          commandfor="inspector-dialog"
+          command="show-modal"
+        >
+          Inspector
+        </button>
+      </div>
+    </header>
+
+    <!-- Wrong Way / Track Limit / Telemetry Alert Pill -->
+    <div
+      id="hud-alert"
+      class="hud-alert"
+      role="status"
+      aria-live="polite"
+      hidden
+    >
+      WRONG WAY — TURN AROUND OR PRESS R TO RESET
+    </div>
+
+    <!-- FIA 5-Light Starting Gantry Overlay (LIGHTS_COUNTDOWN) -->
+    <section
+      id="start-lights-overlay"
+      class="start-lights-overlay"
+      aria-label="FIA Race Start Lights"
+      aria-live="assertive"
+      hidden
+    >
+      <div class="fia-gantry-frame">
+        <div class="fia-gantry-bar">
+          <div id="start-light-0" class="fia-light-pod" data-light-index="0">
+            <span class="fia-lamp" aria-hidden="true"></span>
+            <span class="fia-lamp" aria-hidden="true"></span>
+          </div>
+          <div id="start-light-1" class="fia-light-pod" data-light-index="1">
+            <span class="fia-lamp" aria-hidden="true"></span>
+            <span class="fia-lamp" aria-hidden="true"></span>
+          </div>
+          <div id="start-light-2" class="fia-light-pod" data-light-index="2">
+            <span class="fia-lamp" aria-hidden="true"></span>
+            <span class="fia-lamp" aria-hidden="true"></span>
+          </div>
+          <div id="start-light-3" class="fia-light-pod" data-light-index="3">
+            <span class="fia-lamp" aria-hidden="true"></span>
+            <span class="fia-lamp" aria-hidden="true"></span>
+          </div>
+          <div id="start-light-4" class="fia-light-pod" data-light-index="4">
+            <span class="fia-lamp" aria-hidden="true"></span>
+            <span class="fia-lamp" aria-hidden="true"></span>
+          </div>
+        </div>
+        <p id="start-lights-status" class="fia-gantry-status">
+          FIA STARTING PROCEDURE — HOLD REVS
+        </p>
+      </div>
+    </section>
+
+    <!-- Showroom Floating CTA Banner (SHOWROOM_GRID) -->
+    <aside
+      id="showroom-banner"
+      class="showroom-banner"
+      aria-label="Showroom Quick Controls and Race Start"
+    >
+      <div class="showroom-header">
+        <div>
+          <p class="showroom-eyebrow">PRE-GRID INSPECTION · DRAG TO ORBIT · SCROLL TO ZOOM</p>
+          <h1 class="showroom-title">Tokyo Grand Prix — 2026 Spec F1</h1>
+        </div>
+      </div>
+
+      <!-- Pirelli Compound Quick Chips -->
+      <div class="showroom-compounds" role="group" aria-label="Quick Pirelli Tire Compound Selection">
+        <span class="showroom-section-label">Pirelli Slick</span>
+        <div class="compound-chip-row">
+          <button
+            type="button"
+            id="chip-compound-soft"
+            class="compound-chip compound-chip--soft is-active"
+            data-compound="soft"
+            aria-pressed="true"
+          >
+            <span class="tire-dot tire-dot--soft" aria-hidden="true"></span>
+            Soft
+          </button>
+          <button
+            type="button"
+            id="chip-compound-medium"
+            class="compound-chip compound-chip--medium"
+            data-compound="medium"
+            aria-pressed="false"
+          >
+            <span class="tire-dot tire-dot--medium" aria-hidden="true"></span>
+            Medium
+          </button>
+          <button
+            type="button"
+            id="chip-compound-hard"
+            class="compound-chip compound-chip--hard"
+            data-compound="hard"
+            aria-pressed="false"
+          >
+            <span class="tire-dot tire-dot--hard" aria-hidden="true"></span>
+            Hard
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Controls Strip -->
+      <div class="showroom-controls-guide" aria-label="Quick Controls">
+        <span><kbd>WASD</kbd> / <kbd>Arrows</kbd> Drive</span>
+        <span><kbd>Space</kbd> DRS / Start</span>
+        <span><kbd>C</kbd> Camera</span>
+        <span><kbd>R</kbd> Reset</span>
+      </div>
+
+      <!-- Primary Race & Solo Launch Actions -->
+      <div class="showroom-actions">
+        <button type="button" id="btn-start-race" class="btn-primary">
+          START RACE
+        </button>
+        <button type="button" id="btn-start-solo" class="btn-secondary">
+          SOLO TIME TRIAL
+        </button>
+      </div>
+    </aside>
+
+    <!-- Bottom Central Telemetry Dock -->
+    <section
+      id="telemetry-dock"
+      class="telemetry-dock"
+      aria-label="Live Formula 1 Telemetry Cluster"
+    >
+      <!-- Left: Vertical Brake & Throttle Bars -->
+      <div class="pedal-cluster" aria-label="Pedal Inputs">
+        <div class="pedal-meter">
+          <div class="pedal-bar-track">
+            <div id="bar-brake" class="pedal-bar-fill pedal-bar-fill--brake"></div>
+          </div>
+          <span class="pedal-label">BRK</span>
+        </div>
+        <div class="pedal-meter">
+          <div class="pedal-bar-track">
+            <div id="bar-throttle" class="pedal-bar-fill pedal-bar-fill--throttle"></div>
+          </div>
+          <span class="pedal-label">THR</span>
+        </div>
+      </div>
+
+      <!-- Center: 15-LED RPM Shift Strip + Digital Gear & Speed -->
+      <div class="telemetry-core">
+        <div class="rpm-row">
+          <div id="rpm-leds" class="rpm-leds" aria-hidden="true">
+            <span class="rpm-led rpm-led--green" data-led="0"></span>
+            <span class="rpm-led rpm-led--green" data-led="1"></span>
+            <span class="rpm-led rpm-led--green" data-led="2"></span>
+            <span class="rpm-led rpm-led--green" data-led="3"></span>
+            <span class="rpm-led rpm-led--green" data-led="4"></span>
+            <span class="rpm-led rpm-led--red" data-led="5"></span>
+            <span class="rpm-led rpm-led--red" data-led="6"></span>
+            <span class="rpm-led rpm-led--red" data-led="7"></span>
+            <span class="rpm-led rpm-led--red" data-led="8"></span>
+            <span class="rpm-led rpm-led--red" data-led="9"></span>
+            <span class="rpm-led rpm-led--blue" data-led="10"></span>
+            <span class="rpm-led rpm-led--blue" data-led="11"></span>
+            <span class="rpm-led rpm-led--blue" data-led="12"></span>
+            <span class="rpm-led rpm-led--blue" data-led="13"></span>
+            <span class="rpm-led rpm-led--blue" data-led="14"></span>
+          </div>
+          <span id="hud-rpm" class="rpm-numeric tabular">4,000 RPM</span>
+        </div>
+
+        <div class="speed-gear-row">
+          <div class="gear-box">
+            <span class="telemetry-micro-label">GEAR</span>
+            <span id="hud-gear" class="gear-value tabular">N</span>
+          </div>
+
+          <div class="speed-box">
+            <span id="hud-speed" class="speed-value tabular">0</span>
+            <span class="speed-unit">KM/H</span>
+          </div>
+
+          <span id="hud-drs" class="drs-pill" data-drs-state="locked">DRS LOCKED</span>
+        </div>
+      </div>
+
+      <!-- Right: Tire Compound/Temp, Brake Temp, G-Force -->
+      <div class="telemetry-vitals">
+        <div class="vital-cell">
+          <span class="telemetry-micro-label">TIRE</span>
+          <div class="vital-inline">
+            <span id="hud-tire-compound" class="tire-pill tire-pill--soft">SOFT</span>
+            <span id="hud-tire-temp" class="vital-value tabular">65°C</span>
+          </div>
+        </div>
+        <div class="vital-cell">
+          <span class="telemetry-micro-label">BRAKES</span>
+          <span id="hud-brake-temp" class="vital-value tabular">220°C</span>
+        </div>
+        <div class="vital-cell">
+          <span class="telemetry-micro-label">G-FORCE</span>
+          <span id="hud-gforce" class="vital-value tabular">0.0 G</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bottom-Right Circuit Minimap Card -->
+    <aside id="minimap-card" class="minimap-card" aria-label="Tokyo GP Circuit Minimap">
+      <div class="minimap-header">
+        <span class="minimap-title">TOKYO GP</span>
+        <span class="minimap-meta tabular">4.3 KM</span>
+      </div>
+      <canvas
+        id="minimap-canvas"
+        width="180"
+        height="140"
+        aria-label="Live track map showing DRS zones, Start/Finish, and car positions"
+      ></canvas>
+    </aside>
+
+    <!-- Pause Overlay (STATE_PAUSED) -->
+    <section
+      id="pause-overlay"
+      class="fullscreen-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="pause-title"
+      hidden
+    >
+      <div class="overlay-card overlay-card--pause">
+        <div class="overlay-header">
+          <div>
+            <p class="overlay-eyebrow">SIMULATION FROZEN · 240 HZ SOLVER SUSPENDED</p>
+            <h2 id="pause-title" class="overlay-title">Race Paused</h2>
+          </div>
+        </div>
+
+        <div class="overlay-actions">
+          <button type="button" id="btn-resume" class="btn-primary">Resume</button>
+          <button type="button" id="btn-restart" class="btn-secondary">Restart</button>
+          <button type="button" id="btn-pause-showroom" class="btn-secondary">Showroom</button>
+        </div>
+
+        <div class="keybind-sheet">
+          <h3 class="keybind-heading">Complete Control Matrix</h3>
+          <dl class="keybind-grid">
+            <div class="keybind-row">
+              <dt><kbd>W</kbd> / <kbd>↑</kbd></dt>
+              <dd>Progressive Throttle (V6 + MGU-K)</dd>
+            </div>
+            <div class="keybind-row">
+              <dt><kbd>S</kbd> / <kbd>↓</kbd></dt>
+              <dd>Brake / Auto-Reverse (&lt; 0.5 m/s)</dd>
+            </div>
+            <div class="keybind-row">
+              <dt><kbd>A</kbd> <kbd>D</kbd> / <kbd>←</kbd> <kbd>→</kbd></dt>
+              <dd>Speed-Sensitive Steering</dd>
+            </div>
+            <div class="keybind-row">
+              <dt><kbd>Space</kbd></dt>
+              <dd>DRS Flap Toggle (or Start Race)</dd>
+            </div>
+            <div class="keybind-row">
+              <dt><kbd>C</kbd> / <kbd>V</kbd></dt>
+              <dd>Cycle Chase · Cockpit · TV Pod</dd>
+            </div>
+            <div class="keybind-row">
+              <dt><kbd>B</kbd></dt>
+              <dd>Hold Rear-View Look Behind</dd>
+            </div>
+            <div class="keybind-row">
+              <dt><kbd>R</kbd></dt>
+              <dd>Reset Car to Track Centerline</dd>
+            </div>
+            <div class="keybind-row">
+              <dt><kbd>Q</kbd> / <kbd>E</kbd></dt>
+              <dd>Manual Downshift / Upshift</dd>
+            </div>
+            <div class="keybind-row">
+              <dt><kbd>M</kbd></dt>
+              <dd>Toggle Procedural F1 Audio Mute</dd>
+            </div>
+            <div class="keybind-row">
+              <dt><kbd>P</kbd> / <kbd>Esc</kbd></dt>
+              <dd>Pause / Resume Simulation</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- Session Summary Overlay (STATE_SESSION_SUMMARY) -->
+    <section
+      id="summary-overlay"
+      class="fullscreen-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="summary-title"
+      hidden
+    >
+      <div class="overlay-card overlay-card--summary">
+        <div class="overlay-header">
+          <div>
+            <p class="overlay-eyebrow">CHECKERED FLAG · TOKYO GP 2026 CLASSIFICATION</p>
+            <h2 id="summary-title" class="overlay-title">Session Complete</h2>
+            <p id="summary-subtitle" class="overlay-subtitle">Official Timing &amp; Telemetry Breakdown</p>
+          </div>
+        </div>
+
+        <div class="summary-kpis">
+          <div class="kpi-tile">
+            <span class="kpi-label">Best Lap</span>
+            <span id="summary-best-lap" class="kpi-value tabular">--:--.---</span>
+          </div>
+          <div class="kpi-tile">
+            <span class="kpi-label">Theoretical Best</span>
+            <span id="summary-theoretical-best" class="kpi-value tabular">--:--.---</span>
+          </div>
+          <div class="kpi-tile">
+            <span class="kpi-label">Top Speed Trap</span>
+            <span id="summary-top-speed" class="kpi-value tabular">0 km/h</span>
+          </div>
+          <div class="kpi-tile">
+            <span class="kpi-label">Peak G-Force</span>
+            <span id="summary-max-g" class="kpi-value tabular">0.0 G</span>
+          </div>
+        </div>
+
+        <div class="summary-table-wrap">
+          <table id="summary-lap-table" class="audit-table">
+            <thead>
+              <tr>
+                <th>Lap</th>
+                <th>Sector 1</th>
+                <th>Sector 2</th>
+                <th>Sector 3</th>
+                <th>Lap Time</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="summary-lap-rows">
+              <tr>
+                <td colspan="6" class="table-empty">No completed laps recorded yet.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="overlay-actions">
+          <button type="button" id="btn-race-again" class="btn-primary">Race Again</button>
+          <button type="button" id="btn-summary-showroom" class="btn-secondary">Showroom</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Declarative Car Setup Popover (Native Top-Layer Popover API) -->
+  <div
+    id="setup-popover"
+    class="setup-popover"
+    popover="auto"
+    role="region"
+    aria-labelledby="setup-popover-title"
+  >
+    <div class="popover-header">
+      <div>
+        <p class="popover-eyebrow">VEHICLE &amp; TRACK CONFIGURATION</p>
+        <h2 id="setup-popover-title" class="popover-title">Car Setup</h2>
+      </div>
+      <button
+        type="button"
+        id="btn-setup-close"
+        class="icon-close-btn"
+        commandfor="setup-popover"
+        command="hide-popover"
+      >
+        Close
+      </button>
+    </div>
+
+    <div class="setup-body">
+      <!-- Pirelli Tire Compound -->
+      <fieldset class="setup-group">
+        <legend class="setup-legend">Pirelli Slick Compound</legend>
+        <div class="segmented-radios">
+          <label class="radio-card" for="setup-compound-soft">
+            <input type="radio" id="setup-compound-soft" name="tire-compound" value="soft" checked>
+            <span class="tire-dot tire-dot--soft" aria-hidden="true"></span>
+            <span>Soft</span>
+          </label>
+          <label class="radio-card" for="setup-compound-medium">
+            <input type="radio" id="setup-compound-medium" name="tire-compound" value="medium">
+            <span class="tire-dot tire-dot--medium" aria-hidden="true"></span>
+            <span>Medium</span>
+          </label>
+          <label class="radio-card" for="setup-compound-hard">
+            <input type="radio" id="setup-compound-hard" name="tire-compound" value="hard">
+            <span class="tire-dot tire-dot--hard" aria-hidden="true"></span>
+            <span>Hard</span>
+          </label>
+        </div>
+      </fieldset>
+
+      <!-- Race Mode -->
+      <fieldset class="setup-group">
+        <legend class="setup-legend">Session Mode</legend>
+        <div class="segmented-radios segmented-radios--two">
+          <label class="radio-card" for="setup-mode-ai">
+            <input type="radio" id="setup-mode-ai" name="race-mode" value="ai_race" checked>
+            <span>AI Grand Prix</span>
+          </label>
+          <label class="radio-card" for="setup-mode-solo">
+            <input type="radio" id="setup-mode-solo" name="race-mode" value="time_trial">
+            <span>Time Trial</span>
+          </label>
+        </div>
+      </fieldset>
+
+      <!-- Gearbox -->
+      <fieldset class="setup-group">
+        <legend class="setup-legend">8-Speed Seamless Gearbox</legend>
+        <div class="segmented-radios segmented-radios--two">
+          <label class="radio-card" for="setup-gearbox-auto">
+            <input type="radio" id="setup-gearbox-auto" name="gearbox-mode" value="auto" checked>
+            <span>Automatic</span>
+          </label>
+          <label class="radio-card" for="setup-gearbox-manual">
+            <input type="radio" id="setup-gearbox-manual" name="gearbox-mode" value="manual">
+            <span>Manual (Q/E)</span>
+          </label>
+        </div>
+      </fieldset>
+
+      <!-- Driving Assists -->
+      <fieldset class="setup-group">
+        <legend class="setup-legend">Drive-by-Wire Assists &amp; Rules</legend>
+        <div class="checkbox-stack">
+          <label class="check-row" for="setup-assist-tc">
+            <input type="checkbox" id="setup-assist-tc" name="assist-tc" checked>
+            <span>Traction Control <small>(Gears 1–3 rear slip guard)</small></span>
+          </label>
+          <label class="check-row" for="setup-assist-abs">
+            <input type="checkbox" id="setup-assist-abs" name="assist-abs" checked>
+            <span>ABS <small>(Anti-lock threshold braking)</small></span>
+          </label>
+          <label class="check-row" for="setup-assist-stability">
+            <input type="checkbox" id="setup-assist-stability" name="assist-stability" checked>
+            <span>Stability Assist <small>(Yaw counter-steer damping)</small></span>
+          </label>
+          <label class="check-row" for="setup-drs-anywhere">
+            <input type="checkbox" id="setup-drs-anywhere" name="drs-anywhere">
+            <span>Free-Practice DRS Anywhere <small>(Bypass DRS zones)</small></span>
+          </label>
+        </div>
+      </fieldset>
+
+      <!-- Solar Elevation Slider -->
+      <div class="setup-group">
+        <div class="slider-header">
+          <label class="setup-legend" for="setup-solar-elevation">Solar Elevation</label>
+          <output id="setup-solar-value" class="slider-readout tabular" for="setup-solar-elevation">28°</output>
+        </div>
+        <input
+          type="range"
+          id="setup-solar-elevation"
+          class="studio-range"
+          min="12"
+          max="65"
+          step="1"
+          value="28"
+        >
+        <div class="slider-ticks tabular">
+          <span>12° Golden Hour</span>
+          <span>28° Late Afternoon</span>
+          <span>65° High Noon</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Declarative Telemetry & PBR Inspector Modal Dialog (closedby="any") -->
+  <dialog
+    id="inspector-dialog"
+    class="inspector-dialog"
+    closedby="any"
+    aria-labelledby="inspector-dialog-title"
+  >
+    <div class="dialog-header">
+      <div>
+        <p class="popover-eyebrow">DIAGNOSTICS · 240 HZ DYNAMICS &amp; PBR COMPLIANCE</p>
+        <h2 id="inspector-dialog-title" class="dialog-title">Telemetry &amp; PBR Inspector</h2>
+      </div>
+      <!-- MANDATORY: NOT inside <form method="dialog">; explicit type="button" with command="close" -->
+      <button
+        type="button"
+        id="btn-inspector-close"
+        class="icon-close-btn"
+        commandfor="inspector-dialog"
+        command="close"
+      >
+        Close
+      </button>
+    </div>
+
+    <div class="dialog-body">
+      <details class="inspector-accordion" name="inspector-tabs" open>
+        <summary class="inspector-summary">
+          <span>1. Live Vehicle Dynamics &amp; Aero Telemetry</span>
+          <span class="summary-chevron" aria-hidden="true"></span>
+        </summary>
+        <div id="inspector-physics" class="inspector-panel tabular">
+          <p class="inspector-placeholder">Awaiting live 240 Hz telemetry feed...</p>
+        </div>
+      </details>
+
+      <details class="inspector-accordion" name="inspector-tabs">
+        <summary class="inspector-summary">
+          <span>2. Parametric .glb &amp; Node Validation</span>
+          <span class="summary-chevron" aria-hidden="true"></span>
+        </summary>
+        <div id="inspector-glb" class="inspector-panel tabular">
+          <p class="inspector-placeholder">Loading f1_car.glb geometry &amp; articulated node audit...</p>
+        </div>
+      </details>
+
+      <details class="inspector-accordion" name="inspector-tabs">
+        <summary class="inspector-summary">
+          <span>3. Nano Banana PBR Reflectance Audit Table</span>
+          <span class="summary-chevron" aria-hidden="true"></span>
+        </summary>
+        <div class="inspector-panel inspector-table-wrap">
+          <table id="inspector-pbr-table" class="audit-table tabular">
+            <thead>
+              <tr>
+                <th>Material / Map</th>
+                <th>Type</th>
+                <th>Color Space</th>
+                <th>sRGB Range</th>
+                <th>Metalness</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="6" class="table-empty">Awaiting PBR reflectance registry...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+
+      <details class="inspector-accordion" name="inspector-tabs">
+        <summary class="inspector-summary">
+          <span>4. Session Lap &amp; Sector History</span>
+          <span class="summary-chevron" aria-hidden="true"></span>
+        </summary>
+        <div id="inspector-laps" class="inspector-panel tabular">
+          <p class="inspector-placeholder">No completed laps recorded in this session yet.</p>
+        </div>
+      </details>
+    </div>
+  </dialog>
+
+  <!-- MANDATORY Modern Web Guidance Conditional Polyfills & Progressive Fallbacks -->
+  <script type="module">
+    // Conditionally load Invoker Commands polyfill ONLY when native support is missing.
+    if (!('commandForElement' in HTMLButtonElement.prototype)) {
+      import('https://esm.run/invokers-polyfill').catch(() => {});
+    }
+
+    // Conditionally load Popover API polyfill ONLY when native support is missing.
+    if (!Object.hasOwn(HTMLElement.prototype, 'popover')) {
+      import('https://unpkg.com/@oddbird/popover-polyfill@latest/dist/popover.min.js').catch(() => {});
+    }
+
+    // Fallback for browsers without native <dialog closedby="any"> light-dismiss (e.g. Safari).
+    const inspectorDialog = document.getElementById('inspector-dialog');
+    if (inspectorDialog && !('closedBy' in HTMLDialogElement.prototype)) {
+      inspectorDialog.addEventListener('click', (event) => {
+        if (event.target !== inspectorDialog) return;
+        const rect = inspectorDialog.getBoundingClientRect();
+        const isInsideDialog =
+          rect.top <= event.clientY &&
+          event.clientY <= rect.top + rect.height &&
+          rect.left <= event.clientX &&
+          event.clientX <= rect.left + rect.width;
+        if (!isInsideDialog) {
+          inspectorDialog.close();
+        }
+      });
+    }
+
+    // Sync aria-expanded on #btn-setup and return focus cleanly when closing via inner button.
+    const setupPopover = document.getElementById('setup-popover');
+    const setupTrigger = document.getElementById('btn-setup');
+    const setupCloseBtn = document.getElementById('btn-setup-close');
+    if (setupPopover && setupTrigger) {
+      let restoreFocusToTrigger = false;
+      setupCloseBtn?.addEventListener('click', () => {
+        restoreFocusToTrigger = true;
+      });
+      setupPopover.addEventListener('toggle', (event) => {
+        const isOpen = event.newState === 'open';
+        setupTrigger.setAttribute('aria-expanded', String(isOpen));
+        if (!isOpen && restoreFocusToTrigger) {
+          restoreFocusToTrigger = false;
+          setupTrigger.focus();
+        }
+      });
+    }
+  </script>
+
+  <!-- Primary ES Module Simulation Entrypoint -->
+  <script type="module" src="./js/main.js"></script>
+</body>
+</html>

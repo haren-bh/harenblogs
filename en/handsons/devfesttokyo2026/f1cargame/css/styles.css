@@ -1,0 +1,1588 @@
+@layer reset, tokens, layout, components, overlays;
+
+/* ==========================================================================
+   1. RESET LAYER
+   ========================================================================== */
+@layer reset {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    width: 100dvw;
+    height: 100dvh;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3,
+  p,
+  dl,
+  dt,
+  dd,
+  fieldset {
+    margin: 0;
+    padding: 0;
+  }
+
+  fieldset {
+    border: 0;
+  }
+
+  button,
+  input,
+  select {
+    font: inherit;
+    color: inherit;
+  }
+
+  button {
+    cursor: pointer;
+    background: none;
+    border: 0;
+  }
+
+  [hidden] {
+    display: none !important;
+  }
+}
+
+/* ==========================================================================
+   2. TOKENS LAYER — Crisp Gray-and-White Motorsport Studio Palette
+   ========================================================================== */
+@layer tokens {
+  :root {
+    color-scheme: light;
+
+    /* Studio Surface Palette */
+    --surface-glass: rgba(248, 249, 251, 0.88);
+    --surface-glass-strong: rgba(252, 253, 255, 0.94);
+    --surface-card: #ffffff;
+    --surface-subtle: #eff2f6;
+    --surface-hover: #e5e9f0;
+    --surface-active: #dce2ec;
+
+    /* Typography & Borders */
+    --ink-primary: #111315;
+    --ink-secondary: #4a5360;
+    --ink-muted: #5b6470;
+    --border-hairline: #d4d9e2;
+    --border-strong: #b8c1cf;
+
+    /* Shadows */
+    --shadow-sm: 0 2px 8px rgba(17, 19, 21, 0.06), 0 1px 2px rgba(17, 19, 21, 0.04);
+    --shadow-md: 0 10px 28px rgba(17, 19, 21, 0.10), 0 2px 6px rgba(17, 19, 21, 0.05);
+    --shadow-lg: 0 22px 48px rgba(17, 19, 21, 0.16), 0 4px 12px rgba(17, 19, 21, 0.08);
+
+    /* Functional FIA Telemetry Accents ONLY */
+    --fia-crimson: #dc2626;
+    --fia-crimson-dark: #b91c1c;
+    --fia-green: #16a34a;
+    --fia-green-soft: rgba(22, 163, 74, 0.14);
+    --fia-blue: #2563eb;
+    --fia-purple: #9333ea;
+    --fia-amber: #ca8a04;
+    --fia-orange: #ea580c;
+
+    /* Pirelli Compound Ring Colors */
+    --pirelli-soft: #dc2626;
+    --pirelli-medium: #eab308;
+    --pirelli-hard: #f8fafc;
+    --pirelli-hard-border: #94a3b8;
+
+    /* Radii & Spacing */
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+    --radius-pill: 999px;
+
+    /* Typography Stack */
+    --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+
+    /* Motion */
+    --ease-studio: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  body {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    line-height: 1.4;
+    color: var(--ink-primary);
+    background-color: #d9dfe8;
+    user-select: none;
+  }
+
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* ==========================================================================
+   3. LAYOUT LAYER — Full-Viewport Canvas & Unobtrusive Broadcast Anchors
+   ========================================================================== */
+@layer layout {
+  #sim-canvas {
+    position: fixed;
+    inset: 0;
+    width: 100dvw;
+    height: 100dvh;
+    display: block;
+    touch-action: none;
+    cursor: default;
+  }
+
+  body[data-state="SHOWROOM_GRID"] #sim-canvas {
+    cursor: grab;
+  }
+
+  body[data-state="SHOWROOM_GRID"] #sim-canvas:active {
+    cursor: grabbing;
+  }
+
+  .hud-layer {
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    pointer-events: none;
+  }
+
+  /* Top Broadcast Bar */
+  .hud-top-bar {
+    position: fixed;
+    top: 12px;
+    left: 14px;
+    right: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 6px 10px;
+    background: var(--surface-glass);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    pointer-events: auto;
+  }
+
+  .hud-cluster {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+  }
+
+  .hud-cluster--center {
+    gap: 8px;
+    flex-wrap: nowrap;
+  }
+
+  /* Showroom Floating CTA Banner — Bottom-left so center hero car stays >85% clear */
+  .showroom-banner {
+    position: fixed;
+    left: 14px;
+    bottom: 14px;
+    width: min(352px, calc(100dvw - 28px));
+    padding: 14px 16px;
+    background: var(--surface-glass-strong);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    pointer-events: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* Bottom Central Telemetry Dock */
+  .telemetry-dock {
+    position: fixed;
+    left: 50%;
+    bottom: 14px;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: stretch;
+    gap: 14px;
+    padding: 9px 14px;
+    background: var(--surface-glass);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    pointer-events: auto;
+  }
+
+  /* Bottom-Right Circuit Minimap Card */
+  .minimap-card {
+    position: fixed;
+    right: 14px;
+    bottom: 14px;
+    padding: 7px 9px 6px;
+    background: var(--surface-glass);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    pointer-events: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  /* Responsive Compactness on narrower viewports */
+  @media (max-width: 1180px) {
+    .hud-top-bar {
+      flex-wrap: wrap;
+      row-gap: 6px;
+    }
+
+    .showroom-banner {
+      bottom: 106px;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .minimap-card {
+      display: none;
+    }
+
+    .hud-cluster--center .sector-strip {
+      display: none;
+    }
+  }
+}
+
+/* ==========================================================================
+   4. COMPONENTS LAYER — Pills, Telemetry Instruments, Buttons, Controls
+   ========================================================================== */
+@layer components {
+  /* Brand Badge */
+  .brand-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 3px 9px 3px 6px;
+    background: var(--ink-primary);
+    color: #ffffff;
+    border-radius: var(--radius-sm);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+  }
+
+  .brand-stripe {
+    width: 3px;
+    height: 12px;
+    border-radius: 2px;
+    background: var(--fia-crimson);
+  }
+
+  /* Broadcast Pills */
+  .hud-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 8px;
+    background: var(--surface-subtle);
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--radius-sm);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--ink-primary);
+    white-space: nowrap;
+  }
+
+  .hud-pill--strong {
+    background: var(--surface-card);
+    font-weight: 700;
+  }
+
+  .hud-pill--state {
+    color: var(--ink-secondary);
+    text-transform: uppercase;
+  }
+
+  .hud-pill--cam {
+    background: var(--surface-card);
+    color: var(--ink-secondary);
+    font-size: 10.5px;
+    letter-spacing: 0.06em;
+  }
+
+  /* Timing Readouts & Sector Splits */
+  .timing-readout {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 5px;
+    white-space: nowrap;
+  }
+
+  .timing-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    color: var(--ink-muted);
+  }
+
+  .timing-value {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink-primary);
+  }
+
+  .timing-value--muted {
+    color: var(--ink-secondary);
+    font-weight: 600;
+  }
+
+  .timing-divider {
+    width: 1px;
+    height: 16px;
+    background: var(--border-hairline);
+  }
+
+  .sector-strip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .sector-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: var(--surface-subtle);
+    border: 1px solid var(--border-hairline);
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 600;
+    color: var(--ink-muted);
+    white-space: nowrap;
+  }
+
+  .sector-badge:is([data-status="purple"], .sector--purple) {
+    background: rgba(147, 51, 234, 0.14);
+    border-color: rgba(147, 51, 234, 0.45);
+    color: #6b21a8;
+  }
+
+  .sector-badge:is([data-status="green"], .sector--green) {
+    background: rgba(22, 163, 74, 0.14);
+    border-color: rgba(22, 163, 74, 0.45);
+    color: #15803d;
+  }
+
+  .sector-badge:is([data-status="yellow"], .sector--yellow) {
+    background: rgba(202, 138, 4, 0.14);
+    border-color: rgba(202, 138, 4, 0.45);
+    color: #a16207;
+  }
+
+  /* HUD Action Buttons */
+  .hud-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    background: var(--surface-card);
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--radius-sm);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--ink-primary);
+    white-space: nowrap;
+  }
+
+  .hud-btn:hover {
+    background: var(--surface-subtle);
+    border-color: var(--border-strong);
+  }
+
+  .hud-btn:focus-visible,
+  .btn-primary:focus-visible,
+  .btn-secondary:focus-visible,
+  .compound-chip:focus-visible,
+  .icon-close-btn:focus-visible,
+  .inspector-summary:focus-visible {
+    outline: 2px solid var(--ink-primary);
+    outline-offset: 2px;
+  }
+
+  .hud-btn[aria-pressed="true"],
+  .hud-btn[aria-expanded="true"] {
+    background: var(--ink-primary);
+    border-color: var(--ink-primary);
+    color: #ffffff;
+  }
+
+  .hud-btn[aria-pressed="true"] .hud-kbd,
+  .hud-btn[aria-expanded="true"] .hud-kbd {
+    background: rgba(255, 255, 255, 0.16);
+    border-color: rgba(255, 255, 255, 0.28);
+    color: #ffffff;
+  }
+
+  .hud-btn--accent-outline {
+    border-color: var(--border-strong);
+  }
+
+  .hud-kbd,
+  kbd {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 17px;
+    padding: 0 4px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--ink-secondary);
+    background: var(--surface-subtle);
+    border: 1px solid var(--border-hairline);
+    border-radius: 4px;
+  }
+
+  /* Primary & Secondary CTA Buttons */
+  .btn-primary,
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 9px 14px;
+    border-radius: var(--radius-md);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: background-color 140ms ease, border-color 140ms ease, color 140ms ease;
+  }
+
+  .btn-primary {
+    background: var(--fia-crimson);
+    border: 1px solid var(--fia-crimson-dark);
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.24);
+  }
+
+  .btn-primary:hover {
+    background: var(--fia-crimson-dark);
+  }
+
+  .btn-secondary {
+    background: var(--surface-card);
+    border: 1px solid var(--border-strong);
+    color: var(--ink-primary);
+  }
+
+  .btn-secondary:hover {
+    background: var(--surface-subtle);
+  }
+
+  /* Showroom Banner Internals */
+  .showroom-eyebrow,
+  .overlay-eyebrow,
+  .popover-eyebrow {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+  }
+
+  .showroom-title {
+    margin-top: 2px;
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--ink-primary);
+  }
+
+  .showroom-compounds {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding-top: 6px;
+    border-top: 1px solid var(--border-hairline);
+  }
+
+  .showroom-section-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--ink-secondary);
+    white-space: nowrap;
+  }
+
+  .compound-chip-row {
+    display: inline-flex;
+    gap: 5px;
+  }
+
+  .compound-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 9px;
+    background: var(--surface-card);
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--radius-pill);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--ink-secondary);
+    transition: background-color 140ms ease, border-color 140ms ease, color 140ms ease;
+  }
+
+  .compound-chip:hover {
+    background: var(--surface-subtle);
+    color: var(--ink-primary);
+  }
+
+  .compound-chip:is(.is-active, .active, [aria-pressed="true"]) {
+    background: var(--ink-primary);
+    border-color: var(--ink-primary);
+    color: #ffffff;
+  }
+
+  .tire-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    flex-shrink: 0;
+  }
+
+  .tire-dot--soft {
+    border-color: var(--pirelli-soft);
+    background: rgba(220, 38, 38, 0.25);
+  }
+
+  .tire-dot--medium {
+    border-color: var(--pirelli-medium);
+    background: rgba(234, 179, 8, 0.25);
+  }
+
+  .tire-dot--hard {
+    border-color: var(--pirelli-hard-border);
+    background: var(--pirelli-hard);
+  }
+
+  .showroom-controls-guide {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 10px;
+    padding: 7px 9px;
+    background: var(--surface-subtle);
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--radius-md);
+    font-size: 11px;
+    color: var(--ink-secondary);
+  }
+
+  .showroom-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  /* Bottom Telemetry Cluster Internals */
+  .pedal-cluster {
+    display: flex;
+    align-items: stretch;
+    gap: 6px;
+    padding-right: 10px;
+    border-right: 1px solid var(--border-hairline);
+  }
+
+  .pedal-meter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .pedal-bar-track {
+    position: relative;
+    width: 11px;
+    height: 46px;
+    background: var(--surface-subtle);
+    border: 1px solid var(--border-hairline);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .pedal-bar-fill {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 0%;
+    border-radius: 2px;
+    transform-origin: bottom;
+  }
+
+  .pedal-bar-fill--throttle {
+    background: var(--fia-green);
+  }
+
+  .pedal-bar-fill--brake {
+    background: var(--fia-crimson);
+  }
+
+  .pedal-label {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: var(--ink-muted);
+  }
+
+  .telemetry-core {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 6px;
+    min-width: 248px;
+  }
+
+  .rpm-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .rpm-leds {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .rpm-led {
+    width: 9px;
+    height: 7px;
+    border-radius: 2px;
+    background: #d5dce6;
+    border: 1px solid rgba(17, 19, 21, 0.08);
+  }
+
+  .rpm-led--green:is(.is-on, .active) {
+    background: var(--fia-green);
+    box-shadow: 0 0 6px rgba(22, 163, 74, 0.55);
+  }
+
+  .rpm-led--red:is(.is-on, .active) {
+    background: var(--fia-crimson);
+    box-shadow: 0 0 6px rgba(220, 38, 38, 0.55);
+  }
+
+  .rpm-led--blue:is(.is-on, .active) {
+    background: var(--fia-blue);
+    box-shadow: 0 0 7px rgba(37, 99, 235, 0.65);
+  }
+
+  .rpm-numeric {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--ink-secondary);
+    white-space: nowrap;
+  }
+
+  .speed-gear-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .gear-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 38px;
+    padding: 2px 7px;
+    background: var(--ink-primary);
+    color: #ffffff;
+    border-radius: var(--radius-sm);
+  }
+
+  .gear-box .telemetry-micro-label {
+    color: rgba(255, 255, 255, 0.65);
+    font-size: 8px;
+  }
+
+  .gear-value {
+    font-family: var(--font-mono);
+    font-size: 20px;
+    font-weight: 800;
+    line-height: 1.05;
+  }
+
+  .speed-box {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 4px;
+    min-width: 102px;
+  }
+
+  .speed-value {
+    font-family: var(--font-mono);
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--ink-primary);
+  }
+
+  .speed-unit {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--ink-muted);
+  }
+
+  /* DRS Status Pill */
+  .drs-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 82px;
+    padding: 4px 8px;
+    border-radius: var(--radius-sm);
+    background: var(--surface-subtle);
+    border: 1px solid var(--border-hairline);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.07em;
+    color: var(--ink-muted);
+    white-space: nowrap;
+  }
+
+  .drs-pill:is([data-drs-state="ready"], .drs-ready) {
+    background: rgba(202, 138, 4, 0.14);
+    border-color: rgba(202, 138, 4, 0.5);
+    color: #92400e;
+  }
+
+  .drs-pill:is([data-drs-state="open"], .drs-open, .is-open) {
+    background: var(--fia-green);
+    border-color: #15803d;
+    color: #ffffff;
+    box-shadow: 0 0 10px rgba(22, 163, 74, 0.35);
+  }
+
+  /* Right Telemetry Vitals: Tire, Brakes, G-Force */
+  .telemetry-vitals {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    align-items: center;
+    gap: 12px;
+    padding-left: 12px;
+    border-left: 1px solid var(--border-hairline);
+  }
+
+  .vital-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 58px;
+  }
+
+  .telemetry-micro-label {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+  }
+
+  .vital-inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .vital-value {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink-primary);
+    white-space: nowrap;
+  }
+
+  .vital-value:is(.is-hot, [data-hot="true"]) {
+    color: var(--fia-orange);
+  }
+
+  .tire-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 1px 6px;
+    border-radius: var(--radius-pill);
+    font-size: 9.5px;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    border: 1.5px solid var(--pirelli-soft);
+    background: var(--surface-card);
+    color: var(--ink-primary);
+  }
+
+  .tire-pill:is(.tire-pill--soft, [data-compound="soft"]) {
+    border-color: var(--pirelli-soft);
+    color: #991b1b;
+  }
+
+  .tire-pill:is(.tire-pill--medium, [data-compound="medium"]) {
+    border-color: var(--pirelli-medium);
+    color: #854d0e;
+  }
+
+  .tire-pill:is(.tire-pill--hard, [data-compound="hard"]) {
+    border-color: var(--pirelli-hard-border);
+    color: var(--ink-primary);
+  }
+
+  /* Circuit Minimap */
+  .minimap-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    color: var(--ink-secondary);
+  }
+
+  .minimap-meta {
+    color: var(--ink-muted);
+  }
+
+  #minimap-canvas {
+    display: block;
+    width: 180px;
+    height: 140px;
+    border-radius: var(--radius-sm);
+    background: rgba(236, 240, 246, 0.72);
+    border: 1px solid rgba(17, 19, 21, 0.06);
+  }
+
+  /* Alert Banner */
+  .hud-alert {
+    position: fixed;
+    top: 66px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 6px 14px;
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(220, 38, 38, 0.45);
+    border-left: 4px solid var(--fia-crimson);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: #991b1b;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  /* FIA 5-Pod Start Lights Gantry */
+  .start-lights-overlay {
+    position: fixed;
+    top: 78px;
+    left: 50%;
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
+
+  .fia-gantry-frame {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 18px;
+    background: var(--surface-glass-strong);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .fia-gantry-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    background: #181b20;
+    border-radius: var(--radius-md);
+    border: 1px solid #2b313a;
+  }
+
+  .fia-light-pod {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 6px 7px;
+    background: #101216;
+    border-radius: 6px;
+    border: 1px solid #272c35;
+  }
+
+  .fia-lamp {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #2b2f38;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .fia-light-pod:is(.is-lit, .active, .lit) .fia-lamp {
+    background: #ef4444;
+    border-color: #fca5a5;
+    box-shadow: 0 0 14px rgba(239, 68, 68, 0.9), inset 0 0 4px #ffffff;
+  }
+
+  .fia-gantry-status {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.09em;
+    color: var(--ink-primary);
+    text-transform: uppercase;
+  }
+
+  /* Audit & Lap History Tables */
+  .audit-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11.5px;
+    text-align: left;
+  }
+
+  .audit-table th {
+    padding: 7px 9px;
+    background: var(--surface-subtle);
+    border-bottom: 1px solid var(--border-hairline);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-secondary);
+    white-space: nowrap;
+  }
+
+  .audit-table td {
+    padding: 6px 9px;
+    border-bottom: 1px solid rgba(212, 217, 226, 0.65);
+    color: var(--ink-primary);
+    vertical-align: middle;
+  }
+
+  .audit-table tbody tr:last-child td {
+    border-bottom: 0;
+  }
+
+  .table-empty {
+    text-align: center;
+    color: var(--ink-muted);
+    padding: 14px 10px !important;
+  }
+
+  /* Inspector Key-Value Grids & Compliance Badges */
+  .inspector-kv-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+    gap: 8px;
+  }
+
+  .inspector-kv {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 7px 9px;
+    background: var(--surface-subtle);
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--radius-sm);
+  }
+
+  .inspector-kv-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+
+  .inspector-kv-value {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--ink-primary);
+  }
+
+  .audit-pass {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: var(--radius-pill);
+    background: var(--fia-green-soft);
+    color: #15803d;
+    font-size: 10px;
+    font-weight: 700;
+  }
+
+  .audit-fail {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: var(--radius-pill);
+    background: rgba(220, 38, 38, 0.14);
+    color: #991b1b;
+    font-size: 10px;
+    font-weight: 700;
+  }
+
+  .audit-warn {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: var(--radius-pill);
+    background: rgba(202, 138, 4, 0.16);
+    color: #92400e;
+    font-size: 10px;
+    font-weight: 700;
+  }
+
+  .icon-close-btn {
+    padding: 4px 10px;
+    border-radius: var(--radius-sm);
+    background: var(--surface-subtle);
+    border: 1px solid var(--border-hairline);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--ink-secondary);
+    transition: background-color 140ms ease, color 140ms ease;
+  }
+
+  .icon-close-btn:hover {
+    background: var(--surface-hover);
+    color: var(--ink-primary);
+  }
+}
+
+/* ==========================================================================
+   5. OVERLAYS LAYER — Pause, Summary, Native [popover] & <dialog closedby="any">
+   ========================================================================== */
+@layer overlays {
+  /* Fullscreen Pause & Summary Backdrops */
+  .fullscreen-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 30;
+    display: grid;
+    place-items: center;
+    padding: 20px;
+    background: rgba(17, 19, 21, 0.34);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    pointer-events: auto;
+  }
+
+  .overlay-card {
+    width: min(640px, 100%);
+    max-height: min(86dvh, 720px);
+    overflow-y: auto;
+    padding: 22px 24px;
+    background: var(--surface-glass-strong);
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .overlay-card--summary {
+    width: min(740px, 100%);
+  }
+
+  .overlay-title {
+    margin-top: 2px;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--ink-primary);
+  }
+
+  .overlay-subtitle {
+    margin-top: 2px;
+    font-size: 12.5px;
+    color: var(--ink-secondary);
+  }
+
+  .overlay-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .overlay-actions .btn-primary,
+  .overlay-actions .btn-secondary {
+    flex: 1 1 130px;
+  }
+
+  /* Pause Keybind Cheat-Sheet */
+  .keybind-sheet {
+    padding-top: 12px;
+    border-top: 1px solid var(--border-hairline);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .keybind-heading {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+
+  .keybind-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 7px 14px;
+  }
+
+  .keybind-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 6px 9px;
+    background: var(--surface-subtle);
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--radius-sm);
+    font-size: 11.5px;
+  }
+
+  .keybind-row dt {
+    white-space: nowrap;
+  }
+
+  .keybind-row dd {
+    color: var(--ink-secondary);
+    text-align: right;
+  }
+
+  /* Summary KPI Strip */
+  .summary-kpis {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .kpi-tile {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 10px 12px;
+    background: var(--surface-card);
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--radius-md);
+  }
+
+  .kpi-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+
+  .kpi-value {
+    font-family: var(--font-mono);
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--ink-primary);
+  }
+
+  .summary-table-wrap,
+  .inspector-table-wrap {
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--radius-md);
+    background: var(--surface-card);
+    overflow-x: auto;
+  }
+
+  /* ------------------------------------------------------------------------
+     Native Declarative Car Setup Popover ([popover="auto"])
+     MANDATORY modern-web-guidance: combine :popover-open and .\:popover-open
+     via :is(), and place transition-behavior: allow-discrete AFTER transition.
+     ------------------------------------------------------------------------ */
+  .setup-popover[popover] {
+    position: fixed;
+    inset: auto;
+    top: 64px;
+    right: 14px;
+    margin: 0;
+    width: min(344px, calc(100dvw - 28px));
+    max-height: calc(100dvh - 84px);
+    overflow-y: auto;
+    padding: 16px;
+    background: var(--surface-glass-strong);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    color: var(--ink-primary);
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    user-select: text;
+
+    @media (prefers-reduced-motion: no-preference) {
+      opacity: 0;
+      transform: translateY(-6px) scale(0.985);
+      transition:
+        opacity 180ms var(--ease-studio),
+        transform 180ms var(--ease-studio),
+        display 180ms,
+        overlay 180ms;
+      transition-behavior: allow-discrete;
+    }
+  }
+
+  .setup-popover[popover]:is(:popover-open, .\:popover-open) {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    opacity: 1;
+    transform: translateY(0) scale(1);
+
+    @media (prefers-reduced-motion: no-preference) {
+      @starting-style {
+        opacity: 0;
+        transform: translateY(-6px) scale(0.985);
+      }
+    }
+  }
+
+  .popover-header,
+  .dialog-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-hairline);
+  }
+
+  .popover-title,
+  .dialog-title {
+    margin-top: 2px;
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--ink-primary);
+  }
+
+  .setup-body {
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+  }
+
+  .setup-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .setup-legend {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink-secondary);
+  }
+
+  .segmented-radios {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+  }
+
+  .segmented-radios--two {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .radio-card {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 7px 8px;
+    background: var(--surface-card);
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--radius-sm);
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--ink-secondary);
+    cursor: pointer;
+    transition: background-color 140ms ease, border-color 140ms ease, color 140ms ease;
+  }
+
+  .radio-card:hover {
+    background: var(--surface-subtle);
+    color: var(--ink-primary);
+  }
+
+  .radio-card input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .radio-card:has(input[type="radio"]:checked) {
+    background: var(--ink-primary);
+    border-color: var(--ink-primary);
+    color: #ffffff;
+  }
+
+  .radio-card:has(input[type="radio"]:focus-visible) {
+    outline: 2px solid var(--ink-primary);
+    outline-offset: 2px;
+  }
+
+  .checkbox-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .check-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 8px;
+    background: var(--surface-card);
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink-primary);
+    cursor: pointer;
+  }
+
+  .check-row small {
+    font-weight: 400;
+    color: var(--ink-muted);
+  }
+
+  .check-row input[type="checkbox"] {
+    width: 15px;
+    height: 15px;
+    accent-color: var(--ink-primary);
+    flex-shrink: 0;
+  }
+
+  .slider-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .slider-readout {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ink-primary);
+  }
+
+  .studio-range {
+    width: 100%;
+    accent-color: var(--ink-primary);
+    cursor: pointer;
+  }
+
+  .slider-ticks {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: var(--ink-muted);
+  }
+
+  /* ------------------------------------------------------------------------
+     Native Declarative Modal Dialog (<dialog id="inspector-dialog" closedby="any">)
+     MANDATORY: transition-behavior: allow-discrete AFTER transition shorthand,
+     opt-in motion inside @media (prefers-reduced-motion: no-preference).
+     ------------------------------------------------------------------------ */
+  .inspector-dialog {
+    margin: auto;
+    width: min(760px, calc(100dvw - 32px));
+    max-height: min(84dvh, 720px);
+    padding: 0;
+    background: var(--surface-glass-strong);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    color: var(--ink-primary);
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    user-select: text;
+
+    @media (prefers-reduced-motion: no-preference) {
+      opacity: 0;
+      transform: translateY(10px) scale(0.98);
+      transition:
+        opacity 200ms var(--ease-studio),
+        transform 200ms var(--ease-studio),
+        display 200ms,
+        overlay 200ms;
+      transition-behavior: allow-discrete;
+    }
+  }
+
+  .inspector-dialog[open] {
+    display: flex;
+    flex-direction: column;
+    opacity: 1;
+    transform: translateY(0) scale(1);
+
+    @media (prefers-reduced-motion: no-preference) {
+      @starting-style {
+        opacity: 0;
+        transform: translateY(10px) scale(0.98);
+      }
+    }
+  }
+
+  .inspector-dialog::backdrop {
+    background: rgba(17, 19, 21, 0.36);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+
+    @media (prefers-reduced-motion: no-preference) {
+      opacity: 0;
+      transition:
+        opacity 200ms var(--ease-studio),
+        display 200ms,
+        overlay 200ms;
+      transition-behavior: allow-discrete;
+    }
+  }
+
+  .inspector-dialog[open]::backdrop {
+    opacity: 1;
+
+    @media (prefers-reduced-motion: no-preference) {
+      @starting-style {
+        opacity: 0;
+      }
+    }
+  }
+
+  .inspector-dialog .dialog-header {
+    padding: 16px 20px 12px;
+    background: rgba(255, 255, 255, 0.72);
+  }
+
+  .dialog-body {
+    padding: 14px 20px 18px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* Exclusive <details name="inspector-tabs"> Accordions */
+  .inspector-accordion {
+    background: var(--surface-card);
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .inspector-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 11px 14px;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--ink-primary);
+    cursor: pointer;
+    list-style: none;
+    background: rgba(248, 249, 251, 0.9);
+    transition: background-color 140ms ease;
+  }
+
+  .inspector-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .inspector-summary:hover {
+    background: var(--surface-subtle);
+  }
+
+  .summary-chevron {
+    width: 8px;
+    height: 8px;
+    border-right: 2px solid var(--ink-muted);
+    border-bottom: 2px solid var(--ink-muted);
+    transform: rotate(45deg);
+    margin-right: 2px;
+
+    @media (prefers-reduced-motion: no-preference) {
+      transition: transform 180ms var(--ease-studio);
+    }
+  }
+
+  .inspector-accordion[open] > .inspector-summary {
+    border-bottom: 1px solid var(--border-hairline);
+  }
+
+  .inspector-accordion[open] > .inspector-summary .summary-chevron {
+    transform: rotate(225deg);
+  }
+
+  .inspector-panel {
+    padding: 12px 14px;
+  }
+
+  .inspector-table-wrap {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+  }
+
+  .inspector-placeholder {
+    font-size: 12px;
+    color: var(--ink-muted);
+  }
+
+  @media (max-width: 680px) {
+    .summary-kpis {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+}
