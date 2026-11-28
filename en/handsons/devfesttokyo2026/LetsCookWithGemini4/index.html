@@ -177,6 +177,7 @@
     }
 
     .btn:focus-visible,
+    .video-facade-btn:focus-visible,
     a:focus-visible,
     summary:focus-visible,
     input:focus-visible,
@@ -948,6 +949,151 @@
       gap: 0.5rem;
     }
 
+    .section-sublead {
+      margin: 0 0 0.75rem;
+      font-size: 0.93rem;
+      color: var(--text-secondary);
+    }
+
+    /* Privacy-Preserving YouTube Walkthrough Video Facade */
+    .video-walkthrough {
+      margin: 0.75rem 0 1.35rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      max-width: 760px;
+      box-shadow: var(--shadow-xs);
+    }
+
+    .video-embed-frame {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: var(--bg-terminal);
+    }
+
+    .video-embed-frame iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .video-facade-btn {
+      position: relative;
+      display: block;
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+      text-align: left;
+      font-family: inherit;
+      color: var(--text-on-dark);
+    }
+
+    .video-facade-btn picture,
+    .video-facade-btn img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .video-facade-btn img {
+      opacity: 0.95;
+      transition: transform 0.22s ease, opacity 0.22s ease;
+    }
+
+    .video-facade-btn:hover img {
+      transform: scale(1.015);
+      opacity: 1;
+    }
+
+    .video-facade-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 0.85rem 1rem;
+      background: linear-gradient(180deg, rgba(17, 24, 39, 0.52) 0%, rgba(17, 24, 39, 0.14) 48%, rgba(17, 24, 39, 0.62) 100%);
+      pointer-events: none;
+    }
+
+    .video-facade-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      width: fit-content;
+      background: rgba(24, 24, 27, 0.88);
+      color: #f9fafb;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 0.26rem 0.68rem;
+      border-radius: var(--radius-pill);
+      font-size: 0.74rem;
+      font-weight: 600;
+      backdrop-filter: blur(4px);
+    }
+
+    .video-play-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 4.35rem;
+      height: 3.05rem;
+      border-radius: 12px;
+      background: rgba(24, 24, 27, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+      transition: transform 0.18s ease, background-color 0.18s ease;
+    }
+
+    .video-facade-btn:hover .video-play-icon {
+      transform: translate(-50%, -50%) scale(1.07);
+      background: #111827;
+    }
+
+    .video-facade-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.96rem;
+      font-weight: 600;
+      color: #ffffff;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+    }
+
+    .video-walkthrough figcaption {
+      padding: 0.55rem 0.85rem;
+      font-size: 0.79rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border-subtle);
+      background: var(--bg-surface);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .video-walkthrough figcaption a {
+      color: var(--text-primary);
+      font-weight: 600;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .video-walkthrough figcaption a:hover {
+      text-decoration: underline;
+    }
+
     /* Terminal / Prompt Code Blocks */
     .cmd-card {
       margin: 0.7rem 0;
@@ -1248,6 +1394,10 @@
 
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
+      .video-facade-btn img,
+      .video-play-icon {
+        transition: none;
+      }
       ::view-transition-group(*),
       ::view-transition-old(*),
       ::view-transition-new(*) {
@@ -1797,6 +1947,41 @@
       </figure>
 
       <h3>Part A: Credit Claiming Procedure</h3>
+      <p class="section-sublead">Watch the short video walkthrough below or follow the numbered steps to redeem your Google Developer Program (GDP) workshop credit:</p>
+      <figure class="video-walkthrough">
+        <div class="video-embed-frame" data-youtube-facade="-8vowSkN0T0" data-youtube-url="https://youtu.be/-8vowSkN0T0" data-youtube-title="Video walkthrough: Claim GDP Credits (GDPクレジットを有効にする)">
+          <button type="button" class="video-facade-btn" aria-label="Play video walkthrough: Claim GDP Credits (1 minute 42 seconds)">
+            <picture>
+              <source srcset="images/yt-claim-credits-thumb.webp" type="image/webp" width="1280" height="720">
+              <img src="images/yt-claim-credits-thumb.jpg" alt="Preview of the Google Builders Hub Claim Your Benefit video walkthrough" width="1280" height="720" loading="lazy">
+            </picture>
+            <span class="video-facade-overlay" aria-hidden="true">
+              <span class="video-facade-badge">Video Walkthrough &bull; 1:42</span>
+              <span class="video-play-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M8 5.14v13.72a1 1 0 0 0 1.52.85l11-6.86a1 1 0 0 0 0-1.7l-11-6.86A1 1 0 0 0 8 5.14z"/>
+                </svg>
+              </span>
+              <span class="video-facade-title">Claim GDP Credits (<span lang="ja">GDPクレジットを有効にする</span>)</span>
+            </span>
+          </button>
+          <noscript>
+            <iframe
+              src="https://www.youtube-nocookie.com/embed/-8vowSkN0T0"
+              title="Video walkthrough: Claim GDP Credits (GDPクレジットを有効にする)"
+              loading="lazy"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen>
+            </iframe>
+          </noscript>
+        </div>
+        <figcaption>
+          <span>Google Developer Program (GDP) credit redemption walkthrough</span>
+          <a href="https://youtu.be/-8vowSkN0T0" target="_blank" rel="noopener">Watch Claim GDP Credits on YouTube &#8599;</a>
+        </figcaption>
+      </figure>
+
       <ol class="tutorial-list">
         <li class="tutorial-item">
           <p>Log in to <a href="https://console.cloud.google.com" target="_blank" rel="noopener">Google Cloud Console (<code>https://console.cloud.google.com</code>)</a> using your <strong>PERSONAL Gmail account</strong> (do not use a corporate or school Workspace account).</p>
@@ -2764,6 +2949,29 @@ agy</code></pre>
         lightboxImg.alt = caption;
         lightboxTitle.textContent = caption;
         lightboxDialog.showModal();
+      });
+    });
+
+    // 11. Privacy-Preserving Click-to-Play YouTube Video Facade
+    document.querySelectorAll('[data-youtube-facade]').forEach((container) => {
+      const btn = container.querySelector('.video-facade-btn');
+      if (!btn) return;
+      btn.addEventListener('click', () => {
+        const videoId = container.dataset.youtubeFacade;
+        const fallbackUrl = container.dataset.youtubeUrl || `https://youtu.be/${encodeURIComponent(videoId || '')}`;
+        if (!videoId) return;
+        if (window.location.protocol === 'file:') {
+          window.open(fallbackUrl, '_blank', 'noopener,noreferrer');
+          return;
+        }
+        const iframe = document.createElement('iframe');
+        iframe.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(videoId)}?autoplay=1&rel=0`;
+        iframe.title = container.dataset.youtubeTitle || 'YouTube video player';
+        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+        iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+        iframe.allowFullscreen = true;
+        container.replaceChildren(iframe);
+        iframe.focus();
       });
     });
   </script>
